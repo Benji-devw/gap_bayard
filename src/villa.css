@@ -4127,6 +4127,114 @@ img.vl-review-avatar {
   }
 }
 
+/* ---------------------------------------------------------------- écran peu haut, quel que soit l'appareil
+   (fenêtre d'ordinateur basse, petit portable, téléphone couché) : les chapitres se compactent et la visite réserve
+   en bas la place des commandes (≈ 80 px sur ordinateur) ; les blocs téléphone qui suivent affinent encore. */
+@media (max-height: 560px) {
+  .vl-layer {
+    padding-top: calc(var(--header-h) + 14px);
+    padding-bottom: 92px;
+  }
+
+  .vl-pos-hero {
+    margin-bottom: 0;
+  }
+
+  .vl-pos-hero h1 {
+    font-size: clamp(40px, 13vh, 84px);
+  }
+
+  .vl-pos-hero .vl-chapter-note,
+  .vl-pos-center .vl-chapter-note {
+    margin-top: 6px;
+    font-size: 19px;
+  }
+
+  .vl-pos-hero .vl-chapter-text,
+  .vl-pos-center .vl-chapter-text {
+    display: -webkit-box;
+    max-width: 52ch;
+    margin-top: 6px;
+    overflow: hidden;
+    font-size: 13.5px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .vl-pos-hero .vl-chapter-meta {
+    display: none;
+  }
+
+  .vl-pos-hero .vl-btn,
+  .vl-pos-center .vl-btn {
+    min-height: 40px;
+    margin-top: 12px;
+    font-size: 13.5px;
+  }
+
+  .vl-pos-center .vl-kicker,
+  .vl-pos-hero .vl-kicker {
+    margin-bottom: 10px;
+  }
+
+  .vl-pos-center h2 {
+    font-size: clamp(34px, 12vh, 64px);
+  }
+
+  .vl-chapter-stats {
+    margin-top: 14px;
+  }
+
+  .vl-chapter-stats > div {
+    padding: 10px 18px 0;
+  }
+
+  .vl-chapter-stats dt {
+    font-size: clamp(28px, 9vh, 44px);
+  }
+
+  .vl-pos-left,
+  .vl-pos-right,
+  .vl-pos-bottom-left,
+  .vl-pos-bottom-right {
+    padding: 16px 22px 18px;
+  }
+
+  .vl-pos-left .vl-kicker,
+  .vl-pos-right .vl-kicker,
+  .vl-pos-bottom-left .vl-kicker,
+  .vl-pos-bottom-right .vl-kicker {
+    margin-bottom: 10px;
+  }
+
+  .vl-pos-left h2,
+  .vl-pos-right h2,
+  .vl-pos-bottom-left h2,
+  .vl-pos-bottom-right h2 {
+    font-size: clamp(24px, 7vh, 34px);
+  }
+
+  .vl-pos-left .vl-chapter-text,
+  .vl-pos-right .vl-chapter-text,
+  .vl-pos-bottom-left .vl-chapter-text,
+  .vl-pos-bottom-right .vl-chapter-text {
+    display: -webkit-box;
+    margin-top: 6px;
+    overflow: hidden;
+    font-size: 13.5px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+}
+
+@media (max-height: 430px) {
+  .vl-pos-center .vl-chapter-text {
+    display: none;
+  }
+}
+
 /* ---------------------------------------------------------------- téléphone (vertical ou couché) : la visite
    Mêmes requêtes que src/lib/media.ts. Un téléphone à l'horizontale dépasse 760 px de large :
    « (pointer: coarse) and (max-height: 500px) » le reconnaît. Placé en fin de fichier pour l'emporter. */
@@ -4455,8 +4563,10 @@ img.vl-review-avatar {
     inset: calc(var(--header-h) + 8px) max(12px, env(safe-area-inset-right)) 10px max(12px, env(safe-area-inset-left));
   }
 
+  /* en bas : la place des commandes de la visite (≈ 46 px + leur marge), pour qu'aucun chapitre ne s'y colle */
   .vl-layer {
-    padding: calc(var(--header-h) + 12px) max(18px, env(safe-area-inset-right)) 14px max(18px, env(safe-area-inset-left));
+    padding: calc(var(--header-h) + 12px) max(18px, env(safe-area-inset-right)) calc(max(10px, env(safe-area-inset-bottom)) + 62px)
+      max(18px, env(safe-area-inset-left));
   }
 
   .vl-pos-left,
@@ -4518,7 +4628,28 @@ img.vl-review-avatar {
   }
 
   .vl-pos-center h2 {
-    font-size: clamp(38px, 14vh, 60px);
+    font-size: clamp(34px, 12vh, 54px);
+  }
+
+  /* chapitre centré (fin de visite) : étiquette, titre, note et bouton seulement ; il tient entre l'en-tête et
+     les commandes (≈ 255 px sur un iPhone couché), le texte est retiré */
+  .vl-pos-center .vl-kicker {
+    margin-bottom: 8px;
+  }
+
+  .vl-pos-center .vl-chapter-note {
+    margin-top: 4px;
+    font-size: 18px;
+  }
+
+  .vl-pos-center .vl-chapter-text {
+    display: none;
+  }
+
+  .vl-pos-center .vl-btn {
+    min-height: 38px;
+    margin-top: 12px;
+    font-size: 13px;
   }
 
   .vl-chapter-stats {
