@@ -8,7 +8,7 @@ Direction artistique « Carte de score », version fine : vert sapin profond et 
 
 React 19 + TypeScript + Vite. Aucune bibliothèque d'animation, aucun re-render React pendant le scroll.
 
-Démo en ligne : [à mettre en ligne]
+Démo en ligne : [gap-bayard.vercel.app](https://gap-bayard.vercel.app) (dépôt privé [Benji-devw/gap_bayard](https://github.com/Benji-devw/gap_bayard))
 
 ---
 
