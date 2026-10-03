@@ -8,7 +8,7 @@ Direction artistique « Carte de score », version fine : vert sapin profond et 
 
 React 19 + TypeScript + Vite. Aucune bibliothèque d'animation, aucun re-render React pendant le scroll.
 
-Démo en ligne : [gap-bayard.vercel.app](https://gap-bayard.vercel.app) (dépôt privé [Benji-devw/gap_bayard](https://github.com/Benji-devw/gap_bayard))
+Démo en ligne : [gap-bayard.vercel.app](https://gap-bayard.vercel.app) (dépôt privé [Benji-devw/gap_bayard](https://github.com/Benji-devw/gap_bayard)). **Préproduction privée, non indexée** : balise `robots` de `index.html` et en-tête `X-Robots-Tag` de `vercel.json` (toutes les adresses), les deux à retirer à la mise en ligne ; pas de `robots.txt` « Disallow », qui empêcherait les moteurs de lire la consigne.
 
 ---
 
