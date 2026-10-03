@@ -4630,6 +4630,32 @@ img.vl-review-avatar {
   }
 }
 
+/* ---------------------------------------------------------------- plein écran sur ordinateur (API Fullscreen)
+   L'écran entier est redessiné à chaque image : plus de verre dépoli (backdrop-filter) sur la vidéo, recalculé
+   à chaque image sur une grande surface (saccades constatées dans Chrome sous Windows, pas sur Mac).
+   Cartes des chapitres et commandes passent en fond opaque, comme sur téléphone. */
+html:fullscreen .vl-pos-left,
+html:fullscreen .vl-pos-right,
+html:fullscreen .vl-pos-bottom-left,
+html:fullscreen .vl-pos-bottom-right {
+  background: var(--bg);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html:fullscreen .vl-fullscreen,
+html:fullscreen .vl-sound,
+html:fullscreen .vl-music-play:not([aria-pressed='true']) {
+  background: var(--cream);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+html:fullscreen .vl-header {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
 /* ---------------------------------------------------------------- iPhone : bords de l'écran
    viewport-fit=cover (index.html) : la page va jusque sous l'encoche et l'indicateur d'accueil ; les éléments
    collés aux bords gardent une marge (env(safe-area-inset-*) vaut 0 ailleurs). Plein écran « immersif »
