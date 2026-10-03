@@ -1,0 +1,1118 @@
+{
+  "$schema": "./villa.schema.json",
+  "meta": {
+    "title": "Golf de Gap-Bayard — 18 trous de montagne à 1 250 m, visite immersive",
+    "description": "Survolez le Golf de Gap-Bayard au scroll : 18 trous par 72 dessinés par Hugues Lambert sur le plateau de Bayard, à 1 250 m d'altitude, aux portes du Parc national des Écrins. Practice, école de golf, restaurant et hébergement au Centre d'oxygénation.",
+    "lang": "fr"
+  },
+  "theme": {
+    "colors": {
+      "bg": "#f4f1ea",
+      "surface": "#fffdf9",
+      "fg": "#17251d",
+      "muted": "#68716b",
+      "line": "rgba(23, 37, 29, 0.13)",
+      "accent": "#22402f",
+      "accent2": "#b08a52",
+      "highlight": "#dd0f7c",
+      "ink": "#0f1c15"
+    },
+    "fonts": {
+      "url": "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap",
+      "display": "'Instrument Serif', 'Times New Roman', serif",
+      "body": "'Geist', system-ui, sans-serif",
+      "hand": "'Instrument Serif', Georgia, serif"
+    }
+  },
+  "brand": {
+    "name": "Golf de Gap-Bayard",
+    "location": "1 250 m",
+    "logo": "media/logo-sapin.png",
+    "price": "66 €",
+    "priceNote": "green fee 18 trous en basse saison · 77 € du 1er juin au 30 septembre (tarifs 2026)",
+    "cta": {
+      "label": "Réserver un départ",
+      "href": "#reserver"
+    },
+    "nav": [
+      {
+        "label": "Le parcours",
+        "href": "#le-parcours"
+      },
+      {
+        "label": "Les 18 trous",
+        "href": "#les-trous"
+      },
+      {
+        "label": "Séjourner",
+        "href": "#sejourner"
+      },
+      {
+        "label": "Tarifs",
+        "href": "#tarifs"
+      },
+      {
+        "label": "Infos",
+        "href": "#infos"
+      },
+      {
+        "label": "Avis",
+        "href": "#avis"
+      }
+    ]
+  },
+  "media": {
+    "type": "video",
+    "src": "https://pub-56f68769ad3a44519c267529445aed7c.r2.dev/gap_bayard/gap_bayard_v1.mp4",
+    "srcLocal": "media/visite-local.mp4",
+    "srcMobile": "media/visite-mobile.mp4",
+    "count": 3054,
+    "fit": "cover",
+    "focus": "50% 50%",
+    "length": 3000,
+    "smooth": 0.1,
+    "smoothTouch": 0.2,
+    "slowdowns": [
+      {
+        "from": 0.052,
+        "to": 0.112,
+        "factor": 1.6
+      },
+      {
+        "from": 0.125,
+        "to": 0.22,
+        "factor": 2.5
+      },
+      {
+        "from": 0.22,
+        "to": 0.37,
+        "factor": 1.4
+      },
+      {
+        "from": 0.555,
+        "to": 0.63,
+        "factor": 1.8
+      },
+      {
+        "from": 0.755,
+        "to": 0.8,
+        "factor": 1.8
+      },
+      {
+        "from": 0.82,
+        "to": 0.89,
+        "factor": 1.8
+      }
+    ]
+  },
+  "audio": {
+    "src": "media/ambiance.mp3",
+    "volume": 0.4,
+    "volumeMobile": 0.35
+  },
+  "play": {
+    "duration": 104,
+    "follow": 0.35,
+    "withMusic": true,
+    "musicOffset": 0
+  },
+  "studioNote": "Prototype : la vidéo de cette démonstration est un survol d'un autre parcours (Fly Over Green), utilisé uniquement pour présenter l'interface. Les photos, plans des trous, tarifs et informations viennent du site gap-bayard.com. Le site final reprend la même visite avec un tournage drone FPV du Golf de Gap-Bayard, trou par trou.",
+  "map": {
+    "query": "Golf de Gap-Bayard, Plateau de Bayard, 05000 Gap"
+  },
+  "hud": {
+    "enabled": true,
+    "until": 0.12,
+    "fps": 25,
+    "telemetry": [
+      [
+        0,
+        6,
+        205
+      ],
+      [
+        0.045,
+        14,
+        212
+      ],
+      [
+        0.09,
+        26,
+        224
+      ],
+      [
+        0.12,
+        38,
+        231
+      ]
+    ]
+  },
+  "hotspotSettings": {
+    "gap": 0.02,
+    "zoom": 0.34
+  },
+  "chapters": [
+    {
+      "in": 0.008,
+      "out": 0.048,
+      "position": "hero",
+      "kicker": "Hautes-Alpes · Col Bayard · 1 250 m",
+      "title": "Golf de Gap-Bayard",
+      "note": "respirez, jouez",
+      "text": "L'un des plus beaux 18 trous de montagne des Alpes du Sud, entre pâturages et forêts, aux portes du Parc national des Écrins.",
+      "meta": "18 trous · par 72 · 6 103 m",
+      "cta": {
+        "label": "Réserver un départ",
+        "href": "#reserver"
+      }
+    },
+    {
+      "in": 0.052,
+      "out": 0.112,
+      "position": "right",
+      "kicker": "Départ · Club-house",
+      "title": "Avant le 1",
+      "note": "on s'échauffe ici",
+      "text": "Quelques putts, un café au Centre d'oxygénation, et le premier départ attend à deux pas."
+    },
+    {
+      "in": 0.125,
+      "out": 0.223,
+      "position": "center",
+      "kicker": "Le parcours",
+      "title": "Un 18 trous de montagne",
+      "stats": [
+        {
+          "value": 18,
+          "label": "trous"
+        },
+        {
+          "value": 72,
+          "label": "par"
+        },
+        {
+          "value": 6103,
+          "suffix": " m",
+          "label": "de fairways"
+        },
+        {
+          "value": 1250,
+          "suffix": " m",
+          "label": "d'altitude"
+        }
+      ]
+    },
+    {
+      "in": 0.225,
+      "out": 0.37,
+      "position": "left",
+      "kicker": "Practice · Location",
+      "title": "Le practice",
+      "note": "4 € le seau de 30 balles",
+      "text": "Clubs, demi-séries, chariots et voiturettes se louent sur place : de quoi régler son swing avant de partir, même sans matériel."
+    },
+    {
+      "in": 0.4,
+      "out": 0.52,
+      "position": "right",
+      "kicker": "Hugues Lambert · 1989",
+      "title": "Le parcours vu du ciel",
+      "note": "18 trous, un seul tracé",
+      "text": "Dessiné en 1989 par Hugues Lambert, le parcours enchaîne ses 18 trous autour du club-house : vu d'en haut, on lit tout le jeu, du départ du 1 au green du 18."
+    },
+    {
+      "in": 0.555,
+      "out": 0.63,
+      "position": "bottom-left",
+      "kicker": "Greens · Approches",
+      "title": "Jusqu'au drapeau",
+      "note": "chaque green se lit",
+      "text": "Pentes, faux plats, eau en bordure : sur un parcours de montagne, chaque approche se travaille et le dernier putt se mérite."
+    },
+    {
+      "in": 0.66,
+      "out": 0.735,
+      "position": "bottom-right",
+      "kicker": "Trou 3 · Par 3 · Hcp 5",
+      "title": "De l'eau en jeu",
+      "note": "le plan d'eau du 3",
+      "text": "À Gap-Bayard, le trou n°3 se joue par-dessus un plan d'eau : un par 3 qui demande de la précision dès le départ."
+    },
+    {
+      "in": 0.755,
+      "out": 0.87,
+      "position": "left",
+      "kicker": "4 par 3 · 10 par 4 · 4 par 5",
+      "title": "Un parcours exigeant",
+      "note": "slope 138 aux départs blancs",
+      "text": "Bunkers qui gardent les greens, doglegs et dénivelé : un vrai parcours de montagne, à jouer en famille comme en compétition."
+    },
+    {
+      "in": 0.92,
+      "out": 1,
+      "position": "center",
+      "kicker": "Club-house · Trou 18",
+      "title": "Rendez-vous au 18",
+      "note": "la terrasse vous attend",
+      "text": "Le restaurant du Centre d'oxygénation fait face au trou n°18 : menu du jour et carte terroir, ouvert à tous sur réservation.",
+      "cta": {
+        "label": "Réserver un départ",
+        "href": "#reserver"
+      }
+    }
+  ],
+  "hotspots": [
+    {
+      "id": "echauffement",
+      "label": "L'échauffement",
+      "category": "Départ · club-house",
+      "title": "S'échauffer avant le 1",
+      "note": "quelques putts et c'est parti",
+      "description": "Le départ du parcours se prend au pied du Centre d'oxygénation : on y récupère sa carte de score, son chariot ou sa voiturette, et on passe au premier tee.",
+      "details": [
+        {
+          "label": "Réservation",
+          "value": "En ligne sur prima.golf"
+        },
+        {
+          "label": "Accueil",
+          "value": "04 92 50 16 83"
+        }
+      ],
+      "features": [
+        "Location de chariots et de voiturettes",
+        "Pro shop",
+        "Restaurant à deux pas"
+      ],
+      "image": "media/lieux/echauffement.webp",
+      "at": {
+        "from": 0.052,
+        "to": 0.112,
+        "x": 0.5,
+        "y": 0.6
+      }
+    },
+    {
+      "id": "practice",
+      "label": "Le practice",
+      "category": "Entraînement · location",
+      "title": "Le practice",
+      "note": "régler son swing",
+      "description": "Le practice accueille les joueurs de tous niveaux et les cours de l'école de golf. Balles au seau ou à volonté, matériel en location pour ceux qui découvrent.",
+      "details": [
+        {
+          "label": "Seau de 30 balles",
+          "value": "4 €"
+        },
+        {
+          "label": "10 seaux",
+          "value": "35 €"
+        },
+        {
+          "label": "Série complète",
+          "value": "25 €"
+        },
+        {
+          "label": "Chariot électrique",
+          "value": "17 €"
+        }
+      ],
+      "features": [
+        "Balles à volonté à l'année (185 €)",
+        "Location de clubs à l'unité",
+        "Cours avec l'école de golf"
+      ],
+      "image": "media/lieux/practice.webp",
+      "at": {
+        "from": 0.225,
+        "to": 0.37,
+        "x": 0.5,
+        "y": 0.6
+      }
+    },
+    {
+      "id": "parcours",
+      "label": "Le parcours",
+      "category": "18 trous · par 72",
+      "title": "Le parcours vu du ciel",
+      "note": "6 103 m de jeu",
+      "description": "Un 18 trous de montagne dessiné par Hugues Lambert en 1989 : 4 par 3, 10 par 4 et 4 par 5, sur 250 hectares de pâturages et de forêts.",
+      "details": [
+        {
+          "label": "Départs messieurs",
+          "value": "5 986 m"
+        },
+        {
+          "label": "Départs dames",
+          "value": "5 226 m"
+        },
+        {
+          "label": "Slope messieurs",
+          "value": "138"
+        },
+        {
+          "label": "Création",
+          "value": "1989"
+        }
+      ],
+      "image": "media/lieux/parcours.webp",
+      "at": {
+        "from": 0.44,
+        "to": 0.52,
+        "x": 0.5,
+        "y": 0.6
+      }
+    },
+    {
+      "id": "greens",
+      "label": "Les greens",
+      "category": "Sur le parcours",
+      "title": "Des greens à lire",
+      "note": "le drapeau au bout",
+      "description": "Avec le relief du plateau, chaque approche demande de regarder la pente : un vrai parcours de montagne, à apprivoiser trou après trou.",
+      "details": [
+        {
+          "label": "Par 3",
+          "value": "4 trous"
+        },
+        {
+          "label": "Par 5",
+          "value": "4 trous"
+        }
+      ],
+      "image": "media/lieux/green.webp",
+      "at": {
+        "from": 0.555,
+        "to": 0.63,
+        "x": 0.5,
+        "y": 0.6
+      }
+    },
+    {
+      "id": "fairways",
+      "label": "Le plan d'eau",
+      "category": "Trou 3 · par 3",
+      "title": "Le plan d'eau du 3",
+      "note": "précision obligatoire",
+      "description": "Le trou n°3 de Gap-Bayard se joue par-dessus un plan d'eau : un par 3, handicap 5, où la mise en jeu décide de tout.",
+      "details": [
+        {
+          "label": "Par",
+          "value": "3"
+        },
+        {
+          "label": "Handicap",
+          "value": "5"
+        }
+      ],
+      "image": "media/lieux/fairway.webp",
+      "at": {
+        "from": 0.66,
+        "to": 0.735,
+        "x": 0.5,
+        "y": 0.6
+      }
+    },
+    {
+      "id": "bunkers",
+      "label": "Les bunkers",
+      "category": "Sur le parcours",
+      "title": "Les bunkers",
+      "note": "à éviter, si possible",
+      "description": "Les obstacles gardent les greens : de quoi travailler ses sorties de sable au practice avant la partie.",
+      "image": "media/lieux/bunkers.webp",
+      "at": {
+        "from": 0.755,
+        "to": 0.8,
+        "x": 0.5,
+        "y": 0.6
+      }
+    },
+    {
+      "id": "club-house",
+      "label": "Le club-house",
+      "category": "Centre d'oxygénation · trou 18",
+      "title": "Le club-house et le restaurant",
+      "note": "face au trou n°18",
+      "description": "Au pied du parcours, face au trou n°18 : restaurant ouvert à tous sur réservation (menu du jour et carte terroir), hébergement et pro shop. Les groupes sont reçus jusqu'à 100 personnes.",
+      "details": [
+        {
+          "label": "Restaurant",
+          "value": "Sur réservation"
+        },
+        {
+          "label": "Groupes",
+          "value": "Jusqu'à 100 personnes"
+        }
+      ],
+      "features": [
+        "Menu du jour et carte terroir",
+        "Hébergement sur place",
+        "Pro shop"
+      ],
+      "image": "media/lieux/club-house.webp",
+      "at": {
+        "from": 0.82,
+        "to": 0.89,
+        "x": 0.5,
+        "y": 0.6
+      }
+    }
+  ],
+  "sections": {
+    "stats": {
+      "kicker": "01 · Le parcours",
+      "title": "Un 18 trous de montagne, face aux sommets",
+      "note": "de la plaine à la montagne",
+      "text": "À 7 km de Gap, à la frontière des Alpes du Nord et du Sud, le parcours dessiné par Hugues Lambert en 1989 s'étire sur le plateau de Bayard, entre pâturages et forêts de pins. En face : le Vieux Chaillol (3 160 m), les sommets du Haut-Champsaur et la falaise de Céüse. Un parcours de montagne à la portée de tous les niveaux.",
+      "image": "media/photos/panorama-parcours.webp",
+      "imageCaption": "Le plateau de Bayard et son parcours, face aux sommets du Champsaur",
+      "items": [
+        {
+          "value": "18",
+          "label": "Trous"
+        },
+        {
+          "value": "72",
+          "label": "Par"
+        },
+        {
+          "value": "6 103 m",
+          "label": "Longueur"
+        },
+        {
+          "value": "138",
+          "label": "Slope"
+        },
+        {
+          "value": "1 250 m",
+          "label": "Altitude"
+        },
+        {
+          "value": "1989",
+          "label": "Création"
+        }
+      ]
+    },
+    "rooms": {
+      "kicker": "03 · Dans la visite",
+      "title": "Du practice au trou 18",
+      "text": "Touchez une carte pour retrouver l'endroit dans la visite."
+    },
+    "amenities": {
+      "kicker": "05 · Sur place",
+      "title": "Tout pour jouer, été comme hiver",
+      "note": "le golf, et tout le reste",
+      "items": [
+        {
+          "icon": "flag",
+          "label": "18 trous par 72",
+          "text": "Parcours de montagne, 6 103 m"
+        },
+        {
+          "icon": "ball",
+          "label": "Practice",
+          "text": "Seaux de 30 balles ou formule à volonté"
+        },
+        {
+          "icon": "school",
+          "label": "Golf Academy",
+          "text": "Cours, stages et école de golf (7 à 18 ans)"
+        },
+        {
+          "icon": "cart",
+          "label": "Location",
+          "text": "Clubs, chariots, voiturettes"
+        },
+        {
+          "icon": "fork",
+          "label": "Bar-restaurant",
+          "text": "Carte de terroir, tous les midis"
+        },
+        {
+          "icon": "bed",
+          "label": "Hébergement",
+          "text": "100 lits, de la chambre au dortoir"
+        },
+        {
+          "icon": "users",
+          "label": "Séminaires",
+          "text": "Salles de 70 à 150 m²"
+        },
+        {
+          "icon": "bike",
+          "label": "Plein air",
+          "text": "Course balisée 3,5 et 6,5 km, stade, VTT"
+        },
+        {
+          "icon": "ski",
+          "label": "Domaine nordique",
+          "text": "50 km de pistes, raquettes, fat bike"
+        },
+        {
+          "icon": "shop",
+          "label": "Pro shop",
+          "text": "Au Centre d'oxygénation"
+        },
+        {
+          "icon": "mountain",
+          "label": "Navette gratuite",
+          "text": "Depuis Gap, en juillet et août"
+        },
+        {
+          "icon": "star",
+          "label": "Réseau LE CLUB",
+          "text": "20 à 50 % sur les green fees"
+        }
+      ]
+    },
+    "gallery": {
+      "kicker": "06 · Galerie",
+      "title": "Le plateau, vu du ciel et sous la neige",
+      "items": [
+        {
+          "src": "media/photos/trou-3-aerien.webp",
+          "caption": "Le trou n°3 et son plan d'eau, vus du ciel"
+        },
+        {
+          "src": "media/photos/club-house-aerien.webp",
+          "caption": "Le Centre d'oxygénation et le dernier green"
+        },
+        {
+          "src": "media/photos/fairway-foret.webp",
+          "caption": "Un fairway entre les pins"
+        },
+        {
+          "src": "media/photos/allee-club-house.webp",
+          "caption": "Le Centre, au bout du fairway"
+        },
+        {
+          "src": "media/photos/plateau.webp",
+          "caption": "Le plateau de Bayard"
+        },
+        {
+          "src": "media/photos/fat-bike.webp",
+          "caption": "Fat bike face aux sommets"
+        },
+        {
+          "src": "media/photos/raquettes.webp",
+          "caption": "Raquettes dans la forêt"
+        },
+        {
+          "src": "media/photos/ski-classique.webp",
+          "caption": "Ski de fond en classique"
+        }
+      ]
+    },
+    "rates": {
+      "kicker": "07 · Tarifs",
+      "title": "Les green fees 2026",
+      "note": "TTC, par joueur",
+      "columns": [
+        {
+          "label": "Haute saison",
+          "period": "1er juin – 30 sept."
+        },
+        {
+          "label": "Basse saison",
+          "period": "1er oct. – 30 mai"
+        }
+      ],
+      "rows": [
+        {
+          "label": "18 trous (journée)",
+          "values": [
+            "77 €",
+            "66 €"
+          ]
+        },
+        {
+          "label": "9 trous",
+          "values": [
+            "46 €",
+            "41 €"
+          ]
+        },
+        {
+          "label": "Jeunes de moins de 18 ans",
+          "values": [
+            "35 €",
+            "30 €"
+          ]
+        },
+        {
+          "label": "Jeunes de moins de 12 ans",
+          "values": [
+            "30 €",
+            "25 €"
+          ]
+        }
+      ],
+      "extras": [
+        {
+          "title": "Practice",
+          "items": [
+            {
+              "label": "Seau de 30 balles",
+              "value": "4 €"
+            },
+            {
+              "label": "10 seaux de 30 balles",
+              "value": "35 €"
+            },
+            {
+              "label": "Balles à volonté (année)",
+              "value": "185 €"
+            }
+          ]
+        },
+        {
+          "title": "Location",
+          "items": [
+            {
+              "label": "Série complète",
+              "value": "25 €"
+            },
+            {
+              "label": "Chariot électrique",
+              "value": "17 €"
+            },
+            {
+              "label": "Voiturette 18 trous (HS / BS)",
+              "value": "46 € / 40 €"
+            }
+          ]
+        },
+        {
+          "title": "Formules",
+          "items": [
+            {
+              "label": "Semaine, 7 jours consécutifs",
+              "value": "395 €"
+            },
+            {
+              "label": "Carnet de 10 green fees",
+              "value": "600 €"
+            },
+            {
+              "label": "Abonnement individuel",
+              "value": "915 €"
+            }
+          ]
+        }
+      ],
+      "source": "Grille officielle 2026 du golf. Réseau LE CLUB : 20 à 50 % de réduction avec les cartes CLASSIC et GOLD.",
+      "link": {
+        "label": "Voir toute la grille (PDF)",
+        "href": "https://www.gap-bayard.com/sites/gap-bayard.com/files/page/193941/tarifs2026golf.pdf"
+      }
+    },
+    "rules": {
+      "kicker": "08 · Infos pratiques",
+      "title": "Venir à Gap-Bayard",
+      "items": [
+        {
+          "label": "Adresse",
+          "value": "Centre d'oxygénation, Plateau de Bayard, 05000 Gap"
+        },
+        {
+          "label": "GPS",
+          "value": "44.59812, 6.06875"
+        },
+        {
+          "label": "Depuis Gap",
+          "value": "7 km par la RN85 (route Napoléon) vers Grenoble : le Centre est 800 m après le col Bayard, sur la droite"
+        },
+        {
+          "label": "Depuis Grenoble",
+          "value": "RN85 par Vizille, Laffrey et La Mure, jusqu'au Centre (3 km après Laye), à gauche"
+        },
+        {
+          "label": "Navette",
+          "value": "Gratuite en juillet et août (ligne 73) depuis Gap, environ 20 min"
+        },
+        {
+          "label": "Haute saison",
+          "value": "Du 1er juin au 30 septembre"
+        },
+        {
+          "label": "Départs",
+          "value": "Réservation en ligne sur prima.golf ou par téléphone"
+        },
+        {
+          "label": "Club",
+          "value": "Association sportive : A.S. Golf de Gap-Bayard"
+        },
+        {
+          "label": "Réseau",
+          "value": "Membre de LE CLUB (plus de 150 golfs en France)"
+        },
+        {
+          "label": "L'hiver",
+          "value": "Domaine nordique, accueil de 8 h 30 à 16 h 30"
+        }
+      ]
+    },
+    "reviews": {
+      "kicker": "09 · Avis",
+      "title": "Ils ont joué le parcours",
+      "note": "carte rendue, avis donné",
+      "sample": true,
+      "api": "",
+      "items": [
+        {
+          "name": "Marc D.",
+          "origin": "Grenoble",
+          "date": "Septembre 2026",
+          "rating": 5,
+          "text": "Un vrai parcours de montagne, du relief et des vues partout. On a fini la journée en terrasse face au 18."
+        },
+        {
+          "name": "Claire et Paul",
+          "origin": "Marseille",
+          "date": "Août 2026",
+          "rating": 5,
+          "text": "La fraîcheur du plateau en plein mois d'août : on a joué 18 trous sans souffrir de la chaleur."
+        },
+        {
+          "name": "Julien R.",
+          "origin": "Gap",
+          "date": "Juillet 2026",
+          "rating": 4,
+          "text": "Parcours exigeant, greens à bien lire. Le practice est pratique pour s'échauffer avant de partir."
+        },
+        {
+          "name": "Famille Morel",
+          "origin": "Lyon",
+          "date": "Juillet 2026",
+          "rating": 5,
+          "text": "Les enfants ont pris un cours à l'école de golf pendant qu'on faisait le 9 trous. Accueil très sympathique."
+        },
+        {
+          "name": "Stéphane V.",
+          "origin": "Aix-en-Provence",
+          "date": "Juin 2026",
+          "rating": 5,
+          "text": "Venu avec la carte LE CLUB : green fee réduit, parcours en très bon état. On reviendra."
+        },
+        {
+          "name": "Anne-Sophie L.",
+          "origin": "Embrun",
+          "date": "Mai 2026",
+          "rating": 4,
+          "text": "Un cadre superbe et un restaurant avec une vraie carte du terroir. Prévoir une voiturette si l'on n'aime pas les montées."
+        }
+      ]
+    },
+    "contact": {
+      "kicker": "10 · Réserver",
+      "title": "Réservez votre départ",
+      "text": "Les départs se réservent en ligne. Pour un séjour, un groupe, un cours, un séminaire ou une compétition d'entreprise, écrivez-nous : l'accueil du Centre vous répond rapidement.",
+      "booking": {
+        "label": "Réserver un départ en ligne",
+        "href": "https://prima.golf/gap-bayard"
+      },
+      "bookingNote": "Réservation immédiate sur prima.golf, 7 jours sur 7.",
+      "singleDate": true,
+      "host": {
+        "name": "Accueil du golf",
+        "role": "Centre d'oxygénation de Gap-Bayard",
+        "phone": "+33 4 92 50 16 83",
+        "email": "contact@gap-bayard.com",
+        "note": "Séjours, groupes, séminaires : on organise tout."
+      },
+      "maxGuests": 100,
+      "formAction": "",
+      "submitLabel": "Envoyer la demande",
+      "successMessage": "Merci, votre demande est bien partie. L'accueil du golf vous répond rapidement."
+    },
+    "holes": {
+      "kicker": "02 · Les 18 trous",
+      "title": "La carte du parcours",
+      "note": "4 par 3, 10 par 4, 4 par 5",
+      "text": "Le par et la difficulté (handicap) de chaque trou, puis les plans du parcours : à garder sous la main avant le départ.",
+      "items": [
+        {
+          "number": 1,
+          "par": 4,
+          "hcp": 7,
+          "image": "media/trous/trou-1.webp"
+        },
+        {
+          "number": 2,
+          "par": 5,
+          "hcp": 3,
+          "image": "media/trous/trou-2.webp"
+        },
+        {
+          "number": 3,
+          "par": 3,
+          "hcp": 5,
+          "image": "media/trous/trou-3.webp"
+        },
+        {
+          "number": 4,
+          "par": 4,
+          "hcp": 17,
+          "image": "media/trous/trou-4.webp"
+        },
+        {
+          "number": 5,
+          "par": 4,
+          "hcp": 9,
+          "image": "media/trous/trou-5.webp"
+        },
+        {
+          "number": 6,
+          "par": 4,
+          "hcp": 1,
+          "image": "media/trous/trou-6.webp"
+        },
+        {
+          "number": 7,
+          "par": 4,
+          "hcp": 11,
+          "image": "media/trous/trou-7.webp"
+        },
+        {
+          "number": 8,
+          "par": 5,
+          "hcp": 13,
+          "image": "media/trous/trou-8.webp"
+        },
+        {
+          "number": 9,
+          "par": 3,
+          "hcp": 15,
+          "image": "media/trous/trou-9.webp"
+        },
+        {
+          "number": 10,
+          "par": 4,
+          "hcp": 16,
+          "image": "media/trous/trou-10.webp"
+        },
+        {
+          "number": 11,
+          "par": 5,
+          "hcp": 4,
+          "image": "media/trous/trou-11.webp"
+        },
+        {
+          "number": 12,
+          "par": 4,
+          "hcp": 10,
+          "image": "media/trous/trou-12.webp"
+        },
+        {
+          "number": 13,
+          "par": 3,
+          "hcp": 12,
+          "image": "media/trous/trou-13.webp"
+        },
+        {
+          "number": 14,
+          "par": 4,
+          "hcp": 2,
+          "image": "media/trous/trou-14.webp"
+        },
+        {
+          "number": 15,
+          "par": 4,
+          "hcp": 6,
+          "image": "media/trous/trou-15.webp"
+        },
+        {
+          "number": 16,
+          "par": 5,
+          "hcp": 18,
+          "image": "media/trous/trou-16.webp"
+        },
+        {
+          "number": 17,
+          "par": 3,
+          "hcp": 8,
+          "image": "media/trous/trou-17.webp"
+        },
+        {
+          "number": 18,
+          "par": 4,
+          "hcp": 14,
+          "image": "media/trous/trou-18.webp"
+        }
+      ]
+    },
+    "stories": {
+      "kicker": "04 · Séjourner",
+      "title": "Le Centre d'oxygénation, été comme hiver",
+      "text": "Au pied du parcours, face au trou n°18 : un hôtel de 100 lits, un bar-restaurant ouvert à tous, des salles de séminaire et 250 hectares de plateau pour jouer, courir ou skier.",
+      "items": [
+        {
+          "kicker": "Hébergement · 100 lits",
+          "title": "Dormir au pied du parcours",
+          "text": "21 chambres avec douche et WC privés, 4 espaces familles de 4 à 6 lits et 2 dortoirs de 8 : le Centre reçoit en nuitée, en demi-pension ou en pension complète, au calme du plateau.",
+          "image": "media/photos/club-house-aerien.webp",
+          "imageAlt": "Le Centre d'oxygénation vu du ciel, derrière un green",
+          "facts": [
+            {
+              "label": "Nuitée en chambre double",
+              "value": "61 € / adulte"
+            },
+            {
+              "label": "Pension complète, chambre double",
+              "value": "96 € / adulte"
+            },
+            {
+              "label": "Enfants",
+              "value": "gratuit jusqu'à 5 ans, −50 % de 6 à 12 ans"
+            }
+          ],
+          "link": {
+            "label": "Demander un séjour",
+            "href": "#reserver"
+          }
+        },
+        {
+          "kicker": "Bar-restaurant · Tous les midis",
+          "title": "Une carte de saison, du terroir",
+          "text": "Ouvert tous les midis, aux golfeurs comme aux promeneurs : une carte de saison de terroir, simple et savoureuse, et une suggestion du jour. Réservation conseillée.",
+          "image": "media/photos/terrasse-hiver.webp",
+          "imageAlt": "Déjeuner en terrasse au soleil, dans la neige",
+          "facts": [
+            {
+              "label": "Plat du jour",
+              "value": "16,90 €"
+            },
+            {
+              "label": "Suggestion plat + dessert",
+              "value": "21 €"
+            },
+            {
+              "label": "Réservation",
+              "value": "04 92 50 16 83"
+            }
+          ]
+        },
+        {
+          "kicker": "Enseignement · Golf Academy",
+          "title": "Apprendre ou progresser",
+          "text": "Baptême, stage découverte, cours particuliers ou parcours accompagné : la Gap Bayard Golf Academy fournit l'équipement et les balles. L'école de golf accueille les 7 à 18 ans avec l'Association sportive.",
+          "image": "media/photos/fairway-foret.webp",
+          "imageAlt": "Un fairway bordé de pins, vu du ciel",
+          "facts": [
+            {
+              "label": "Baptême découverte 1 h 30",
+              "value": "40 €"
+            },
+            {
+              "label": "Cours individuel 1 h",
+              "value": "70 €"
+            },
+            {
+              "label": "Stage découverte 3 × 2 h",
+              "value": "270 €"
+            },
+            {
+              "label": "Parcours accompagné 2 h",
+              "value": "150 €"
+            }
+          ]
+        },
+        {
+          "kicker": "Séminaires · Groupes",
+          "title": "Réunir son équipe à 1 250 m",
+          "text": "Plusieurs salles de 70 à 150 m², un restaurant qui sert jusqu'à 200 personnes et tout le plateau pour les activités : golf, ski, randonnée, chasse au trésor, VTT ou raid.",
+          "image": "media/photos/plateau.webp",
+          "imageAlt": "Un chemin sur le plateau, un troupeau de moutons et les montagnes",
+          "facts": [
+            {
+              "label": "Salles",
+              "value": "70 à 150 m²"
+            },
+            {
+              "label": "Repas et cocktails",
+              "value": "jusqu'à 200 personnes"
+            },
+            {
+              "label": "Domaine",
+              "value": "250 hectares"
+            }
+          ],
+          "link": {
+            "label": "Demander un devis",
+            "href": "#reserver"
+          }
+        },
+        {
+          "kicker": "Hiver · Domaine nordique",
+          "title": "Quand la neige tombe, le plateau devient nordique",
+          "text": "50 km de pistes de ski de fond tracées chaque jour, en classique et en skating, des itinéraires de raquettes, du fat bike électrique et des chiens de traîneau. L'accueil du domaine ouvre tous les jours, du 20 décembre à début mars selon l'enneigement.",
+          "image": "media/photos/ski-skating.webp",
+          "imageAlt": "Skieurs de fond en skating dans la forêt enneigée",
+          "facts": [
+            {
+              "label": "Pistes",
+              "value": "50 km"
+            },
+            {
+              "label": "Location",
+              "value": "800 paires de skis"
+            },
+            {
+              "label": "Accueil",
+              "value": "8 h 30 – 16 h 30"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "footer": {
+    "text": "Golf de Gap-Bayard · Centre d'oxygénation · Plateau de Bayard, 05000 Gap · +33 4 92 50 16 83",
+    "links": [
+      {
+        "label": "Mentions légales",
+        "href": "#"
+      },
+      {
+        "label": "Confidentialité",
+        "href": "#"
+      }
+    ],
+    "credits": [
+      {
+        "label": "Photos, plans des trous et informations :",
+        "author": "Centre d'oxygénation de Gap-Bayard",
+        "authorHref": "https://www.gap-bayard.com"
+      },
+      {
+        "label": "Photo aérienne du trou n°3 :",
+        "author": "Michel Teichet"
+      },
+      {
+        "label": "Vidéo de démonstration (autre parcours) :",
+        "author": "Fly Over Green"
+      },
+      {
+        "label": "Musique : « Calm Instrumental »,",
+        "author": "Kulakovka",
+        "authorHref": "https://pixabay.com/users/kulakovka-24203542/",
+        "linkLabel": "Pixabay (licence libre de droits)",
+        "href": "https://pixabay.com/music/id-283168/"
+      }
+    ]
+  },
+  "ui": {
+    "loading": "on prépare le parcours…",
+    "travel": "Direction",
+    "route": "Parcours",
+    "seeInTour": "Voir dans la visite →",
+    "details": "voir le lieu",
+    "ratesItem": "Green fee",
+    "form": {
+      "arrival": "Date souhaitée",
+      "guests": "Joueurs",
+      "message": "Votre demande (groupe, cours, séminaire…)"
+    }
+  }
+}

@@ -1,0 +1,1364 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Villa Moana (variante Lagon) — contenu",
+  "description": "Tout le contenu de la page. Les progressions (t, in, out) vont de 0 (début de la vidéo) à 1 (fin). Les positions x/y vont de 0 à 1 depuis le coin haut-gauche de l'image.",
+  "type": "object",
+  "required": [
+    "meta",
+    "theme",
+    "brand",
+    "media",
+    "chapters",
+    "hotspots",
+    "sections",
+    "footer"
+  ],
+  "$defs": {
+    "link": {
+      "type": "object",
+      "required": ["label", "href"],
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "href": {
+          "type": "string"
+        }
+      }
+    },
+    "progress": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "trackPoint": {
+      "description": "[t, x, y] : à l'instant t (0..1), l'objet est à la position x, y (0..1, depuis le coin haut-gauche de l'image).",
+      "type": "array",
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/progress"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "number"
+        }
+      ],
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "credit": {
+      "type": "object",
+      "required": ["label", "author"],
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "ex. « Vidéo FPV : », « Musique : »"
+        },
+        "author": {
+          "type": "string"
+        },
+        "authorHref": {
+          "type": "string",
+          "description": "Lien vers l'auteur"
+        },
+        "linkLabel": {
+          "type": "string"
+        },
+        "href": {
+          "type": "string",
+          "description": "Lien vers l'œuvre d'origine"
+        }
+      }
+    },
+    "crop": {
+      "type": "object",
+      "description": "Portion de l'image de référence (vidéo ordinateur) que contient cette vidéo, en fractions 0..1 depuis le coin haut-gauche : les points et chapitres restent placés dans l'image complète. Ex. recadrage 3:4 au centre d'une 16:9 : x 0.289, y 0, width 0.422, height 1",
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "videoSource": {
+      "type": "object",
+      "description": "Un candidat vidéo : le premier que l'écran (media) et le navigateur (type) acceptent est lu",
+      "required": ["src"],
+      "properties": {
+        "src": {
+          "type": "string",
+          "description": "Fichier vidéo (chemin relatif à public/, ou adresse complète)"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type MIME avec codecs, ex. video/mp4; codecs=\"hvc1.1.6.L120.B0\" (HEVC) : ignoré si le navigateur ne sait pas le lire"
+        },
+        "media": {
+          "type": "string",
+          "description": "Requête média que l'écran doit satisfaire, ex. (orientation: portrait)"
+        },
+        "crop": {
+          "$ref": "#/$defs/crop"
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Nombre d'images de cette vidéo si sa cadence diffère (sinon count / countMobile)"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "meta": {
+      "type": "object",
+      "required": ["title", "description"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Titre de l'onglet et du partage"
+        },
+        "description": {
+          "type": "string"
+        },
+        "lang": {
+          "type": "string",
+          "default": "fr"
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "required": ["colors", "fonts"],
+      "properties": {
+        "colors": {
+          "type": "object",
+          "description": "Couleurs CSS (hex, rgb, rgba…)",
+          "required": [
+            "bg",
+            "surface",
+            "fg",
+            "muted",
+            "line",
+            "accent",
+            "accent2",
+            "ink"
+          ],
+          "properties": {
+            "bg": {
+              "type": "string",
+              "description": "Fond des sections"
+            },
+            "surface": {
+              "type": "string",
+              "description": "Cartes et popups"
+            },
+            "fg": {
+              "type": "string",
+              "description": "Texte principal"
+            },
+            "muted": {
+              "type": "string",
+              "description": "Texte secondaire"
+            },
+            "line": {
+              "type": "string",
+              "description": "Filets et bordures"
+            },
+            "accent": {
+              "type": "string",
+              "description": "Couleur d'accent (boutons, points numérotés)"
+            },
+            "ink": {
+              "type": "string",
+              "description": "Teinte sombre (voiles sur la vidéo, pied de page)"
+            },
+            "accent2": {
+              "type": "string",
+              "description": "Seconde couleur d'accent (coches, tampons)"
+            },
+            "highlight": {
+              "type": "string",
+              "description": "Couleur de rappel (ex. couleur du logo), en touches discrètes : point des étiquettes, fil de progression, fanion ouvert, champ actif. Absente = accent2"
+            }
+          }
+        },
+        "fonts": {
+          "type": "object",
+          "required": ["display", "body", "hand"],
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "URL Google Fonts (ou autre feuille de style de polices)"
+            },
+            "display": {
+              "type": "string",
+              "description": "Famille CSS des titres"
+            },
+            "body": {
+              "type": "string",
+              "description": "Famille CSS du texte"
+            },
+            "hand": {
+              "type": "string",
+              "description": "Famille CSS de la police manuscrite (annotations, légendes)"
+            }
+          }
+        }
+      }
+    },
+    "brand": {
+      "type": "object",
+      "required": ["name", "location", "cta", "nav"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "price": {
+          "type": "string",
+          "description": "Prix affiché, ex. « 550 € »"
+        },
+        "cta": {
+          "$ref": "#/$defs/link"
+        },
+        "nav": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/link"
+          }
+        },
+        "priceNote": {
+          "type": "string",
+          "description": "Précision du prix, ex. « la nuit · ménage inclus »"
+        },
+        "logo": {
+          "type": "string",
+          "description": "Logo du client (image de public/, ex. « media/logo.png ») : remplace le nom dans l'en-tête, le chargement et le pied de page"
+        }
+      }
+    },
+    "media": {
+      "type": "object",
+      "required": ["type", "src"],
+      "properties": {
+        "type": {
+          "enum": ["frames", "video"],
+          "description": "frames = séquence d'images (meilleure qualité), video = fichier MP4/WebM"
+        },
+        "src": {
+          "description": "frames : \"frames/mon-dossier/{index}.webp\" — video : \"videos/ma-video.mp4\" (chemins relatifs au dossier public/), ou liste de candidats (codecs, orientation, recadrage)",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/videoSource"
+              }
+            }
+          ]
+        },
+        "srcLocal": {
+          "type": "string",
+          "description": "En local (npm run dev, npm run preview sur localhost) : fichier de public/ lu à la place de src, ex. « media/visite-local.mp4 » (quand src pointe vers Cloudflare R2). Exclu de Git"
+        },
+        "countMobile": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Vidéo : nombre d'images de srcMobile quand elle a une autre cadence que la vidéo ordinateur (ex. 30 images/s sur mobile : durée × 30). Absent = même nombre que count"
+        },
+        "srcMobile": {
+          "description": "Version plus légère pour les écrans de moins de 768 px (même durée), ex. \"videos/ma-video-mobile.mp4\" ; ou liste de candidats, ex. une version portrait recadrée (crop) pour le téléphone à la verticale",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/videoSource"
+              }
+            }
+          ]
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 2,
+          "description": "Nombre d'images (obligatoire en mode frames)"
+        },
+        "fit": {
+          "enum": ["cover", "contain"],
+          "default": "cover"
+        },
+        "focus": {
+          "type": "string",
+          "default": "50% 50%",
+          "description": "Point focal du recadrage"
+        },
+        "length": {
+          "type": "number",
+          "default": 1100,
+          "description": "Longueur de scroll en vh (plus c'est grand, plus la visite est lente)"
+        },
+        "smooth": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 1,
+          "default": 0.08
+        },
+        "smoothTouch": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 1,
+          "default": 0.25,
+          "description": "Inertie sur écran tactile : plus directe (le doigt a déjà la sienne), jamais plus douce que smooth"
+        },
+        "slowdowns": {
+          "type": "array",
+          "description": "Ralentis : dans ces plages de la vidéo, le scroll avance factor fois plus lentement (le temps de lire les popups)",
+          "items": {
+            "type": "object",
+            "required": ["from", "to", "factor"],
+            "properties": {
+              "from": {
+                "$ref": "#/$defs/progress"
+              },
+              "to": {
+                "$ref": "#/$defs/progress"
+              },
+              "factor": {
+                "type": "number",
+                "minimum": 0.1
+              }
+            }
+          }
+        },
+        "pace": {
+          "type": "array",
+          "description": "Rythme : poids de scroll par tranche égale de vidéo (1 = normal). Généré par « Analyser le mouvement » dans l'éditeur (?edit).",
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        }
+      }
+    },
+    "audio": {
+      "type": "object",
+      "description": "Musique d'ambiance de la visite : coupée par défaut, bouton en bas au centre, téléchargée au premier clic",
+      "required": ["src"],
+      "properties": {
+        "src": {
+          "type": "string",
+          "description": "Chemin relatif à public/, ex. « media/ambiance.mp3 »"
+        },
+        "volume": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5,
+          "description": "Volume sur ordinateur (souris, pavé tactile), 0..1"
+        },
+        "volumeMobile": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Volume sur écran tactile (téléphone, tablette), 0..1 ; absent = volume. Safari sur iPhone l'ignore (toujours à 100 %)"
+        }
+      }
+    },
+    "play": {
+      "type": "object",
+      "description": "Bouton lecture en bas au centre : la visite défile toute seule jusqu'à la fin (s'arrête si le visiteur fait défiler ou ouvre une fiche). Absent = pas de bouton",
+      "properties": {
+        "duration": {
+          "type": "number",
+          "minimum": 5,
+          "description": "Durée de la visite entière en lecture, en secondes (par défaut : durée réelle de la vidéo, media.count ÷ hud.fps)"
+        },
+        "follow": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.35,
+          "description": "Part du rythme du scroll (pace, ralentis) suivie par la lecture : 0 = vidéo à vitesse régulière, 1 = exactement comme au scroll (les trajets filent, les lieux traînent)"
+        },
+        "withMusic": {
+          "type": "boolean",
+          "default": false,
+          "description": "Bouton « visite en musique » en plus (pastille avec texte) : lance ensemble la musique d'ambiance, depuis le début du morceau, et la visite, depuis le début ; demande la clé audio"
+        },
+        "musicOffset": {
+          "type": "number",
+          "default": 0,
+          "description": "Visite en musique : décalage (s) entre la musique et les images, pour caler les temps forts du morceau. Positif : la visite part d'autant plus loin dans la vidéo (images en avance) ; négatif : la musique part d'autant plus loin dans le morceau (musique en avance). Par pas de 0,1 ; pour ce bouton seulement"
+        }
+      }
+    },
+    "studioNote": {
+      "type": "string",
+      "description": "Précision propre au projet dans la popup « Comment ça marche », sous l'introduction, ex. sur un site de démonstration : la vidéo n'a pas été tournée par Navart. Absent = rien"
+    },
+    "map": {
+      "type": "object",
+      "description": "Lieu du bien : bouton Google Maps dans l'en-tête",
+      "required": ["query"],
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Adresse, ville ou code postal cherché dans Google Maps, ex. « Gap 05000 »"
+        }
+      }
+    },
+    "hud": {
+      "type": "object",
+      "description": "Viseur façon drone (REC, timecode, coins) au début de la visite : signature Navart, à garder sur chaque projet",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "until": {
+          "$ref": "#/$defs/progress",
+          "description": "Progression à laquelle le viseur disparaît"
+        },
+        "telemetry": {
+          "type": "array",
+          "description": "[t, altitude (m), cap (°)] — facultatif",
+          "items": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        "fps": {
+          "type": "integer",
+          "description": "Images par seconde de la vidéo (timecode)"
+        }
+      }
+    },
+    "hotspotSettings": {
+      "type": "object",
+      "properties": {
+        "gap": {
+          "type": "number",
+          "default": 0.04,
+          "description": "Si deux points d'une piste sont plus espacés que cette valeur (en t), la pièce est masquée entre eux"
+        },
+        "zoom": {
+          "type": "number",
+          "default": 0.34,
+          "description": "Taille du zoom affiché dans la fiche d'une pièce sans photo (part de la hauteur de l'image)"
+        }
+      }
+    },
+    "chapters": {
+      "type": "array",
+      "description": "Textes affichés sur la vidéo entre in et out",
+      "items": {
+        "type": "object",
+        "required": ["in", "out", "position", "title"],
+        "properties": {
+          "in": {
+            "$ref": "#/$defs/progress"
+          },
+          "out": {
+            "$ref": "#/$defs/progress"
+          },
+          "position": {
+            "enum": [
+              "hero",
+              "left",
+              "right",
+              "center",
+              "bottom-left",
+              "bottom-right"
+            ]
+          },
+          "kicker": {
+            "type": "string",
+            "description": "Petite ligne au-dessus du titre"
+          },
+          "title": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string",
+            "description": "Ligne manuscrite sous le titre"
+          },
+          "text": {
+            "type": "string"
+          },
+          "meta": {
+            "type": "string"
+          },
+          "cta": {
+            "$ref": "#/$defs/link"
+          },
+          "stats": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["value", "label"],
+              "properties": {
+                "value": {
+                  "type": "number"
+                },
+                "decimals": {
+                  "type": "integer"
+                },
+                "suffix": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "hotspots": {
+      "type": "array",
+      "description": "Pièces de la visite, dans l'ordre du parcours (le numéro du point suit cet ordre)",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "title"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]+$"
+          },
+          "label": {
+            "type": "string",
+            "description": "Nom court affiché à côté du point numéroté"
+          },
+          "category": {
+            "type": "string",
+            "description": "Petite ligne au-dessus du titre, ex. « Étage · suite parentale »"
+          },
+          "title": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string",
+            "description": "Légende manuscrite sous la photo"
+          },
+          "description": {
+            "type": "string"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["label", "value"],
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "features": {
+            "type": "array",
+            "description": "Équipements de la pièce (liste cochée)",
+            "items": {
+              "type": "string"
+            }
+          },
+          "image": {
+            "type": "string",
+            "description": "Photo de la pièce (fiche et section « pièces ») ; sinon zoom automatique dans la vidéo"
+          },
+          "link": {
+            "$ref": "#/$defs/link"
+          },
+          "in": {
+            "$ref": "#/$defs/progress"
+          },
+          "out": {
+            "$ref": "#/$defs/progress"
+          },
+          "at": {
+            "type": "object",
+            "description": "Mode simple : popup fixe entre from et to, à la position x, y de l'image. Ignoré si track contient des points.",
+            "required": ["from", "to", "x", "y"],
+            "properties": {
+              "from": {
+                "$ref": "#/$defs/progress"
+              },
+              "to": {
+                "$ref": "#/$defs/progress"
+              },
+              "x": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "y": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          },
+          "track": {
+            "type": "array",
+            "description": "Mode suivi : le point suit l'objet image par image",
+            "items": {
+              "$ref": "#/$defs/trackPoint"
+            }
+          }
+        }
+      }
+    },
+    "sections": {
+      "type": "object",
+      "required": [
+        "stats",
+        "rooms",
+        "amenities",
+        "gallery",
+        "rules",
+        "contact"
+      ],
+      "properties": {
+        "stats": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "Texte d'introduction à côté des chiffres"
+            },
+            "image": {
+              "type": "string",
+              "description": "Grande photo d'ouverture de la section (chemin dans public/)"
+            },
+            "imageCaption": {
+              "type": "string"
+            }
+          }
+        },
+        "holes": {
+          "type": "object",
+          "description": "Carte de score du parcours (golf) : un trou par entrée, dans l'ordre, avec par, handicap et plan facultatif. Section facultative.",
+          "required": ["title", "items"],
+          "properties": {
+            "kicker": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["number", "par"],
+                "properties": {
+                  "number": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "par": {
+                    "type": "integer",
+                    "minimum": 3,
+                    "maximum": 6
+                  },
+                  "hcp": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Handicap (difficulté) du trou"
+                  },
+                  "image": {
+                    "type": "string",
+                    "description": "Plan du trou (chemin dans public/)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "stories": {
+          "type": "object",
+          "description": "Récits en photo + texte, en alternance (séjourner, restaurant, séminaires, hiver…). Section facultative.",
+          "required": ["title", "items"],
+          "properties": {
+            "kicker": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["title", "text", "image"],
+                "properties": {
+                  "kicker": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string"
+                  },
+                  "imageAlt": {
+                    "type": "string"
+                  },
+                  "facts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["label", "value"],
+                      "properties": {
+                        "label": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "link": {
+                    "$ref": "#/$defs/link"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "rooms": {
+          "type": "object",
+          "description": "Section des lieux (cartes générées depuis hotspots)",
+          "required": ["title"],
+          "properties": {
+            "kicker": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        },
+        "amenities": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "icon": {
+                    "enum": [
+                      "pool",
+                      "sea",
+                      "garden",
+                      "spa",
+                      "garage",
+                      "smart",
+                      "wine",
+                      "shield",
+                      "sun",
+                      "bed",
+                      "key",
+                      "star",
+                      "wifi",
+                      "snow",
+                      "kitchen",
+                      "washer",
+                      "grill",
+                      "coffee",
+                      "child",
+                      "flag",
+                      "ball",
+                      "cart",
+                      "fork",
+                      "school",
+                      "shop",
+                      "mountain",
+                      "bike",
+                      "ski",
+                      "users"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "gallery": {
+          "type": "object"
+        },
+        "rules": {
+          "type": "object",
+          "description": "Bon à savoir : horaires, règles de la maison",
+          "required": ["title", "items"],
+          "properties": {
+            "kicker": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["label", "value"],
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "rates": {
+          "type": "object",
+          "description": "Tarifs en tableau façon carte de score (golf) : colonnes (saisons), lignes (prestations), puis tarifs annexes par groupe. Section facultative.",
+          "required": ["title", "columns", "rows"],
+          "properties": {
+            "kicker": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string",
+              "description": "Annotation manuscrite sous le titre"
+            },
+            "text": {
+              "type": "string"
+            },
+            "columns": {
+              "type": "array",
+              "description": "En-têtes des colonnes de prix, ex. « Haute saison »",
+              "items": {
+                "type": "object",
+                "required": ["label"],
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  },
+                  "period": {
+                    "type": "string",
+                    "description": "Ex. « 1er juin – 30 sept. »"
+                  }
+                }
+              }
+            },
+            "rows": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["label", "values"],
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  },
+                  "values": {
+                    "type": "array",
+                    "description": "Un prix par colonne",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "extras": {
+              "type": "array",
+              "description": "Tarifs annexes (practice, location, formules…), en groupes",
+              "items": {
+                "type": "object",
+                "required": ["title", "items"],
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["label", "value"],
+                      "properties": {
+                        "label": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "source": {
+              "type": "string",
+              "description": "Origine des tarifs (ex. « Grille officielle 2026, TTC »)"
+            },
+            "link": {
+              "$ref": "#/$defs/link"
+            }
+          }
+        },
+        "reviews": {
+          "type": "object",
+          "description": "Avis : saisis ici (items) ou vrais avis Google via une fonction serveur (api). Section facultative.",
+          "required": ["title", "items"],
+          "properties": {
+            "kicker": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string",
+              "description": "Annotation manuscrite sous le titre"
+            },
+            "text": {
+              "type": "string"
+            },
+            "sample": {
+              "type": "boolean",
+              "description": "true = avis d'exemple : mention visible, pas de lien Google. À passer à false avec de vrais avis."
+            },
+            "api": {
+              "type": "string",
+              "description": "Adresse de la fonction qui renvoie les vrais avis Google, ex. « /api/reviews » (voir api/reviews.js). Vide = avis du JSON."
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["name", "date", "rating", "text"],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "origin": {
+                    "type": "string",
+                    "description": "Ville ou pays"
+                  },
+                  "date": {
+                    "type": "string",
+                    "description": "Ex. « Août 2026 »"
+                  },
+                  "rating": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "contact": {
+          "type": "object",
+          "required": ["title", "host", "submitLabel", "successMessage"],
+          "properties": {
+            "host": {
+              "type": "object",
+              "required": ["name", "role", "phone", "email"],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string",
+                  "description": "Mot manuscrit de l'hôte"
+                }
+              }
+            },
+            "maxGuests": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Nombre maximal de voyageurs (champ du formulaire)"
+            },
+            "formAction": {
+              "type": "string",
+              "description": "URL d'envoi du formulaire (Formspree, Netlify Forms, API…). Vide = mode démo, rien n'est envoyé."
+            },
+            "booking": {
+              "$ref": "#/$defs/link",
+              "description": "Réservation en ligne (ex. départs sur prima.golf) : bouton principal de la section, ouvert dans un nouvel onglet"
+            },
+            "bookingNote": {
+              "type": "string",
+              "description": "Ligne sous le bouton de réservation en ligne"
+            },
+            "singleDate": {
+              "type": "boolean",
+              "description": "true = formulaire à une seule date (date souhaitée, sans départ) : golf, cours, rendez-vous"
+            },
+            "availability": {
+              "type": "object",
+              "description": "Calendrier des disponibilités au-dessus du formulaire : nuits libres ou réservées, choix de l'arrivée et du départ",
+              "required": ["title"],
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "sample": {
+                  "type": "boolean",
+                  "description": "true = réservations d'exemple générées et mention visible (démo). À passer à false avec de vraies données."
+                },
+                "api": {
+                  "type": "string",
+                  "description": "Adresse de la fonction qui lit le calendrier iCal du bien (Google Agenda, Airbnb, Booking), ex. « /api/availability » ; vide = dates du JSON"
+                },
+                "minNights": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "Séjour minimum, en nuits"
+                },
+                "booked": {
+                  "type": "array",
+                  "description": "Réservations saisies à la main ; `to` = jour du départ",
+                  "items": {
+                    "type": "object",
+                    "required": ["from", "to"],
+                    "properties": {
+                      "from": {
+                        "type": "string",
+                        "format": "date"
+                      },
+                      "to": {
+                        "type": "string",
+                        "format": "date"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "footer": {
+      "type": "object",
+      "required": ["text", "links"],
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/link"
+          }
+        },
+        "credits": {
+          "type": "array",
+          "description": "Crédits des œuvres utilisées (vidéo d'un autre réalisateur, musique…)",
+          "items": {
+            "$ref": "#/$defs/credit"
+          }
+        }
+      }
+    },
+    "ui": {
+      "type": "object",
+      "description": "Petits textes de l'interface (à traduire avec le reste). Facultatif : valeurs françaises par défaut.",
+      "properties": {
+        "tutorialTouch": {
+          "type": "string",
+          "description": "Tutoriel du début, écran tactile (main qui glisse vers le haut)"
+        },
+        "tutorialTrackpad": {
+          "type": "string",
+          "description": "Tutoriel du début, pavé tactile (deux doigts vers le haut)"
+        },
+        "tutorialWheel": {
+          "type": "string",
+          "description": "Tutoriel du début, souris (molette vers le bas)"
+        },
+        "reviewsCount": {
+          "type": "string",
+          "description": "Nombre d'avis sous la note ({count})"
+        },
+        "reviewsRating": {
+          "type": "string",
+          "description": "Libellé d'accessibilité des étoiles ({rating})"
+        },
+        "reviewsSample": {
+          "type": "string",
+          "description": "Mention des avis d'exemple (sections.reviews.sample)"
+        },
+        "reviewsLink": {
+          "type": "string",
+          "description": "Lien vers la fiche Google Maps du bien"
+        },
+        "reviewsGoogle": {
+          "type": "string",
+          "description": "Attribution des avis venus de l'API Google"
+        },
+        "reviewsPrev": {
+          "type": "string",
+          "description": "Flèche précédente du carrousel d'avis"
+        },
+        "reviewsNext": {
+          "type": "string",
+          "description": "Flèche suivante du carrousel d'avis"
+        },
+        "calendarPrev": {
+          "type": "string",
+          "description": "Calendrier : flèche du mois précédent"
+        },
+        "calendarNext": {
+          "type": "string",
+          "description": "Calendrier : flèche du mois suivant"
+        },
+        "calendarFree": {
+          "type": "string",
+          "description": "Calendrier : légende des nuits libres"
+        },
+        "calendarBooked": {
+          "type": "string",
+          "description": "Calendrier : légende des nuits réservées"
+        },
+        "calendarStay": {
+          "type": "string",
+          "description": "Calendrier : légende du séjour choisi"
+        },
+        "calendarStart": {
+          "type": "string",
+          "description": "Calendrier : consigne avant le choix"
+        },
+        "calendarEnd": {
+          "type": "string",
+          "description": "Calendrier : consigne après l'arrivée ({n} = nuits minimum)"
+        },
+        "calendarSummary": {
+          "type": "string",
+          "description": "Calendrier : séjour choisi ({n}, {from}, {to})"
+        },
+        "calendarClear": {
+          "type": "string",
+          "description": "Calendrier : bouton pour effacer le choix"
+        },
+        "calendarSample": {
+          "type": "string",
+          "description": "Calendrier : mention des disponibilités d'exemple"
+        },
+        "rotateHint": {
+          "type": "string",
+          "description": "Invitation à tourner le téléphone, affichée pendant l'accueil sur un téléphone tenu à la verticale"
+        },
+        "map": {
+          "type": "string",
+          "description": "Bouton Google Maps de l'en-tête"
+        },
+        "loading": {
+          "type": "string",
+          "description": "Texte manuscrit sous le nom pendant le chargement"
+        },
+        "ratesItem": {
+          "type": "string",
+          "description": "Tableau des tarifs : en-tête de la première colonne (« Formule »)"
+        },
+        "holesHole": {
+          "type": "string",
+          "description": "Carte de score : intitulé de la ligne des numéros (« Trou »)"
+        },
+        "holesPar": {
+          "type": "string"
+        },
+        "holesHcp": {
+          "type": "string"
+        },
+        "holesOut": {
+          "type": "string",
+          "description": "Total des trous 1 à 9 (« Aller »)"
+        },
+        "holesIn": {
+          "type": "string",
+          "description": "Total des trous 10 à 18 (« Retour »)"
+        },
+        "holesTotal": {
+          "type": "string"
+        },
+        "holesPlan": {
+          "type": "string",
+          "description": "Légende d'un plan de trou ({n} numéro, {par})"
+        },
+        "seeInTour": {
+          "type": "string",
+          "description": "Lien des cartes de la section « lieux »"
+        },
+        "details": {
+          "type": "string",
+          "description": "Libellé d'accessibilité des points (« <nom> : <details> »)"
+        },
+        "close": {
+          "type": "string"
+        },
+        "menu": {
+          "type": "string",
+          "description": "Libellé d'accessibilité du bouton menu (mobile)"
+        },
+        "route": {
+          "type": "string",
+          "description": "Titre de l'itinéraire affiché pendant la visite"
+        },
+        "live": {
+          "type": "string",
+          "description": "Pastille du zoom en direct (pièce sans photo)"
+        },
+        "hudFormat": {
+          "type": "string",
+          "description": "Format du viseur drone ; {fps} = images par seconde"
+        },
+        "fullscreen": {
+          "type": "string",
+          "description": "Bouton plein écran de la visite"
+        },
+        "exitFullscreen": {
+          "type": "string"
+        },
+        "fullscreenHint": {
+          "type": "string",
+          "description": "Bulle au-dessus du bouton plein écran quand le téléphone passe à l'horizontale"
+        },
+        "soundOn": {
+          "type": "string",
+          "description": "Bouton de la musique (son coupé)"
+        },
+        "soundOff": {
+          "type": "string",
+          "description": "Bouton de la musique (son actif)"
+        },
+        "play": {
+          "type": "string",
+          "description": "Bouton de lecture automatique (visite à l'arrêt)"
+        },
+        "pause": {
+          "type": "string",
+          "description": "Bouton de lecture automatique (visite en lecture)"
+        },
+        "playWithMusicText": {
+          "type": "string",
+          "description": "Bouton « visite en musique » : texte visible de la pastille, suivi d'une note de musique (« Visite en »)"
+        },
+        "playWithMusic": {
+          "type": "string",
+          "description": "Bouton « visite en musique » (libellé d'accessibilité et infobulle)"
+        },
+        "pauseWithMusic": {
+          "type": "string",
+          "description": "Bouton « visite en musique » en lecture (libellé d'accessibilité)"
+        },
+        "showHeader": {
+          "type": "string",
+          "description": "Plein écran pendant la visite : bouton (fleur) qui rappelle l'en-tête rangé"
+        },
+        "hideHeader": {
+          "type": "string",
+          "description": "Plein écran pendant la visite : même bouton quand l'en-tête est affiché"
+        },
+        "travel": {
+          "type": "string",
+          "description": "Voile pendant un saut d'un lieu à un autre, suivi du nom du lieu (« En route vers »)"
+        },
+        "form": {
+          "type": "object",
+          "properties": {
+            "arrival": {
+              "type": "string"
+            },
+            "departure": {
+              "type": "string"
+            },
+            "guests": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

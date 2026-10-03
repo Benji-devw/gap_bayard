@@ -1,0 +1,72 @@
+{
+  "name": "Navart",
+  "button": "Comment ça marche",
+  "kicker": "Développé par Navart",
+  "title": "Votre bien en visite immersive, de A à Z",
+  "intro": "Je m'occupe de tout, du tournage à la mise en ligne : prises de vue en drone FPV 4K à 60 images/s, montage et compression de la vidéo pour le web et le mobile, développement du site et design à votre image. Gîtes, campings, maisons d'hôtes : Gap et 1 h autour.",
+  "highlights": [
+    { "value": "≈ 2 h", "label": "de tournage sur place" },
+    { "value": "≈ 1 semaine", "label": "entre le tournage et la mise en ligne" },
+    { "value": "0", "label": "matériel à prévoir de votre côté" }
+  ],
+  "steps": [
+    {
+      "icon": "chat",
+      "title": "Rendez-vous sur place",
+      "duration": "≈ 1 h, sans le drone",
+      "text": "Vous me faites visiter le bien et me montrez ce que vous voulez mettre en valeur. Je repère le parcours de vol, je vérifie la réglementation aérienne et nous choisissons ensemble les fonctions du site. Vous recevez un devis détaillé et un planning."
+    },
+    {
+      "icon": "drone",
+      "title": "Tournage",
+      "duration": "≈ 2 h",
+      "text": "La date est fixée selon la météo. J'apporte tout le matériel et je fais plusieurs prises pour garder la meilleure : un plan-séquence sans coupe, de la vue aérienne jusqu'au cœur du bien. On valide les images ensemble sur place."
+    },
+    {
+      "icon": "palette",
+      "title": "Création du site",
+      "duration": "4 à 5 jours",
+      "text": "Je monte et étalonne la vidéo, je crée l'interface à votre image et je place les points interactifs dans le parcours. Textes, prix et photos : je reprends ceux de votre site ou de vos annonces s'ils existent."
+    },
+    {
+      "icon": "rocket",
+      "title": "Validation & mise en ligne",
+      "duration": "≈ 1 semaine après le tournage",
+      "text": "Vous testez le site sur un lien privé et me transmettez vos ajustements. Je le teste sur iPhone, Android et ordinateur, puis je le mets en ligne."
+    },
+    {
+      "icon": "key",
+      "title": "Et après",
+      "text": "Avec le Pack Zen, je m'occupe de l'hébergement, du nom de domaine et de vos mises à jour (textes, prix, photos) toute l'année, sans refaire le site."
+    }
+  ],
+  "prepare": {
+    "title": "Préparer le jour du tournage",
+    "items": [
+      "Pièces rangées et désencombrées",
+      "Volets ouverts, lumières allumées",
+      "Piscine propre, extérieurs dégagés",
+      "Portes intérieures ouvertes sur le parcours",
+      "Animaux et personnes hors du parcours de vol"
+    ]
+  },
+  "deliverables": {
+    "title": "Ce que vous recevez",
+    "items": [
+      "Le site complet en ligne, sur ordinateur et mobile",
+      "La vidéo en 4K 60 images/s et en Full HD, réutilisable sur vos annonces",
+      "Une version courte pour les réseaux sociaux",
+      "Un formulaire de contact qui arrive dans votre boîte mail",
+      "Un site testé sur iPhone, Android et ordinateur avant la mise en ligne"
+    ]
+  },
+  "credit": "Visite immersive réalisée par",
+  "site": {
+    "label": "Découvrir la prestation sur navart.dev",
+    "href": "https://navart.dev/prestation"
+  },
+  "contact": {
+    "label": "Demander un devis",
+    "href": "mailto:nav.devart@gmail.com?subject=Demande%20de%20devis%20%E2%80%94%20visite%20immersive"
+  }
+}

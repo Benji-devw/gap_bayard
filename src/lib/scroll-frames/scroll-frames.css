@@ -1,0 +1,180 @@
+/*
+ * ScrollFrames — styles de base
+ *
+ * Variables écrites par le moteur (utilisables partout dans votre CSS) :
+ *   section .sf     --sf-progress (0→1)   --sf-load (0→1)   --sf-load-ready (0→1)
+ *                   [data-sf-state="loading|ready|error"]   [data-sf-complete]
+ *   chaque .sf-step --sf-p  progression locale entre in et out (0→1)
+ *                   --sf-v  visibilité avec fondu (0→1)
+ *                   --sf-e  décalage d'entrée/sortie (+1 → 0 → -1)
+ *                   [data-visible] [data-active]
+ */
+
+.sf {
+  position: relative;
+  height: var(--sf-length, 400vh);
+}
+
+.sf-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.sf-canvas,
+.sf-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* vidéo affichée à la place du canvas quand le navigateur ne sait pas l'y copier (Firefox Android) */
+.sf-video {
+  pointer-events: none;
+}
+
+/* Calque de contenu posé sur le canvas */
+.sf-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- étapes */
+.sf-step {
+  --sf-v: 0;
+  --sf-e: 1;
+  --sf-p: 0;
+  opacity: var(--sf-v);
+  visibility: hidden;
+  will-change: opacity, transform;
+}
+
+.sf-step[data-visible] {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Presets : <Step anim="…">  (amplitude réglable avec distance / --sf-distance) */
+[data-anim='fade-up'] {
+  transform: translate3d(0, calc(var(--sf-e) * var(--sf-distance, 48px)), 0);
+}
+
+[data-anim='fade-down'] {
+  transform: translate3d(0, calc(var(--sf-e) * -1 * var(--sf-distance, 48px)), 0);
+}
+
+[data-anim='fade-left'] {
+  transform: translate3d(calc(var(--sf-e) * var(--sf-distance, 64px)), 0, 0);
+}
+
+[data-anim='fade-right'] {
+  transform: translate3d(calc(var(--sf-e) * -1 * var(--sf-distance, 64px)), 0, 0);
+}
+
+[data-anim='scale'] {
+  transform: scale(calc(1 - (1 - var(--sf-v)) * 0.08));
+}
+
+[data-anim='zoom'] {
+  transform: scale(calc(1 + var(--sf-e) * 0.14));
+}
+
+[data-anim='blur'] {
+  filter: blur(calc((1 - var(--sf-v)) * 14px));
+  transform: translate3d(0, calc(var(--sf-e) * 20px), 0);
+}
+
+[data-anim='clip'] {
+  clip-path: inset(0 0 calc((1 - var(--sf-v)) * 100%) 0);
+}
+
+[data-anim='drift'] {
+  transform: translate3d(0, calc((0.5 - var(--sf-p)) * var(--sf-distance, 120px)), 0);
+}
+
+/* Révélation mot à mot : <SplitWords> dans une <Step> */
+.sf-word {
+  opacity: clamp(var(--sf-dim, 0.18), calc((var(--sf-p) - 0.08) / 0.62 * var(--n) - var(--i) + 1), 1);
+}
+
+/* ---------------------------------------------------------------- préchargement */
+.sf-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 14px;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+  transition: opacity 0.7s ease, visibility 0.7s;
+}
+
+.sf[data-sf-state='ready'] .sf-loader {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.sf-loader-bar {
+  width: min(220px, 50vw);
+  height: 2px;
+  overflow: hidden;
+  background: color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.sf-loader-bar::after {
+  content: '';
+  display: block;
+  height: 100%;
+  background: currentColor;
+  transform-origin: left;
+  transform: scaleX(var(--sf-load-ready, 0));
+  transition: transform 0.25s ease;
+}
+
+/* taille de la vidéo inconnue : barre en va-et-vient */
+.sf[data-sf-indeterminate] .sf-loader-bar::after {
+  width: 35%;
+  transform: none;
+  animation: sf-indeterminate 1.1s ease-in-out infinite;
+}
+
+@keyframes sf-indeterminate {
+  from {
+    translate: -100% 0;
+  }
+
+  to {
+    translate: 290% 0;
+  }
+}
+
+.sf-loader-text {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  opacity: 0.7;
+}
+
+/* ---------------------------------------------------------------- utilitaires */
+.sf-progress-x {
+  transform-origin: left center;
+  transform: scaleX(var(--sf-progress, 0));
+}
+
+.sf-progress-y {
+  transform-origin: center top;
+  transform: scaleY(var(--sf-progress, 0));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sf-step {
+    transform: none !important;
+    filter: none !important;
+  }
+}

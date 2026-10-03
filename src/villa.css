@@ -1,0 +1,4662 @@
+/* ============================================================
+   Template « Villa » — variante « Carte de score » (Golf de Gap-Bayard, Hautes-Alpes)
+   L'élégance d'une carte de score imprimée : papier crème, filets fins, chiffres alignés.
+   Vert sapin profond et laiton, sur crème ; le magenta du logo (theme.colors.highlight) en touches discrètes
+   seulement : point des étiquettes, fil de progression, barre de chargement, fanion ouvert, survol du menu, champ actif.
+   Instrument Serif (titres, chiffres, notes en italique) + Geist (texte) + Geist Mono (étiquettes, numéros).
+   - en-tête : barre crème à filet, logo, altimètre en mono, bouton en pilule sapin
+   - chapitres : grand serif blanc sur la vidéo, cartes crème à filet pour les étapes, compteurs à filets
+   - points : drapeaux de green fins (mât blanc, fanion laiton numéroté) ; fiche crème à filets
+   - itinéraire : fil vertical fin, pastille laiton pour le lieu en cours
+   - voile : sapin très flou, drapeau au trait ; chargement : sapin, logo sur plaque blanche, barre d'un pixel
+   - sections : grande photo d'ouverture, carte de score des 18 trous, plans en bande, récits en alternance,
+     sur place sur sapin, galerie en mosaïque, tableau des green fees, infos en liste, réservation en deux colonnes
+   Couleurs et polices : data/villa.json (theme)
+   ============================================================ */
+.tpl-villa {
+  --pad: clamp(20px, 5vw, 80px);
+  --header-h: 68px;
+  --radius: 2px;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  /* teintes dérivées du thème */
+  --cream: #f6f1e6;
+  --brass-soft: color-mix(in srgb, var(--accent2) 55%, #fff);
+  --pine-soft: color-mix(in srgb, var(--accent) 7%, var(--surface));
+  --hair-light: rgb(255 255 255 / 0.22);
+  --flag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 2h1.4v20H6zM7.4 3 19 7.5 7.4 12z'/%3E%3C/svg%3E");
+  --mountain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M1 20 9 6.5l4 6.2 3-4.2 7 11.5z'/%3E%3C/svg%3E");
+
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+:root:has(.tpl-villa) {
+  background: var(--ink, #0f1c15);
+  color-scheme: light;
+}
+
+.tpl-villa ::selection {
+  background: var(--accent);
+  color: var(--cream);
+}
+
+/* note en italique serif (laiton) */
+.vl-hand {
+  font-family: var(--hand);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+/* étiquette : capitales mono espacées, segments séparés par un filet (comme les cases d'une carte) */
+.vl-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 0;
+  margin-bottom: 20px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* rappel du logo : un point magenta devant chaque étiquette */
+.vl-kicker::before {
+  content: '';
+  flex: none;
+  width: 5px;
+  height: 5px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background: var(--highlight);
+}
+
+.vl-kicker > span + span::before {
+  content: '';
+  display: inline-block;
+  width: 1px;
+  height: 0.95em;
+  margin: 0 12px;
+  vertical-align: -0.12em;
+  background: currentColor;
+  opacity: 0.35;
+}
+
+.vl-kicker > span:first-child {
+  color: var(--accent2);
+}
+
+/* liste cochée : trait fin laiton */
+.vl-checklist {
+  display: grid;
+  gap: 8px;
+}
+
+.vl-checklist li {
+  position: relative;
+  padding-left: 24px;
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+.vl-checklist li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 6px;
+  width: 9px;
+  height: 5px;
+  border-left: 1.5px solid var(--accent2);
+  border-bottom: 1.5px solid var(--accent2);
+  rotate: -45deg;
+}
+
+/* ---------------------------------------------------------------- boutons : pilule sapin, texte crème */
+.vl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 50px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-family: var(--body);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  white-space: nowrap;
+  color: var(--cream);
+  background: var(--accent);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+
+.vl-btn:hover {
+  background: var(--ink);
+}
+
+.vl-btn:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: 3px;
+}
+
+.vl-btn-sm {
+  min-height: 40px;
+  padding: 0 20px;
+  font-size: 13.5px;
+}
+
+.vl-btn-big {
+  min-height: 58px;
+  padding: 0 32px;
+  font-size: 15px;
+}
+
+.vl-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: translate 0.25s var(--ease);
+}
+
+.vl-btn:hover svg {
+  translate: 2px -2px;
+}
+
+/* lien éditorial : capitales mono soulignées d'un filet laiton */
+.vl-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding-bottom: 4px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent2);
+  transition: gap 0.25s var(--ease), color 0.2s;
+}
+
+.vl-link::after {
+  content: '→';
+  font-family: var(--body);
+}
+
+.vl-link:hover {
+  gap: 12px;
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------- en-tête : barre crème, filet fin */
+.vl-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-height: var(--header-h);
+  padding: 10px var(--pad);
+  color: var(--fg);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  border-bottom: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+  transition: translate 0.45s var(--ease), opacity 0.3s, background 0.3s;
+}
+
+.vl-header.is-solid {
+  background: var(--bg);
+}
+
+/* plein écran pendant la visite : en-tête rangé vers le haut (rappelé par .vl-header-peek) */
+.vl-header.is-tucked {
+  translate: 0 -100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vl-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  flex: none;
+  font-family: var(--display);
+  font-size: 24px;
+  text-decoration: none;
+  white-space: nowrap;
+  color: inherit;
+}
+
+.vl-logo-img {
+  width: auto;
+  height: 40px;
+}
+
+/* repère de secours (projet sans logo, rappel de l'en-tête en plein écran) : drapeau laiton */
+.vl-logo-mark {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  background: var(--accent2);
+  -webkit-mask: var(--flag) center / contain no-repeat;
+  mask: var(--flag) center / contain no-repeat;
+}
+
+/* altimètre : mono, séparé du logo par un filet */
+.vl-logo-place {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding-left: 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  border-left: 1px solid var(--line);
+}
+
+.vl-logo-place::before {
+  content: '';
+  width: 13px;
+  height: 13px;
+  background: var(--accent2);
+  -webkit-mask: var(--mountain) center / contain no-repeat;
+  mask: var(--mountain) center / contain no-repeat;
+}
+
+.vl-nav {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.vl-nav a {
+  position: relative;
+  padding: 8px 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.vl-nav a::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 4px;
+  height: 1px;
+  background: var(--highlight);
+  scale: 0 1;
+  transform-origin: left;
+  transition: scale 0.3s var(--ease);
+}
+
+.vl-nav a:hover::after {
+  scale: 1 1;
+}
+
+.vl-btn-header {
+  min-height: 42px;
+  padding: 0 22px;
+  font-size: 13.5px;
+}
+
+/* ---------------------------------------------------------------- visite (séquence) */
+.vl-layer {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr) auto;
+  column-gap: 24px;
+  padding: calc(var(--header-h) + 44px) var(--pad) 104px;
+  color: #fff;
+  isolation: isolate;
+}
+
+.vl-chapter h1,
+.vl-chapter h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 0.95;
+}
+
+.vl-chapter-note {
+  margin-top: 12px;
+  font-family: var(--hand);
+  font-size: clamp(22px, 2vw, 28px);
+  font-style: italic;
+  line-height: 1.15;
+}
+
+.vl-chapter-text {
+  margin-top: 16px;
+  max-width: 42ch;
+  font-size: 16.5px;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.vl-chapter-meta {
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.vl-chapter .vl-btn {
+  margin-top: 28px;
+}
+
+/* sur la vidéo : étiquettes blanches, segment de tête en laiton clair */
+.vl-pos-hero .vl-kicker,
+.vl-pos-center .vl-kicker {
+  color: rgb(255 255 255 / 0.85);
+}
+
+.vl-pos-hero .vl-kicker > span:first-child,
+.vl-pos-center .vl-kicker > span:first-child {
+  color: var(--brass-soft);
+}
+
+/* accueil : en bas à gauche, très grand serif, posé sur un dégradé discret */
+.vl-pos-hero {
+  position: relative;
+  grid-column: 1 / span 8;
+  grid-row: 2;
+  align-self: end;
+  max-width: 820px;
+  margin-bottom: clamp(36px, 6vh, 72px);
+  text-shadow: 0 2px 30px rgb(0 0 0 / 0.3);
+}
+
+.vl-pos-hero::before {
+  content: '';
+  position: absolute;
+  inset: -80px -160px -60px -100px;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgb(8 18 12 / 0.45), transparent);
+  pointer-events: none;
+}
+
+.vl-pos-hero .vl-btn,
+.vl-pos-center .vl-btn {
+  color: var(--ink);
+  background: var(--cream);
+  text-shadow: none;
+}
+
+.vl-pos-hero .vl-btn:hover,
+.vl-pos-center .vl-btn:hover {
+  background: #fff;
+}
+
+.vl-pos-hero h1 {
+  font-size: clamp(64px, min(9.5vw, 16vh), 168px);
+  line-height: 0.88;
+}
+
+.vl-pos-hero .vl-chapter-note {
+  color: var(--brass-soft);
+  font-size: clamp(24px, 2.3vw, 34px);
+}
+
+.vl-pos-hero .vl-chapter-text {
+  font-size: clamp(16.5px, 1.3vw, 19px);
+}
+
+/* étapes latérales : cartes crème à filet, sans ombre lourde */
+.vl-pos-left,
+.vl-pos-right,
+.vl-pos-bottom-left,
+.vl-pos-bottom-right {
+  position: relative;
+  max-width: 400px;
+  padding: 30px 32px 32px;
+  color: var(--fg);
+  background: color-mix(in srgb, var(--bg) 93%, transparent);
+  border: 1px solid rgb(255 255 255 / 0.5);
+  border-radius: var(--radius);
+  box-shadow: 0 40px 70px -40px rgb(0 0 0 / 0.55);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  backdrop-filter: blur(18px) saturate(1.2);
+}
+
+.vl-pos-left h2,
+.vl-pos-right h2,
+.vl-pos-bottom-left h2,
+.vl-pos-bottom-right h2 {
+  font-size: clamp(34px, 2.8vw, 46px);
+  line-height: 1;
+}
+
+.vl-pos-left .vl-chapter-note,
+.vl-pos-right .vl-chapter-note,
+.vl-pos-bottom-left .vl-chapter-note,
+.vl-pos-bottom-right .vl-chapter-note {
+  color: var(--accent2);
+}
+
+.vl-pos-left .vl-chapter-text,
+.vl-pos-right .vl-chapter-text,
+.vl-pos-bottom-left .vl-chapter-text,
+.vl-pos-bottom-right .vl-chapter-text {
+  font-size: 15.5px;
+  color: color-mix(in srgb, var(--fg) 78%, var(--muted));
+}
+
+.vl-pos-left {
+  grid-column: 1 / span 5;
+  grid-row: 1 / -1;
+  align-self: center;
+}
+
+.vl-pos-right {
+  grid-column: 8 / span 5;
+  grid-row: 1 / -1;
+  align-self: center;
+  justify-self: end;
+}
+
+.vl-pos-bottom-left {
+  grid-column: 1 / span 5;
+  grid-row: 2;
+  align-self: end;
+}
+
+.vl-pos-bottom-right {
+  grid-column: 8 / span 5;
+  grid-row: 2;
+  align-self: end;
+  justify-self: end;
+}
+
+/* centre : grand serif blanc, compteurs séparés par des filets */
+.vl-pos-center {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  place-self: center;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  text-shadow: 0 2px 30px rgb(0 0 0 / 0.35);
+}
+
+.vl-pos-center .vl-kicker {
+  justify-content: center;
+}
+
+.vl-pos-center h2 {
+  font-size: clamp(56px, min(8.5vw, 16vh), 150px);
+}
+
+.vl-pos-center .vl-chapter-note {
+  color: var(--brass-soft);
+}
+
+.vl-pos-center .vl-chapter-text {
+  margin-inline: auto;
+  font-size: 18px;
+}
+
+.vl-chapter-stats {
+  display: flex;
+  margin: 34px 0 0;
+  border-top: 1px solid rgb(255 255 255 / 0.4);
+}
+
+.vl-chapter-stats > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 130px;
+  padding: 18px 26px 0;
+}
+
+.vl-chapter-stats > div + div {
+  border-left: 1px solid rgb(255 255 255 / 0.4);
+}
+
+.vl-chapter-stats dt {
+  font-family: var(--display);
+  font-size: clamp(44px, 4.4vw, 64px);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* chiffre qui compte (StatCount.tsx) : posé sur sa valeur finale transparente, qui réserve la largeur */
+.vl-count {
+  display: inline-grid;
+}
+
+.vl-count > span {
+  grid-area: 1 / 1;
+  justify-self: start;
+}
+
+.vl-count-final {
+  color: transparent;
+  text-shadow: none;
+}
+
+.vl-chapter-stats dd {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* progression : fil laiton fin en bas de l'écran */
+.vl-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 6;
+  height: 2px;
+  background: rgb(255 255 255 / 0.2);
+}
+
+.vl-progress div {
+  height: 100%;
+  background: var(--highlight);
+}
+
+/* écran de chargement : sapin profond, logo sur plaque blanche, barre d'un pixel */
+.vl-loader {
+  gap: 26px;
+  color: var(--cream);
+  background:
+    radial-gradient(80% 60% at 50% 115%, color-mix(in srgb, var(--accent2) 22%, transparent), transparent 70%),
+    var(--ink);
+}
+
+.vl-loader-brand {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  font-family: var(--display);
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1;
+}
+
+.vl-loader-brand .vl-logo-img {
+  height: clamp(60px, 8vw, 84px);
+  padding: 12px 18px;
+  background: #fff;
+  border-radius: var(--radius);
+}
+
+.vl-loader-brand .vl-hand {
+  font-size: clamp(21px, 2vw, 26px);
+  color: var(--brass-soft);
+}
+
+.vl-loader .sf-loader-bar {
+  width: min(260px, 60vw);
+  height: 1px;
+  background: rgb(255 255 255 / 0.2);
+}
+
+.vl-loader .sf-loader-bar::after {
+  background: var(--highlight);
+}
+
+.vl-loader .sf-loader-text {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  opacity: 0.8;
+}
+
+/* ---------------------------------------------------------------- viseur drone (signature Navart, style inchangé) */
+.vl-hud {
+  position: absolute;
+  inset: 96px 58px 58px;
+  z-index: 4;
+  pointer-events: none;
+  color: rgba(255, 255, 255, 0.88);
+  font: 500 18px/1 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  letter-spacing: 0.14em;
+}
+
+.vl-hud-corner {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border: 0 solid rgba(255, 255, 255, 0.7);
+}
+
+.vl-hud-corner.tl {
+  top: 0;
+  left: 0;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.vl-hud-corner.tr {
+  top: 0;
+  right: 0;
+  border-top-width: 1.5px;
+  border-right-width: 1.5px;
+}
+
+.vl-hud-corner.bl {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.vl-hud-corner.br {
+  bottom: 0;
+  right: 0;
+  border-bottom-width: 1.5px;
+  border-right-width: 1.5px;
+}
+
+.vl-hud-rec,
+.vl-hud-time {
+  position: absolute;
+  top: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vl-hud-rec {
+  left: 36px;
+}
+
+.vl-hud-time {
+  left: 110px;
+  font-variant-numeric: tabular-nums;
+}
+
+.vl-hud-rec b {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff4b3e;
+  animation: vl-blink 1.2s steps(2, jump-none) infinite;
+}
+
+@keyframes vl-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.vl-hud-format {
+  position: absolute;
+  top: 32px;
+  right: 36px;
+}
+
+.vl-hud-data {
+  position: absolute;
+  right: 36px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.vl-hud-sep {
+  width: 1px;
+  height: 12px;
+  margin: 0 8px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.vl-hud-cross {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  opacity: 0.55;
+  background:
+    linear-gradient(#fff, #fff) center / 1px 100% no-repeat,
+    linear-gradient(#fff, #fff) center / 100% 1px no-repeat;
+}
+
+/* ---------------------------------------------------------------- commandes de la visite : en bas au centre
+   Ronds crème (son, plein écran), lecture en sapin au milieu, « Visite en ♫ » en pilule crème.
+   Centrées par left: 50% + translate (jamais de right). */
+.vl-tour-controls {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  translate: -50% 0;
+}
+
+.vl-fullscreen,
+.vl-sound {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--fg);
+  background: color-mix(in srgb, var(--cream) 88%, transparent);
+  border: 1px solid rgb(255 255 255 / 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, scale 0.25s var(--ease);
+}
+
+.vl-fullscreen:hover,
+.vl-sound:hover {
+  background: #fff;
+  scale: 1.05;
+}
+
+.vl-sound[aria-pressed='true'] {
+  color: var(--cream);
+  background: var(--accent);
+  border-color: transparent;
+}
+
+.vl-fullscreen svg,
+.vl-sound svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.vl-sound[aria-pressed='true'] .vl-sound-waves {
+  animation: vl-waves 1.4s ease-in-out infinite;
+}
+
+@keyframes vl-waves {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* lecture automatique : bouton principal, sapin, anneau clair ; laiton pendant la lecture */
+.vl-play {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--cream);
+  background: var(--accent);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.55),
+    0 0 0 6px rgb(255 255 255 / 0.14),
+    0 18px 34px -16px rgb(0 0 0 / 0.6);
+  cursor: pointer;
+  transition: background 0.25s, scale 0.25s var(--ease);
+}
+
+.vl-play:hover {
+  scale: 1.05;
+}
+
+.vl-play:focus-visible,
+.vl-sound:focus-visible,
+.vl-fullscreen:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.vl-play[aria-pressed='true'] {
+  background: var(--accent2);
+}
+
+.vl-play svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+/* triangle recentré à l'œil */
+.vl-play[aria-pressed='false'] svg {
+  translate: 1px 0;
+}
+
+/* visite en musique : pilule crème « Visite en ♫ », sapin pendant la lecture en musique */
+.vl-music-play {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 14px 0 18px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--fg);
+  background: color-mix(in srgb, var(--cream) 88%, transparent);
+  border: 1px solid rgb(255 255 255 / 0.6);
+  border-radius: 999px;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, scale 0.25s var(--ease);
+}
+
+.vl-music-play:hover {
+  background: #fff;
+  scale: 1.03;
+}
+
+.vl-music-play:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.vl-music-play[aria-pressed='true'] {
+  color: var(--cream);
+  background: var(--accent);
+  border-color: transparent;
+}
+
+.vl-music-play-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* la note : police du système (les polices du thème n'ont pas ce signe), grande, sans espacement */
+.vl-music-play-note {
+  display: inline-block;
+  font-family: 'Segoe UI Symbol', 'Apple Symbols', 'Noto Sans Symbols 2', 'DejaVu Sans', sans-serif;
+  font-size: 22px;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--accent2);
+  transform-origin: 50% 70%;
+}
+
+.vl-music-play[aria-pressed='true'] .vl-music-play-note {
+  color: var(--brass-soft);
+  animation: vl-music-sway 1.6s ease-in-out infinite;
+}
+
+@keyframes vl-music-sway {
+  25% {
+    rotate: -8deg;
+  }
+
+  75% {
+    rotate: 8deg;
+  }
+}
+
+/* ---------------------------------------------------------------- itinéraire : fil vertical fin, le long du bord droit
+   Anneau blanc = lieu à venir, point crème = lieu vu, pastille laiton numérotée = lieu en cours (son nom à côté).
+   Survol : nom du lieu ; clic : on y va. */
+.vl-route {
+  position: absolute;
+  top: 50%;
+  right: clamp(16px, 2.2vw, 32px);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  translate: 10px -50%;
+  transition: opacity 0.4s, translate 0.4s var(--ease), visibility 0s 0.4s;
+}
+
+.vl-route[data-visible] {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 -50%;
+  transition: opacity 0.4s, translate 0.4s var(--ease);
+}
+
+.vl-route-title {
+  writing-mode: vertical-rl;
+  rotate: 180deg;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 0.8);
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.5);
+}
+
+.vl-route ol {
+  display: grid;
+  justify-items: center;
+}
+
+.vl-route li {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+/* fil entre deux lieux : blanc discret, laiton une fois parcouru */
+.vl-route li + li::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 1px;
+  height: 100%;
+  translate: -50% 0;
+  background: rgb(255 255 255 / 0.45);
+  transition: background 0.35s;
+}
+
+.vl-route li[data-done]::before,
+.vl-route li[data-active]::before {
+  background: var(--brass-soft);
+}
+
+.vl-route button {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.vl-route button:focus-visible {
+  outline: 1.5px solid #fff;
+  outline-offset: -2px;
+}
+
+.vl-route-num {
+  display: grid;
+  place-items: center;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  font-family: var(--mono);
+  font-size: 0;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--ink);
+  background: rgb(15 28 21 / 0.5);
+  box-shadow: inset 0 0 0 1.5px #fff;
+  transition: width 0.35s var(--ease), height 0.35s var(--ease), font-size 0.35s, background 0.35s, box-shadow 0.35s, scale 0.25s var(--ease);
+}
+
+.vl-route li:not([data-active]) button:hover .vl-route-num {
+  scale: 1.4;
+}
+
+.vl-route [data-done] .vl-route-num {
+  background: var(--cream);
+  box-shadow: none;
+}
+
+.vl-route [data-active] .vl-route-num {
+  width: 26px;
+  height: 26px;
+  font-size: 11px;
+  color: var(--ink);
+  background: var(--brass-soft);
+  box-shadow: 0 0 0 4px rgb(255 255 255 / 0.2);
+}
+
+/* nom du lieu en étiquette crème, à gauche du fil */
+.vl-route-label {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  padding: 6px 12px;
+  white-space: nowrap;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--fg);
+  background: var(--cream);
+  box-shadow: 0 10px 22px -10px rgb(0 0 0 / 0.5);
+  opacity: 0;
+  translate: 6px -50%;
+  transition: opacity 0.3s, translate 0.3s var(--ease);
+  pointer-events: none;
+}
+
+.vl-route [data-active] .vl-route-label,
+.vl-route button:hover .vl-route-label,
+.vl-route button:focus-visible .vl-route-label {
+  opacity: 1;
+  translate: 0 -50%;
+}
+
+/* ---------------------------------------------------------------- voile entre deux lieux
+   Sur toute la page, sous l'en-tête : fondu vers un sapin très flou, drapeau au trait qui flotte,
+   « Direction » + le lieu (ou le nom de la section) ; la page et la vidéo sautent derrière
+   (engine.jumpTo / settle). Durée du fondu = TRAVEL_FADE_MS de lib/travel.ts. */
+.vl-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 48;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 22px;
+  color: var(--cream);
+  background: color-mix(in srgb, var(--ink) 66%, transparent);
+  -webkit-backdrop-filter: blur(36px) saturate(1.1);
+  backdrop-filter: blur(36px) saturate(1.1);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.45s ease, visibility 0s 0.45s;
+}
+
+.vl-veil[data-shown] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.45s ease;
+}
+
+.vl-veil-flag {
+  width: 44px;
+  height: 44px;
+  background: var(--brass-soft);
+  -webkit-mask: var(--flag) center / contain no-repeat;
+  mask: var(--flag) center / contain no-repeat;
+  transform-origin: 30% 100%;
+  animation: vl-flag-wave 1.8s ease-in-out infinite;
+}
+
+@keyframes vl-flag-wave {
+  50% {
+    transform: skewY(-6deg) scaleX(0.95);
+  }
+}
+
+.vl-veil-text {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 0 24px;
+  font-family: var(--display);
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-align: center;
+  translate: 0 8px;
+  transition: translate 0.5s var(--ease);
+}
+
+.vl-veil[data-shown] .vl-veil-text {
+  translate: 0 0;
+}
+
+.vl-veil-text .vl-hand {
+  font-size: clamp(20px, 2vw, 26px);
+  color: var(--brass-soft);
+}
+
+/* ---------------------------------------------------------------- points des lieux : drapeaux de green fins
+   Rangés en bas au centre, au-dessus des commandes (Hotspots.tsx) : mât blanc d'un trait, fanion laiton
+   numéroté, trou en bas. Apparition : le drapeau se plante (le trou s'ouvre, le mât sort, le fanion se déroule,
+   puis l'étiquette arrive) ; disparition dans l'ordre inverse, plus vite. */
+.vl-hotspots {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* fiche ouverte : le calque des points passe au-dessus des commandes (sur téléphone, le panneau et le tiroir
+   les recouvrent au lieu de passer dessous) */
+.vl-hotspots:has(.vl-popup[data-shown]) {
+  z-index: 8;
+}
+
+.vl-hs {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  padding: 0;
+  cursor: pointer;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: auto;
+  will-change: transform, opacity;
+  transition: visibility 0s 0.55s;
+}
+
+.vl-hs[data-visible] {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* fanion (le numéro) : posé au-dessus du point, mât à gauche */
+.vl-hs-dot {
+  position: absolute;
+  left: -2px;
+  top: -60px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 25px;
+  padding-right: 7px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--ink);
+  background: var(--brass-soft);
+  clip-path: polygon(0 0, 100% 0, 80% 50%, 100% 100%, 0 100%);
+  transform-origin: 0 100%;
+}
+
+/* mât et trou : dessinés par le bouton lui-même */
+.vl-hs::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: -60px;
+  width: 1.5px;
+  height: 62px;
+  background: #fff;
+  box-shadow: 0 0 6px rgb(0 0 0 / 0.35);
+  scale: 1 0;
+  transform-origin: bottom;
+  transition: scale 0.3s cubic-bezier(0.5, 0, 0.75, 0) 0.18s;
+}
+
+.vl-hs::after {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 0;
+  width: 13px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgb(8 18 12 / 0.7);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.8);
+  scale: 0 1;
+  transition: scale 0.25s ease-in 0.35s;
+}
+
+.vl-hs[data-visible]::after {
+  scale: 1;
+  transition: scale 0.3s var(--ease) 0s;
+}
+
+.vl-hs[data-visible]::before {
+  scale: 1;
+  transition: scale 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+}
+
+.vl-hs.is-open .vl-hs-dot {
+  color: #fff;
+  background: var(--highlight);
+}
+
+/* étiquette du lieu : pilule crème au-dessus du fanion */
+.vl-hs-label {
+  position: absolute;
+  left: 0;
+  bottom: 70px;
+  padding: 6px 12px;
+  white-space: nowrap;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--fg);
+  background: var(--cream);
+  box-shadow: 0 10px 22px -10px rgb(0 0 0 / 0.5);
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  pointer-events: none;
+}
+
+.vl-hs.is-featured .vl-hs-label,
+.vl-hs:hover .vl-hs-label,
+.vl-hs:focus-visible .vl-hs-label {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.vl-hs.is-open .vl-hs-label {
+  opacity: 0;
+}
+
+.vl-hs:focus-visible {
+  outline: none;
+}
+
+.vl-hs:focus-visible .vl-hs-dot {
+  outline: 2px solid #fff;
+}
+
+/* fanion : se déroule depuis le mât une fois celui-ci sorti, se replie en premier */
+.vl-hs .vl-hs-dot {
+  scale: 0 1;
+  transition: scale 0.18s ease-in, background 0.25s, color 0.25s;
+}
+
+.vl-hs[data-visible] .vl-hs-dot {
+  scale: 1 1;
+  transition: scale 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.42s, background 0.25s, color 0.25s;
+  animation: vl-pennant 3s ease-in-out 1s infinite;
+}
+
+/* étiquette : arrive en dernier, en fondu qui monte ; part tout de suite */
+.vl-hs .vl-hs-label {
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.vl-hs[data-visible] .vl-hs-label {
+  transition: opacity 0.4s 0.7s, transform 0.5s var(--ease) 0.7s;
+}
+
+.vl-hs[data-visible]:hover .vl-hs-label,
+.vl-hs[data-visible]:focus-visible .vl-hs-label {
+  transition-delay: 0s;
+}
+
+.vl-hs[data-visible]:hover .vl-hs-dot,
+.vl-hs[data-visible].is-open .vl-hs-dot {
+  scale: 1.08 1.08;
+  transition-delay: 0s;
+}
+
+/* le fanion flotte au vent */
+@keyframes vl-pennant {
+  50% {
+    transform: skewY(-4deg);
+  }
+}
+
+/* ---------------------------------------------------------------- fiche d'un lieu : carte crème à filets
+   Ouverture : la carte se déplie de haut en bas, comme une carte de score qu'on ouvre (panneau bas du téléphone :
+   de bas en haut ; tiroir du téléphone couché : depuis le bord droit). Fermeture : la même, à l'envers. */
+.vl-popup {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 8;
+  width: 380px;
+  /* plus basse que l'écran, défilable ; toujours entre l'en-tête et les commandes (POP_TOP et POP_BOTTOM de Hotspots.tsx) */
+  max-height: min(calc(100% - 88px - 112px), 58vh, 540px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent2) transparent;
+  color: var(--fg);
+  background: var(--bg);
+  border-radius: var(--radius);
+  box-shadow: 0 40px 90px -36px rgb(0 0 0 / 0.65);
+  visibility: hidden;
+  pointer-events: auto;
+}
+
+.vl-popup[data-shown] {
+  visibility: visible;
+  animation: vl-pop 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* fermeture : la même animation, à l'envers (Hotspots garde la fiche affichée le temps qu'elle se termine).
+   Copie sous un autre nom : un navigateur ne relance pas une animation dont seul le sens change. */
+.vl-popup[data-shown][data-closing] {
+  pointer-events: none;
+  animation: vl-pop-close 0.4s cubic-bezier(0.65, 0, 0.35, 1) reverse both;
+}
+
+.vl-popup[data-side='left'] {
+  transform-origin: right center;
+}
+
+.vl-popup {
+  --unfold-from: inset(0 0 100% 0);
+  --unfold-shift: 0 -8px;
+}
+
+@keyframes vl-pop {
+  from {
+    opacity: 0.4;
+    clip-path: var(--unfold-from);
+    translate: var(--unfold-shift);
+  }
+
+  to {
+    opacity: 1;
+    clip-path: inset(0);
+    translate: 0 0;
+  }
+}
+
+/* copie de vl-pop pour la fermeture (jouée à l'envers) */
+@keyframes vl-pop-close {
+  from {
+    opacity: 0.4;
+    clip-path: var(--unfold-from);
+    translate: var(--unfold-shift);
+  }
+
+  to {
+    opacity: 1;
+    clip-path: inset(0);
+    translate: 0 0;
+  }
+}
+
+/* contenu : arrive juste après la carte */
+.vl-popup[data-shown]:not([data-closing]) .vl-popup-body {
+  animation: vl-popup-body 0.5s var(--ease) 0.15s both;
+}
+
+@keyframes vl-popup-body {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+.vl-popup-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--cream);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.vl-popup-close:hover {
+  background: #fff;
+}
+
+.vl-popup-close svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--fg);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.vl-popup-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--accent);
+}
+
+.vl-popup-media canvas,
+.vl-popup-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vl-popup-live {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgb(8 18 12 / 0.6);
+}
+
+.vl-popup-live i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff4b3e;
+}
+
+.vl-popup-note {
+  padding: 16px 26px 0;
+  font-family: var(--hand);
+  font-size: 21px;
+  font-style: italic;
+  line-height: 1.15;
+  color: var(--accent2);
+}
+
+.vl-popup-body {
+  padding: 10px 26px 26px;
+}
+
+.vl-popup-cat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.vl-popup-num {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 11px;
+  letter-spacing: 0;
+  color: var(--ink);
+  background: var(--brass-soft);
+}
+
+.vl-popup-body h3 {
+  margin-top: 12px;
+  font-family: var(--display);
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.vl-popup-desc {
+  margin-top: 12px;
+  font-size: 14.5px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--fg) 82%, var(--muted));
+}
+
+/* détails : grille à filets, intitulé mono, valeur en serif */
+.vl-popup-details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.vl-popup-details div {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.vl-popup-details div:nth-child(even) {
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+}
+
+.vl-popup-details dt {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.vl-popup-details dd {
+  margin: 4px 0 0;
+  font-family: var(--display);
+  font-size: 21px;
+  line-height: 1.1;
+}
+
+.vl-popup-features {
+  margin-top: 18px;
+}
+
+.vl-popup-foot {
+  margin-top: 18px;
+}
+
+/* grand écran : fiche plus large, équipements sur deux colonnes */
+@media (min-width: 1280px) and (min-height: 640px) {
+  .vl-popup {
+    width: clamp(420px, 30vw, 540px);
+  }
+
+  .vl-popup-body h3 {
+    font-size: 40px;
+  }
+
+  .vl-popup-features {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 18px;
+  }
+}
+
+/* ---------------------------------------------------------------- menu mobile : sapin profond, grands titres serif */
+.vl-burger {
+  display: none;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border-radius: 50%;
+  color: var(--cream);
+  background: var(--accent);
+  cursor: pointer;
+}
+
+.vl-burger span,
+.vl-burger span::before,
+.vl-burger span::after {
+  display: block;
+  width: 16px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.3s, background 0.3s;
+}
+
+.vl-burger span {
+  position: relative;
+}
+
+.vl-burger span::before,
+.vl-burger span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+}
+
+.vl-burger span::before {
+  transform: translateY(-5px);
+}
+
+.vl-burger span::after {
+  transform: translateY(5px);
+}
+
+.vl-burger[aria-expanded='true'] span {
+  background: transparent;
+}
+
+.vl-burger[aria-expanded='true'] span::before {
+  transform: rotate(45deg);
+}
+
+.vl-burger[aria-expanded='true'] span::after {
+  transform: rotate(-45deg);
+}
+
+.vl-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 49; /* sous l'en-tête : logo et bouton restent cliquables */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 28px;
+  padding: calc(var(--header-h) + 28px) max(var(--pad), env(safe-area-inset-right)) max(28px, env(safe-area-inset-bottom)) max(var(--pad), env(safe-area-inset-left));
+  overflow-y: auto;
+  color: var(--cream);
+  background:
+    radial-gradient(90% 60% at 50% 115%, color-mix(in srgb, var(--accent2) 20%, transparent), transparent 70%),
+    var(--ink);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0s 0.3s;
+}
+
+.vl-menu.is-open {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+html:has(.vl-menu.is-open) {
+  overflow: hidden;
+}
+
+.vl-menu ul {
+  counter-reset: vl-menu;
+}
+
+.vl-menu li {
+  counter-increment: vl-menu;
+  border-bottom: 1px solid var(--hair-light);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+.vl-menu.is-open li {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(0.05s * var(--i) + 0.08s);
+}
+
+.vl-menu li a {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding: 14px 0;
+  font-family: var(--display);
+  font-size: clamp(32px, 9vw, 46px);
+  line-height: 1;
+  text-decoration: none;
+  color: inherit;
+}
+
+.vl-menu li a::before {
+  content: counter(vl-menu, decimal-leading-zero);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--brass-soft);
+}
+
+.vl-menu > .vl-btn {
+  width: 100%;
+  color: var(--ink);
+  background: var(--cream);
+}
+
+/* ---------------------------------------------------------------- popup studio (Navart), restylée crème et filets */
+.vl-studio-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 16px 0 6px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 400;
+  white-space: nowrap;
+  color: var(--fg);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.vl-studio-btn:hover {
+  border-color: var(--accent2);
+  background: var(--surface);
+}
+
+.vl-studio-dot {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-family: var(--display);
+  font-size: 17px;
+  font-style: italic;
+  color: var(--cream);
+  background: var(--accent);
+}
+
+.vl-studio {
+  width: min(760px, calc(100% - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  color: var(--fg);
+  background: var(--bg);
+  box-shadow: 0 40px 90px rgb(0 0 0 / 0.35);
+  overflow: hidden;
+}
+
+.vl-studio[open] {
+  display: flex;
+  animation: vl-studio-in 0.35s var(--ease);
+}
+
+.vl-studio::backdrop {
+  background: color-mix(in srgb, var(--ink) 60%, transparent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+@keyframes vl-studio-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+
+html:has(.vl-studio[open]) {
+  overflow: hidden;
+}
+
+.vl-studio-panel {
+  position: relative;
+  width: 100%;
+  padding: clamp(28px, 5vw, 54px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.vl-studio-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--fg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.vl-studio-close:hover {
+  border-color: var(--accent2);
+}
+
+.vl-studio h2 {
+  max-width: 20ch;
+  text-wrap: balance;
+  font-family: var(--display);
+  font-size: clamp(34px, 4.6vw, 52px);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.vl-studio-intro {
+  margin-top: 18px;
+  max-width: 56ch;
+  font-weight: 300;
+  color: var(--muted);
+}
+
+/* précision propre au projet (villa.json, studioNote) : filet laiton, italique serif */
+.vl-studio-note {
+  margin-top: 18px;
+  max-width: 58ch;
+  padding: 4px 0 4px 18px;
+  font-family: var(--hand);
+  font-size: 19px;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--fg);
+  border-left: 1px solid var(--accent2);
+}
+
+.vl-studio-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 32px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.vl-studio-highlights div {
+  padding: 18px 18px 18px 0;
+}
+
+.vl-studio-highlights div + div {
+  padding-left: 18px;
+  border-left: 1px solid var(--line);
+}
+
+.vl-studio-highlights dt {
+  font-family: var(--display);
+  font-size: 32px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.vl-studio-highlights dd {
+  margin: 6px 0 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.vl-studio-steps {
+  margin-top: 36px;
+}
+
+.vl-studio-steps li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 18px;
+  padding-bottom: 26px;
+}
+
+.vl-studio-steps li:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 21.5px;
+  top: 50px;
+  bottom: 4px;
+  width: 1px;
+  background: var(--line);
+}
+
+.vl-studio-step-mark {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.vl-studio-icon {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.vl-studio-steps h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  padding-top: 8px;
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.vl-studio-step-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--accent2);
+}
+
+.vl-studio-step-time {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  border: 1px solid var(--line);
+}
+
+.vl-studio-steps p {
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--muted);
+}
+
+.vl-studio-lists {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.vl-studio-lists > div {
+  padding: 22px 24px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.vl-studio-lists h3 {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.vl-studio-lists ul {
+  margin-top: 12px;
+}
+
+.vl-studio-lists li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.vl-studio-lists li + li {
+  margin-top: 6px;
+}
+
+.vl-studio-lists li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 10px;
+  width: 8px;
+  height: 1px;
+  background: var(--accent2);
+}
+
+.vl-studio-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.vl-studio-foot strong {
+  font-weight: 500;
+  color: var(--fg);
+}
+
+/* lien Navart (popup « Comment ça marche ») */
+.vl-studio-site {
+  display: block;
+  margin-top: 4px;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------- sections : crème et blanc cassé, beaucoup d'air */
+.vl-section {
+  position: relative;
+  padding: clamp(90px, 11vw, 170px) max(var(--pad), (100% - 1320px) / 2 + var(--pad));
+  color: var(--fg);
+  background: var(--bg);
+  scroll-margin-top: var(--header-h);
+}
+
+.vl-section-head {
+  max-width: 760px;
+  margin-bottom: clamp(40px, 5vw, 72px);
+}
+
+.vl-section h2 {
+  font-family: var(--display);
+  font-size: clamp(46px, 5.8vw, 92px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.vl-section-note {
+  margin-top: 14px;
+  font-size: clamp(22px, 2vw, 28px);
+  color: var(--accent2);
+}
+
+.vl-lead {
+  margin-top: 20px;
+  max-width: 56ch;
+  font-size: 17.5px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--fg) 75%, var(--muted));
+}
+
+/* ---------------------------------------------------------------- le parcours : grande photo, texte et chiffres */
+.vl-brief-photo {
+  position: relative;
+  margin: 0 0 clamp(48px, 6vw, 88px);
+  aspect-ratio: 21 / 9;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.vl-brief-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vl-brief-photo figcaption {
+  position: absolute;
+  left: 20px;
+  bottom: 18px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 1px 10px rgb(0 0 0 / 0.5);
+}
+
+.vl-brief-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 40px clamp(40px, 6vw, 110px);
+}
+
+.vl-brief-body .vl-section-head {
+  margin-bottom: 0;
+}
+
+.vl-brief-side {
+  display: grid;
+  gap: 40px;
+  padding-top: 8px;
+}
+
+/* chiffres : grille à filets, intitulé mono, valeur en serif */
+.vl-figures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--fg);
+}
+
+.vl-figures div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 16px 20px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.vl-figures div:not(:nth-child(3n + 1)) {
+  padding-left: 16px;
+  border-left: 1px solid var(--line);
+}
+
+.vl-figures dt {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.vl-figures dd {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(38px, 3.6vw, 54px);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* prix : « à partir de » en italique, le montant en grand serif */
+.vl-price-tag {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  gap: 4px 20px;
+}
+
+.vl-price-tag .vl-hand {
+  grid-column: 1 / -1;
+  font-size: 22px;
+  color: var(--accent2);
+}
+
+.vl-price-tag strong {
+  font-family: var(--display);
+  font-size: clamp(64px, 6vw, 88px);
+  font-weight: 400;
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+}
+
+.vl-price-tag > span:last-child {
+  max-width: 30ch;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ---------------------------------------------------------------- les 18 trous : carte de score imprimée, plans en bande */
+.vl-holes-section {
+  background: var(--surface);
+}
+
+.vl-card-wrap {
+  display: grid;
+  gap: 16px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.vl-card {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  border-top: 1px solid var(--fg);
+  border-bottom: 1px solid var(--fg);
+}
+
+.vl-card th,
+.vl-card td {
+  padding: 12px 6px;
+  text-align: center;
+  border-left: 1px solid var(--line);
+}
+
+.vl-card th[scope='row'] {
+  width: 76px;
+  padding-left: 0;
+  text-align: left;
+  border-left: 0;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.vl-card thead th[scope='col'] {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.vl-card tbody tr {
+  border-top: 1px solid var(--line);
+}
+
+.vl-card tbody td {
+  font-family: var(--display);
+  font-size: 26px;
+  line-height: 1;
+}
+
+.vl-card .vl-card-hcp td {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* par 3 et par 5 : cercle et carré fins, comme sur une carte annotée */
+.vl-card td[data-par='3'],
+.vl-card td[data-par='5'] {
+  position: relative;
+}
+
+.vl-card td[data-par='3']::after,
+.vl-card td[data-par='5']::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 34px;
+  height: 34px;
+  translate: -50% -50%;
+  border: 1px solid var(--accent2);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.vl-card td[data-par='5']::after {
+  border-radius: 2px;
+}
+
+.vl-card .vl-card-sum {
+  background: var(--pine-soft);
+}
+
+.vl-card thead .vl-card-sum {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.vl-card tbody .vl-card-sum {
+  color: var(--accent);
+}
+
+/* plans des trous : bande défilante, cartes blanches */
+.vl-plans {
+  display: grid;
+  grid-auto-flow: column;
+  /* les plans font 520 px de large : jusqu'à cette taille, ils restent nets */
+  grid-auto-columns: clamp(300px, 34vw, 520px);
+  gap: 16px;
+  margin-top: 40px;
+  padding-bottom: 14px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent2) transparent;
+}
+
+.vl-plans li {
+  scroll-snap-align: start;
+}
+
+.vl-plans figure {
+  padding: 10px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.vl-plans img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 520 / 332;
+  object-fit: cover;
+}
+
+.vl-plans figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 2px 2px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.vl-plans figcaption span {
+  color: var(--muted);
+}
+
+/* ---------------------------------------------------------------- dans la visite : cartes photo, numéro mono, nom en serif */
+.vl-holes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 40px 22px;
+}
+
+.vl-hole {
+  display: grid;
+  align-content: start;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+}
+
+.vl-hole:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: 6px;
+}
+
+.vl-hole-photo {
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--pine-soft);
+}
+
+.vl-hole-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale 0.8s var(--ease);
+}
+
+.vl-hole:hover .vl-hole-photo img {
+  scale: 1.05;
+}
+
+.vl-thumb-empty {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--pine-soft);
+}
+
+.vl-hole-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.vl-hole-num {
+  color: var(--accent2);
+}
+
+.vl-hole-cat {
+  color: var(--muted);
+}
+
+.vl-hole-name {
+  margin-top: 8px;
+  font-family: var(--display);
+  font-size: 32px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.vl-hole-note {
+  margin-top: 6px;
+  font-size: 19px;
+  color: var(--accent2);
+}
+
+.vl-hole-link {
+  margin-top: 14px;
+  width: fit-content;
+  padding-bottom: 3px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent2);
+}
+
+/* ---------------------------------------------------------------- séjourner : récits photo + texte, en alternance */
+.vl-stories {
+  display: grid;
+  gap: clamp(64px, 8vw, 120px);
+}
+
+.vl-story {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(32px, 6vw, 96px);
+}
+
+.vl-story:nth-child(even) .vl-story-photo {
+  order: 2;
+}
+
+.vl-story-photo {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--pine-soft);
+}
+
+.vl-story-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vl-story-body h3 {
+  font-family: var(--display);
+  font-size: clamp(38px, 3.6vw, 56px);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.vl-story-body > p {
+  margin-top: 18px;
+  max-width: 48ch;
+  font-size: 16.5px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--fg) 78%, var(--muted));
+}
+
+.vl-story-facts {
+  margin-top: 26px;
+  border-top: 1px solid var(--fg);
+}
+
+.vl-story-facts div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.vl-story-facts dt {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.vl-story-facts dd {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 22px;
+  line-height: 1.1;
+  text-align: right;
+}
+
+.vl-story-body .vl-link {
+  margin-top: 26px;
+}
+
+/* ---------------------------------------------------------------- sur place : grille à filets sur sapin */
+.vl-amenities-section {
+  color: var(--cream);
+  background: var(--accent);
+}
+
+.vl-amenities-section .vl-kicker {
+  color: rgb(255 255 255 / 0.8);
+}
+
+.vl-amenities-section .vl-kicker > span:first-child,
+.vl-amenities-section .vl-section-note {
+  color: var(--brass-soft);
+}
+
+.vl-amenities {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--hair-light);
+}
+
+.vl-amenities li {
+  display: grid;
+  align-content: start;
+  gap: 22px;
+  padding: 28px 24px 32px 0;
+  border-bottom: 1px solid var(--hair-light);
+}
+
+.vl-amenities li:not(:nth-child(4n + 1)) {
+  padding-left: 24px;
+  border-left: 1px solid var(--hair-light);
+}
+
+.vl-amenities strong {
+  display: block;
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.vl-amenities li > span > span {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: rgb(246 241 230 / 0.75);
+}
+
+.vl-icon {
+  width: 30px;
+  height: 30px;
+  fill: none;
+  stroke: var(--brass-soft);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------------------------------------------------------------- galerie : mosaïque, légende au survol */
+.vl-gallery-section {
+  background: var(--surface);
+}
+
+.vl-gallery {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: clamp(160px, 16vw, 250px);
+  gap: 12px;
+}
+
+.vl-gallery figure {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--pine-soft);
+}
+
+.vl-gallery figure:first-child {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.vl-gallery figure:nth-child(4) {
+  grid-column: span 2;
+}
+
+.vl-gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale 0.9s var(--ease);
+}
+
+.vl-gallery figure:hover img {
+  scale: 1.04;
+}
+
+.vl-gallery figcaption {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 40px 16px 14px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #fff;
+  background: linear-gradient(transparent, rgb(8 18 12 / 0.65));
+  opacity: 0;
+  translate: 0 6px;
+  transition: opacity 0.35s, translate 0.35s var(--ease);
+}
+
+.vl-gallery figure:hover figcaption {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* ---------------------------------------------------------------- tarifs : tableau imprimé à filets */
+.vl-rates-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.vl-rates {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  border-top: 1px solid var(--fg);
+}
+
+.vl-rates th,
+.vl-rates td {
+  padding: 18px 16px;
+  text-align: right;
+}
+
+.vl-rates thead th {
+  vertical-align: bottom;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border-bottom: 1px solid var(--line);
+}
+
+.vl-rates thead th span {
+  display: block;
+  margin-top: 5px;
+  font-family: var(--body);
+  font-size: 12.5px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--muted);
+}
+
+.vl-rates th:first-child {
+  padding-left: 0;
+  text-align: left;
+}
+
+.vl-rates tbody tr {
+  border-bottom: 1px solid var(--line);
+}
+
+.vl-rates tbody th {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.vl-rates td {
+  font-family: var(--display);
+  font-size: 34px;
+  line-height: 1;
+}
+
+.vl-rates td:last-child {
+  padding-right: 0;
+}
+
+/* le green fee principal (18 trous, haute saison) en laiton */
+.vl-rates tbody tr:first-child td:nth-child(2) {
+  color: var(--accent2);
+}
+
+.vl-rates-extras {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 22px clamp(24px, 4vw, 56px);
+  margin-top: 56px;
+}
+
+.vl-rates-extras h3 {
+  padding-bottom: 12px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border-bottom: 1px solid var(--fg);
+}
+
+.vl-rates-extras dl div {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.vl-rates-extras dt {
+  flex: 1;
+  font-size: 14.5px;
+  color: color-mix(in srgb, var(--fg) 80%, var(--muted));
+}
+
+.vl-rates-extras dd {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 22px;
+  white-space: nowrap;
+}
+
+.vl-rates-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 22px;
+  margin-top: 30px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.vl-rates-foot a {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent2);
+}
+
+/* ---------------------------------------------------------------- infos pratiques : liste à filets, deux colonnes */
+.vl-rules-section {
+  background: var(--surface);
+}
+
+.vl-rules {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(32px, 5vw, 80px);
+  border-top: 1px solid var(--fg);
+}
+
+.vl-rules div {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 18px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.vl-rules dt {
+  padding-top: 3px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.vl-rules dd {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.55;
+}
+
+/* ---------------------------------------------------------------- avis : note en grand serif, citations sur blanc */
+.vl-reviews-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px 48px;
+  margin-bottom: clamp(40px, 5vw, 72px);
+}
+
+.vl-reviews-head .vl-section-head {
+  margin-bottom: 0;
+}
+
+.vl-reviews-score {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  min-width: 220px;
+  padding-left: 28px;
+  border-left: 1px solid var(--line);
+}
+
+.vl-reviews-score strong {
+  font-family: var(--display);
+  font-size: 92px;
+  font-weight: 400;
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+}
+
+.vl-reviews-source,
+.vl-reviews-count {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.vl-reviews-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  text-underline-offset: 4px;
+}
+
+.vl-reviews-sample {
+  max-width: 26ch;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.vl-stars {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.vl-stars svg {
+  width: 14px;
+  height: 14px;
+  fill: color-mix(in srgb, var(--fg) 14%, transparent);
+}
+
+.vl-stars svg.is-on {
+  fill: var(--accent2);
+}
+
+.vl-reviews {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.vl-review {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px 28px 22px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.vl-review blockquote {
+  flex: 1;
+  margin: 0;
+}
+
+.vl-review blockquote p {
+  font-family: var(--display);
+  font-size: 22px;
+  line-height: 1.3;
+}
+
+.vl-review-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 13.5px;
+}
+
+.vl-review-avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-family: var(--display);
+  font-size: 18px;
+  color: var(--cream);
+  background: var(--accent);
+}
+
+img.vl-review-avatar {
+  object-fit: cover;
+}
+
+.vl-review-author strong {
+  font-weight: 500;
+}
+
+.vl-review-author > span:last-child > span {
+  display: block;
+  color: var(--muted);
+}
+
+.vl-review-author a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---------------------------------------------------------------- réserver : départ en ligne à gauche, demande à droite */
+.vl-contact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(40px, 6vw, 110px);
+  background: var(--surface);
+}
+
+.vl-contact .vl-section-head {
+  margin-bottom: 32px;
+}
+
+.vl-booking {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.vl-booking p {
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.vl-host {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 22px 0;
+  border-top: 1px solid var(--fg);
+  border-bottom: 1px solid var(--line);
+}
+
+.vl-host-avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.vl-host-avatar .vl-icon {
+  width: 22px;
+  height: 22px;
+  stroke: var(--cream);
+}
+
+.vl-host > span:last-child {
+  display: grid;
+  gap: 2px;
+  font-size: 15px;
+}
+
+.vl-host strong {
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.vl-host > span:last-child > span {
+  margin-bottom: 6px;
+  color: var(--muted);
+}
+
+.vl-host a {
+  width: fit-content;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.vl-host a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--accent2);
+}
+
+.vl-host-note {
+  margin-top: 18px;
+  font-size: 22px;
+  color: var(--accent2);
+}
+
+/* carte de demande : crème, filet fin */
+.vl-contact-card {
+  display: grid;
+  gap: 24px;
+  padding: clamp(26px, 3.4vw, 44px);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.vl-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 18px;
+}
+
+.vl-form label {
+  display: grid;
+  gap: 6px;
+}
+
+.vl-form label > span {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* champs soulignés d'un filet, à la manière d'un formulaire imprimé */
+.vl-form input,
+.vl-form textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 8px 0;
+  font: inherit;
+  font-size: 16px; /* pas de zoom automatique sur iPhone */
+  color: var(--fg);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--fg) 35%, transparent);
+  border-radius: 0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.vl-form textarea {
+  resize: vertical;
+}
+
+.vl-form input:focus,
+.vl-form textarea:focus {
+  outline: none;
+  border-bottom-color: var(--highlight);
+  box-shadow: 0 1px 0 var(--highlight);
+}
+
+.vl-form-wide,
+.vl-form button {
+  grid-column: 1 / -1;
+}
+
+/* une seule date : nom et e-mail côte à côte */
+.vl-form label.vl-form-wide:has(input[type='email']) {
+  grid-column: auto;
+}
+
+.vl-form button {
+  justify-self: start;
+  margin-top: 6px;
+}
+
+.vl-form-success {
+  font-family: var(--hand);
+  font-size: 30px;
+  font-style: italic;
+  line-height: 1.2;
+  color: var(--accent);
+}
+
+/* ---------------------------------------------------------------- disponibilités (location seulement ; absentes du golf) */
+.vl-cal {
+  display: grid;
+  gap: 12px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.vl-cal-head,
+.vl-cal-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+}
+
+.vl-cal-title {
+  font-family: var(--display);
+  font-size: 26px;
+}
+
+.vl-cal-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vl-cal-month {
+  min-width: 9em;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.vl-cal-nav button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.vl-cal-nav button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.vl-cal-nav svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.vl-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+}
+
+.vl-cal-wd {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.vl-cal-day {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.vl-cal-day[data-state='free'] {
+  background: var(--pine-soft);
+}
+
+.vl-cal-day[data-state='booked'] {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.vl-cal-day[data-state='booked'][data-end-ok] {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.vl-cal-day[data-state='past'] {
+  color: color-mix(in srgb, var(--muted) 45%, transparent);
+}
+
+.vl-cal-day:disabled {
+  cursor: not-allowed;
+}
+
+.vl-cal-day[data-in] {
+  background: color-mix(in srgb, var(--accent) 18%, var(--surface));
+}
+
+.vl-cal-day[data-edge] {
+  color: var(--cream);
+  background: var(--accent);
+}
+
+.vl-cal-hint {
+  font-size: 14px;
+}
+
+.vl-cal-clear {
+  color: var(--accent2);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.vl-cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.vl-cal-sample {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ---------------------------------------------------------------- pied de page : sapin profond, logo sur plaque blanche */
+.vl-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 36px;
+  padding: 56px max(var(--pad), (100% - 1320px) / 2 + var(--pad)) max(56px, env(safe-area-inset-bottom));
+  font-size: 13px;
+  font-weight: 300;
+  color: rgb(246 241 230 / 0.7);
+  background: var(--ink);
+}
+
+.vl-footer .vl-logo {
+  color: var(--cream);
+}
+
+.vl-footer .vl-logo-img {
+  height: 50px;
+  padding: 8px 12px;
+  background: #fff;
+  border-radius: var(--radius);
+}
+
+.vl-footer > p:first-of-type {
+  max-width: 46ch;
+}
+
+.vl-footer nav {
+  display: flex;
+  gap: 22px;
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.vl-footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.vl-footer a:hover {
+  color: var(--cream);
+}
+
+.vl-footer-credit {
+  flex-basis: 100%;
+}
+
+.vl-footer-credit a {
+  color: var(--cream);
+  text-decoration: underline;
+  text-decoration-color: var(--accent2);
+  text-underline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------- éditeur (?edit) */
+.vl-editor-catcher {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  cursor: crosshair;
+}
+
+.vl-editor-marker {
+  position: absolute;
+  left: -9px;
+  top: -9px;
+  z-index: 21;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px dashed #ffd84d;
+  pointer-events: none;
+}
+
+.vl-editor {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  display: grid;
+  gap: 10px;
+  width: 330px;
+  padding: 16px;
+  border-radius: 16px;
+  color: #eee;
+  background: rgba(18, 17, 16, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font: 13px/1.45 system-ui, sans-serif;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.vl-editor header {
+  display: grid;
+  gap: 2px;
+}
+
+.vl-editor header span {
+  font: 12px ui-monospace, Menlo, monospace;
+  color: #ffd84d;
+}
+
+.vl-editor-row {
+  display: flex;
+  gap: 8px;
+}
+
+.vl-editor-row > * {
+  flex: 1;
+}
+
+.vl-editor select,
+.vl-editor input,
+.vl-editor button {
+  min-height: 34px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  font: inherit;
+}
+
+.vl-editor button {
+  cursor: pointer;
+}
+
+.vl-editor button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.vl-editor-main button {
+  background: #ffd84d;
+  color: #111;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.vl-editor-main button:hover {
+  background: #ffe37a;
+}
+
+.vl-editor-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.vl-editor-fields label {
+  display: grid;
+  gap: 4px;
+  font-size: 11px;
+  color: #aaa;
+}
+
+.vl-editor-fields label:first-child {
+  grid-column: 1 / -1;
+}
+
+.vl-editor-help {
+  color: #bbb;
+  font-size: 12px;
+}
+
+.vl-editor-note {
+  color: #ffd84d;
+  font-size: 12px;
+}
+
+.vl-editor-reset {
+  background: none !important;
+  border: 0 !important;
+  color: #999;
+  text-decoration: underline;
+}
+
+.vl-editor-toast {
+  color: #7ee2a8;
+}
+
+/* ---------------------------------------------------------------- plein écran : drapeau qui rappelle l'en-tête rangé
+   En haut au centre ; l'en-tête affiché, il se place juste dessous (un clic le range de nouveau). */
+.vl-header-peek {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  z-index: 51;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ink) 70%, transparent);
+  border: 1px solid rgb(255 255 255 / 0.35);
+  translate: -50% 0;
+  cursor: pointer;
+  transition: top 0.45s var(--ease), scale 0.25s var(--ease), background 0.25s;
+}
+
+.vl-header-peek:hover {
+  scale: 1.06;
+  background: var(--accent);
+}
+
+.vl-header-peek:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.vl-header-peek .vl-logo-mark {
+  width: 22px;
+  height: 22px;
+  background: var(--brass-soft);
+  transition: rotate 0.5s var(--ease);
+}
+
+.vl-header-peek.is-open {
+  top: calc(var(--header-h) + 12px);
+}
+
+.vl-header-peek.is-open .vl-logo-mark {
+  rotate: 180deg;
+}
+
+/* ---------------------------------------------------------------- invitation à tourner le téléphone
+   Visible seulement sur un téléphone tenu à la verticale, pendant l'accueil de la visite. */
+.vl-rotate {
+  display: none;
+  position: absolute;
+  top: calc(var(--header-h) + 52px);
+  left: 50%;
+  translate: -50% 0;
+  z-index: 6;
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  max-width: calc(100% - 36px);
+  padding: 6px 6px 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--fg);
+  background: var(--cream);
+  box-shadow: 0 12px 26px -14px rgb(0 0 0 / 0.6);
+}
+
+.vl-rotate-icon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: none;
+  stroke: var(--accent2);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  animation: vl-rotate 2.6s ease-in-out infinite;
+}
+
+@keyframes vl-rotate {
+  0%,
+  20%,
+  100% {
+    rotate: 0deg;
+  }
+
+  45%,
+  75% {
+    rotate: -90deg;
+  }
+}
+
+.vl-rotate-close {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--fg);
+  background: var(--pine-soft);
+  cursor: pointer;
+}
+
+@media (pointer: coarse) and (orientation: portrait) and (max-width: 760px) {
+  .vl-rotate {
+    display: flex;
+  }
+}
+
+/* ---------------------------------------------------------------- tutoriel de défilement (début de la visite)
+   Norme de chaque projet (components/ScrollTutorial.tsx) : à droite, centré en hauteur, pendant l'accueil.
+   Ici : icône au trait blanc sur un halo sombre, texte en capitales mono. Animé en transform / opacity seulement. */
+.vl-tuto {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: max(14px, calc(var(--pad, 32px) * 0.6));
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  pointer-events: none !important;
+}
+
+.vl-tuto-inner {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  width: 128px;
+  padding: 22px 8px;
+  text-align: center;
+  color: #fff;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.32), transparent);
+}
+
+.vl-tuto-icon {
+  width: 44px;
+  height: 60px;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.vl-tuto-chevron {
+  stroke: var(--brass-soft);
+}
+
+.vl-tuto-trail {
+  stroke-dasharray: 2 5;
+  opacity: 0.6;
+}
+
+.vl-tuto-finger {
+  fill: currentColor;
+  stroke: none;
+}
+
+.vl-tuto-move {
+  animation: vl-tuto-swipe 1.9s cubic-bezier(0.3, 0.6, 0.3, 1) infinite;
+}
+
+.vl-tuto-wheel {
+  stroke: var(--brass-soft);
+  animation: vl-tuto-wheel 1.5s ease-in-out infinite;
+}
+
+.vl-tuto-down {
+  animation: vl-tuto-down 1.5s ease-in-out infinite;
+}
+
+.vl-tuto-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.6);
+}
+
+@keyframes vl-tuto-swipe {
+  0% {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  70% {
+    transform: translateY(-20px);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-24px);
+    opacity: 0;
+  }
+}
+
+@keyframes vl-tuto-wheel {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  60% {
+    transform: translateY(7px);
+    opacity: 0.15;
+  }
+}
+
+@keyframes vl-tuto-down {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+/* ---------------------------------------------------------------- invitation au plein écran (norme)
+   Téléphone tourné à l'horizontale : bulle au-dessus du bouton plein écran, bouton qui pulse (FullscreenButton.tsx).
+   Ici : pilule crème, bouton laiton. Animé en transform / opacity seulement. */
+.vl-fs-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.vl-fs-hint {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 14px);
+  z-index: 2;
+  width: max-content;
+  max-width: 62vw;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+  color: var(--fg);
+  background: var(--cream);
+  border-radius: 999px;
+  box-shadow: 0 12px 26px -10px rgb(0 0 0 / 0.5);
+  translate: -50% 0;
+  cursor: pointer;
+  animation: vl-fs-hint-in 0.4s ease-out both, vl-fs-hint-bob 1.6s ease-in-out 0.4s infinite;
+}
+
+.vl-fs-hint::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  margin-left: -6px;
+  border: 6px solid transparent;
+  border-top-color: var(--cream);
+}
+
+.vl-fullscreen[data-invite] {
+  position: relative;
+  color: var(--ink);
+  background: var(--brass-soft);
+}
+
+.vl-fullscreen[data-invite]::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border: 1.5px solid #fff;
+  border-radius: inherit;
+  pointer-events: none;
+  animation: vl-fs-ring 1.4s ease-out infinite;
+}
+
+@keyframes vl-fs-hint-in {
+  from {
+    opacity: 0;
+    translate: -50% 8px;
+  }
+}
+
+@keyframes vl-fs-hint-bob {
+  50% {
+    translate: -50% -4px;
+  }
+}
+
+@keyframes vl-fs-ring {
+  from {
+    scale: 0.9;
+    opacity: 0.9;
+  }
+
+  to {
+    scale: 1.5;
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------------- mouvements réduits */
+@media (prefers-reduced-motion: reduce) {
+  .vl-hud-rec b,
+  .vl-sound[aria-pressed='true'] .vl-sound-waves,
+  .vl-music-play-note,
+  .vl-veil-flag,
+  .vl-hs[data-visible] .vl-hs-dot,
+  .vl-rotate-icon,
+  .vl-tuto-move,
+  .vl-tuto-wheel,
+  .vl-tuto-down,
+  .vl-fs-hint,
+  .vl-fullscreen[data-invite]::after,
+  .vl-popup[data-shown]:not([data-closing]) .vl-popup-body {
+    animation: none;
+  }
+
+  .vl-veil,
+  .vl-veil[data-shown],
+  .vl-veil-text,
+  .vl-header,
+  .vl-header-peek,
+  .vl-header-peek .vl-logo-mark,
+  .vl-route,
+  .vl-route li::before,
+  .vl-route-num,
+  .vl-route-label,
+  .vl-hs,
+  .vl-hs::before,
+  .vl-hs::after,
+  .vl-hs .vl-hs-dot,
+  .vl-hs .vl-hs-label,
+  .vl-hs[data-visible]::before,
+  .vl-hs[data-visible]::after,
+  .vl-hs[data-visible] .vl-hs-dot,
+  .vl-hs[data-visible] .vl-hs-label,
+  .vl-hole-photo img,
+  .vl-gallery img,
+  .vl-gallery figcaption,
+  .vl-btn,
+  .vl-btn svg,
+  .vl-link,
+  .vl-nav a::after,
+  .vl-menu li {
+    transition: none;
+  }
+}
+
+/* mouvements réduits : la fiche apparaît et part sans se déplier (animation quasi nulle : Hotspots attend sa fin) */
+@media (prefers-reduced-motion: reduce) {
+  .vl-popup[data-shown],
+  .vl-popup[data-shown][data-closing] {
+    animation-duration: 0.01s;
+  }
+}
+
+/* ---------------------------------------------------------------- en-tête : la place manque avant le menu burger */
+@media (max-width: 1360px) {
+  .vl-studio-btn {
+    width: 42px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .vl-studio-btn-label {
+    display: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .vl-logo-place {
+    display: none;
+  }
+
+  .vl-nav a {
+    padding: 8px 9px;
+  }
+
+  .vl-nav a::after {
+    left: 9px;
+    right: 9px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .vl-btn-header {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- écrans moyens : les grilles se replient */
+@media (max-width: 1100px) {
+  .vl-amenities {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vl-amenities li:nth-child(n) {
+    padding-left: 24px;
+    border-left: 1px solid var(--hair-light);
+  }
+
+  .vl-amenities li:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .vl-brief-body,
+  .vl-contact {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------------------------------------------------------------- mobile : menu burger (même requête que MENU_QUERY de lib/media.ts) */
+@media (max-width: 900px), (pointer: coarse) and (max-height: 500px) {
+  .vl-nav,
+  .vl-btn-header {
+    display: none;
+  }
+
+  .vl-map {
+    margin-left: auto;
+  }
+
+  .vl-burger {
+    display: grid;
+  }
+
+  .vl-rules {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vl-story {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vl-story:nth-child(even) .vl-story-photo {
+    order: 0;
+  }
+}
+
+@media (min-width: 901px) and (min-height: 501px), (min-width: 901px) and (pointer: fine) {
+  .vl-menu {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- bouton Google Maps de l'en-tête : rond à filet */
+.vl-map {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border-radius: 50%;
+  color: var(--accent);
+  border: 1px solid var(--line);
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.vl-map:hover {
+  background: var(--surface);
+  border-color: var(--accent2);
+}
+
+.vl-map svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* carte et « Comment ça marche » rapprochés */
+.vl-map + .vl-studio-btn {
+  margin-left: -12px;
+}
+
+/* ---------------------------------------------------------------- téléphone : en-tête et sections */
+@media (max-width: 760px) {
+  .tpl-villa {
+    --header-h: 60px;
+  }
+
+  .vl-header {
+    gap: 8px;
+    padding: 8px 14px;
+  }
+
+  .vl-logo-img {
+    height: 34px;
+  }
+
+  .vl-route {
+    display: none;
+  }
+
+  .vl-map + .vl-studio-btn {
+    margin-left: 0;
+  }
+
+  .vl-studio {
+    width: 100%;
+    max-height: 92dvh;
+    margin: auto 0 0;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .vl-studio-panel {
+    padding: 30px 20px max(32px, env(safe-area-inset-bottom));
+  }
+
+  .vl-studio-highlights,
+  .vl-studio-lists {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vl-studio-highlights div:nth-child(n) {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 12px 0;
+    border-left: 0;
+  }
+
+  .vl-studio-highlights div + div {
+    border-top: 1px solid var(--line);
+  }
+
+  .vl-studio-highlights dt {
+    font-size: 26px;
+  }
+
+  .vl-section h2 {
+    font-size: clamp(40px, 12vw, 54px);
+  }
+
+  .vl-brief-photo {
+    aspect-ratio: 4 / 3;
+    margin-inline: calc(var(--pad) * -1);
+    border-radius: 0;
+  }
+
+  .vl-figures {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vl-figures div:nth-child(n) {
+    padding-left: 14px;
+    border-left: 1px solid var(--line);
+  }
+
+  .vl-figures div:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .vl-figures dd {
+    font-size: 40px;
+  }
+
+  .vl-card {
+    min-width: 0;
+  }
+
+  .vl-card th,
+  .vl-card td {
+    padding: 10px 2px;
+  }
+
+  .vl-card th[scope='row'] {
+    width: 42px;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+
+  .vl-card thead th[scope='col'] {
+    font-size: 10.5px;
+  }
+
+  .vl-card tbody td {
+    font-size: 18px;
+  }
+
+  .vl-card .vl-card-hcp td {
+    font-size: 10px;
+  }
+
+  .vl-card thead .vl-card-sum {
+    font-size: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  .vl-card td[data-par='3']::after,
+  .vl-card td[data-par='5']::after {
+    width: 24px;
+    height: 24px;
+  }
+
+  .vl-plans {
+    grid-auto-columns: 74%;
+    margin-inline: calc(var(--pad) * -1);
+    padding-inline: var(--pad);
+    scroll-padding-inline: var(--pad);
+  }
+
+  .vl-holes {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .vl-story-body h3 {
+    font-size: clamp(34px, 10vw, 44px);
+  }
+
+  .vl-amenities {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vl-amenities li:nth-child(n) {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 18px;
+    padding: 20px 0;
+    border-left: 0;
+  }
+
+  .vl-amenities strong {
+    font-size: 23px;
+  }
+
+  .vl-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 140px;
+    gap: 8px;
+  }
+
+  .vl-gallery figure:nth-child(4) {
+    grid-column: auto;
+  }
+
+  /* légendes toujours visibles (pas de survol au doigt) */
+  .vl-gallery figcaption {
+    padding: 28px 10px 8px;
+    font-size: 11.5px;
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  .vl-rates th,
+  .vl-rates td {
+    padding: 14px 8px;
+  }
+
+  .vl-rates tbody th {
+    font-size: 14px;
+  }
+
+  .vl-rates td {
+    font-size: 26px;
+  }
+
+  .vl-rates thead th span {
+    font-size: 11px;
+  }
+
+  .vl-rules div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    padding: 16px 0;
+  }
+
+  .vl-reviews-score {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .vl-review blockquote p {
+    font-size: 20px;
+  }
+
+  .vl-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vl-booking,
+  .vl-booking .vl-btn {
+    width: 100%;
+  }
+
+  .vl-form button {
+    justify-self: stretch;
+  }
+
+  .vl-footer nav {
+    margin-left: 0;
+  }
+
+  .vl-editor {
+    left: 10px;
+    right: 10px;
+    width: auto;
+  }
+}
+
+/* ---------------------------------------------------------------- téléphone (vertical ou couché) : la visite
+   Mêmes requêtes que src/lib/media.ts. Un téléphone à l'horizontale dépasse 760 px de large :
+   « (pointer: coarse) and (max-height: 500px) » le reconnaît. Placé en fin de fichier pour l'emporter. */
+@media (max-width: 760px), (pointer: coarse) and (max-height: 500px) {
+  /* viseur drone : cadre complet près des bords, texte plus petit (style Navart inchangé) */
+  .vl-hud {
+    inset: calc(var(--header-h) + 14px) max(12px, env(safe-area-inset-right)) 12px max(12px, env(safe-area-inset-left));
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+
+  .vl-hud-corner {
+    width: 22px;
+    height: 22px;
+  }
+
+  .vl-hud-rec,
+  .vl-hud-time,
+  .vl-hud-format {
+    top: 12px;
+  }
+
+  .vl-hud-rec {
+    left: 12px;
+  }
+
+  .vl-hud-time {
+    left: 62px;
+  }
+
+  .vl-hud-format {
+    right: 12px;
+  }
+
+  .vl-hud-data {
+    right: 12px;
+    bottom: 10px;
+  }
+
+  .vl-hud-rec b {
+    width: 6px;
+    height: 6px;
+  }
+
+  .vl-hud-sep {
+    height: 9px;
+    margin: 0 5px;
+  }
+
+  .vl-hud-cross {
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0 -9px;
+  }
+
+  /* chapitres : une seule colonne ; left / bottom-left centrés à gauche, right / bottom-right à droite */
+  .vl-layer {
+    grid-template-columns: minmax(0, 1fr);
+    padding: calc(var(--header-h) + 22px) max(14px, env(safe-area-inset-right)) 100px max(14px, env(safe-area-inset-left));
+  }
+
+  .vl-pos-hero,
+  .vl-pos-center,
+  .vl-pos-left,
+  .vl-pos-right,
+  .vl-pos-bottom-left,
+  .vl-pos-bottom-right {
+    grid-column: 1 / -1;
+  }
+
+  .vl-pos-left,
+  .vl-pos-bottom-left,
+  .vl-pos-right,
+  .vl-pos-bottom-right {
+    grid-row: 1 / -1;
+    align-self: center;
+    max-width: min(84%, 330px);
+    margin: 0;
+    padding: 18px 20px 20px;
+  }
+
+  .vl-pos-left,
+  .vl-pos-bottom-left {
+    justify-self: start;
+  }
+
+  .vl-pos-right,
+  .vl-pos-bottom-right {
+    justify-self: end;
+  }
+
+  .vl-pos-left .vl-kicker,
+  .vl-pos-right .vl-kicker,
+  .vl-pos-bottom-left .vl-kicker,
+  .vl-pos-bottom-right .vl-kicker {
+    margin-bottom: 12px;
+    font-size: 9.5px;
+  }
+
+  .vl-pos-left h2,
+  .vl-pos-right h2,
+  .vl-pos-bottom-left h2,
+  .vl-pos-bottom-right h2 {
+    font-size: clamp(26px, 8vw, 32px);
+  }
+
+  .vl-pos-left .vl-chapter-note,
+  .vl-pos-right .vl-chapter-note,
+  .vl-pos-bottom-left .vl-chapter-note,
+  .vl-pos-bottom-right .vl-chapter-note {
+    margin-top: 6px;
+    font-size: 19px;
+  }
+
+  /* texte limité à quatre lignes : la carte ne doit pas masquer la vidéo */
+  .vl-pos-left .vl-chapter-text,
+  .vl-pos-right .vl-chapter-text,
+  .vl-pos-bottom-left .vl-chapter-text,
+  .vl-pos-bottom-right .vl-chapter-text {
+    display: -webkit-box;
+    margin-top: 8px;
+    overflow: hidden;
+    font-size: 13.5px;
+    line-height: 1.5;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+  }
+
+  /* accueil : plus haut et plus petit, centré */
+  .vl-pos-hero {
+    grid-row: 1 / -1;
+    align-self: center;
+    justify-self: center;
+    max-width: none;
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  .vl-pos-hero .vl-kicker {
+    justify-content: center;
+    font-size: 9.5px;
+  }
+
+  .vl-pos-hero h1 {
+    font-size: clamp(54px, 16vw, 72px);
+  }
+
+  .vl-pos-hero .vl-chapter-note {
+    font-size: 22px;
+  }
+
+  .vl-pos-hero .vl-chapter-text {
+    margin-inline: auto;
+    font-size: 14.5px;
+  }
+
+  .vl-pos-hero .vl-chapter-meta {
+    font-size: 10px;
+  }
+
+  .vl-pos-hero .vl-btn {
+    min-height: 44px;
+    font-size: 13.5px;
+  }
+
+  .vl-pos-center h2 {
+    font-size: clamp(44px, 13vw, 62px);
+  }
+
+  .vl-pos-center .vl-chapter-text {
+    font-size: 15px;
+  }
+
+  /* compteurs : deux par ligne */
+  .vl-chapter-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 22px;
+  }
+
+  .vl-chapter-stats > div {
+    min-width: 0;
+    padding: 14px 12px 10px;
+  }
+
+  .vl-chapter-stats > div:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .vl-chapter-stats > div:nth-child(n + 3) {
+    border-top: 1px solid rgb(255 255 255 / 0.4);
+  }
+
+  .vl-chapter-stats dt {
+    font-size: 40px;
+  }
+
+  .vl-chapter-stats dd {
+    font-size: 9.5px;
+  }
+
+  /* commandes plus petites */
+  .vl-tour-controls {
+    gap: 8px;
+  }
+
+  .vl-fullscreen,
+  .vl-sound {
+    width: 42px;
+    height: 42px;
+  }
+
+  .vl-music-play {
+    height: 42px;
+    gap: 5px;
+    padding: 0 10px 0 13px;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+  }
+
+  .vl-music-play-note {
+    font-size: 20px;
+  }
+
+  .vl-play {
+    width: 52px;
+    height: 52px;
+  }
+
+  /* drapeaux un peu plus petits */
+  .vl-hs-dot {
+    top: -52px;
+    width: 34px;
+    height: 22px;
+    font-size: 11px;
+  }
+
+  .vl-hs::before {
+    top: -52px;
+    height: 54px;
+  }
+
+  .vl-hs-label {
+    bottom: 60px;
+    font-size: 12px;
+  }
+
+  /* tutoriel plus étroit */
+  .vl-tuto {
+    right: max(8px, env(safe-area-inset-right));
+  }
+
+  .vl-tuto-inner {
+    width: 108px;
+  }
+
+  /* fiche : panneau en bas, jamais plus grande que l'écran, défilable */
+  .vl-popup {
+    --unfold-from: inset(100% 0 0 0);
+    --unfold-shift: 0 10px;
+
+    position: fixed;
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
+    top: auto;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    width: auto;
+    max-height: min(50dvh, 440px);
+    transform: none !important;
+  }
+
+  .vl-popup-media {
+    aspect-ratio: auto;
+    height: min(20dvh, 150px);
+  }
+
+  .vl-popup-body {
+    padding: 8px 18px 20px;
+  }
+
+  .vl-popup-note {
+    padding: 12px 18px 0;
+    font-size: 19px;
+  }
+
+  .vl-popup-body h3 {
+    font-size: 28px;
+  }
+}
+
+/* ---------------------------------------------------------------- téléphone debout : le tutoriel monte un peu */
+@media (max-width: 760px) and (orientation: portrait) {
+  .vl-tuto {
+    bottom: 30%;
+  }
+
+  /* l'accueil remonte au-dessus du milieu : les drapeaux et les commandes gardent le bas */
+  .vl-pos-hero {
+    margin-bottom: 14vh;
+  }
+}
+
+/* ---------------------------------------------------------------- téléphone couché */
+@media (pointer: coarse) and (max-height: 500px) {
+  .tpl-villa {
+    --header-h: 52px;
+  }
+
+  .vl-header {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  .vl-logo-img {
+    height: 32px;
+  }
+
+  .vl-logo-place,
+  .vl-route,
+  .vl-rotate {
+    display: none;
+  }
+
+  .vl-hud {
+    inset: calc(var(--header-h) + 8px) max(12px, env(safe-area-inset-right)) 10px max(12px, env(safe-area-inset-left));
+  }
+
+  .vl-layer {
+    padding: calc(var(--header-h) + 12px) max(18px, env(safe-area-inset-right)) 14px max(18px, env(safe-area-inset-left));
+  }
+
+  .vl-pos-left,
+  .vl-pos-bottom-left,
+  .vl-pos-right,
+  .vl-pos-bottom-right {
+    max-width: min(40%, 330px);
+    padding: 14px 18px 16px;
+  }
+
+  .vl-pos-left h2,
+  .vl-pos-right h2,
+  .vl-pos-bottom-left h2,
+  .vl-pos-bottom-right h2 {
+    font-size: clamp(22px, 7vh, 30px);
+  }
+
+  .vl-pos-left .vl-chapter-text,
+  .vl-pos-right .vl-chapter-text,
+  .vl-pos-bottom-left .vl-chapter-text,
+  .vl-pos-bottom-right .vl-chapter-text {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+
+  /* accueil compact, à gauche */
+  .vl-pos-hero {
+    justify-self: start;
+    max-width: 62%;
+    margin: 0;
+    text-align: left;
+  }
+
+  .vl-pos-hero .vl-kicker {
+    justify-content: flex-start;
+  }
+
+  .vl-pos-hero h1 {
+    font-size: clamp(40px, 14vh, 62px);
+  }
+
+  .vl-pos-hero .vl-chapter-note {
+    font-size: 19px;
+  }
+
+  .vl-pos-hero .vl-chapter-text {
+    margin-inline: 0;
+    margin-top: 6px;
+    font-size: 13px;
+  }
+
+  .vl-pos-hero .vl-chapter-meta {
+    display: none;
+  }
+
+  .vl-pos-hero .vl-btn {
+    min-height: 38px;
+    margin-top: 12px;
+  }
+
+  .vl-pos-center h2 {
+    font-size: clamp(38px, 14vh, 60px);
+  }
+
+  .vl-chapter-stats {
+    display: flex;
+    margin-top: 16px;
+  }
+
+  .vl-chapter-stats > div:nth-child(n) {
+    padding: 10px 16px 0;
+    border-top: 0;
+    border-left: 1px solid rgb(255 255 255 / 0.4);
+  }
+
+  .vl-chapter-stats > div:first-child {
+    border-left: 0;
+  }
+
+  .vl-chapter-stats dt {
+    font-size: 32px;
+  }
+
+  /* commandes plus basses et plus petites */
+  .vl-fullscreen,
+  .vl-sound,
+  .vl-music-play {
+    height: 40px;
+  }
+
+  .vl-fullscreen,
+  .vl-sound {
+    width: 40px;
+  }
+
+  .vl-play {
+    width: 46px;
+    height: 46px;
+  }
+
+  /* fiche : tiroir à droite, sous l'en-tête (sa croix reste visible) */
+  .vl-popup {
+    --unfold-from: inset(0 0 0 100%);
+    --unfold-shift: 10px 0;
+
+    left: auto;
+    top: calc(var(--header-h) + 8px);
+    right: max(8px, env(safe-area-inset-right));
+    bottom: auto;
+    width: min(360px, 50vw);
+    max-height: min(calc(100dvh - var(--header-h) - 24px), 300px);
+  }
+
+  .vl-popup-media {
+    height: 30dvh;
+  }
+
+  /* menu burger : tout tient dans la hauteur */
+  .vl-menu li a {
+    padding: 7px 0;
+    font-size: 28px;
+  }
+}
+
+/* ---------------------------------------------------------------- performance sur téléphone et tablette
+   Le verre dépoli (backdrop-filter) posé sur la vidéo est recalculé à chaque image : très lourd pour la puce
+   graphique d'un téléphone, la visite rame. Sur écran tactile ou étroit : fonds crème opaques, sans flou,
+   fanions immobiles, dégradé de l'accueil allégé. Le voile de transition garde son flou : il ne dure qu'un instant.
+   Rien ne change sur ordinateur. */
+@media (max-width: 900px), (pointer: coarse) {
+  .vl-header,
+  .vl-pos-left,
+  .vl-pos-right,
+  .vl-pos-bottom-left,
+  .vl-pos-bottom-right,
+  .vl-fullscreen,
+  .vl-sound,
+  .vl-music-play {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .vl-header,
+  .vl-pos-left,
+  .vl-pos-right,
+  .vl-pos-bottom-left,
+  .vl-pos-bottom-right {
+    background: var(--bg);
+  }
+
+  .vl-fullscreen,
+  .vl-sound,
+  .vl-music-play:not([aria-pressed='true']) {
+    background: var(--cream);
+  }
+
+  .vl-hs[data-visible] .vl-hs-dot {
+    animation: none;
+  }
+
+  .vl-pos-hero::before {
+    background: radial-gradient(closest-side, rgb(8 18 12 / 0.4), transparent);
+  }
+
+  .vl-layer .sf-step[data-anim='blur'] {
+    filter: none;
+  }
+
+  .vl-layer .sf-step:not([data-visible]) {
+    will-change: auto;
+  }
+}
+
+/* ---------------------------------------------------------------- iPhone : bords de l'écran
+   viewport-fit=cover (index.html) : la page va jusque sous l'encoche et l'indicateur d'accueil ; les éléments
+   collés aux bords gardent une marge (env(safe-area-inset-*) vaut 0 ailleurs). Plein écran « immersif »
+   (html[data-immersive], lib/fullscreen.ts) : l'en-tête se range et Safari replie ses barres au défilement. */
+@media (pointer: coarse) {
+  .vl-header {
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+    padding-top: max(8px, env(safe-area-inset-top));
+  }
+
+  .vl-header-peek {
+    top: max(10px, env(safe-area-inset-top));
+  }
+
+  /* commandes centrées (left: 50% + translate) : seule la marge basse suit l'indicateur d'accueil */
+  .vl-tour-controls {
+    bottom: max(18px, env(safe-area-inset-bottom));
+  }
+}
+
+@media (pointer: coarse) and (max-height: 500px) {
+  .vl-tour-controls {
+    bottom: max(10px, env(safe-area-inset-bottom));
+  }
+
+  .vl-header-peek {
+    top: 8px;
+  }
+}

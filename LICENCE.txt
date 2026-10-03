@@ -1,0 +1,48 @@
+=====================================================================
+  MODÈLE DE LICENCE — À RELIRE ET ADAPTER AVANT LA VENTE
+  (remplacez les [CROCHETS] ; ce modèle n'est pas un conseil juridique)
+=====================================================================
+
+LICENCE D'UTILISATION — [NOM DU PRODUIT]
+Vendeur : [VOTRE NOM OU SOCIÉTÉ] — [SITE] — [EMAIL]
+Version : 1.0
+
+1. OBJET
+Ce produit (code source, styles, séquences d'images et documentation,
+ci-après « le Produit ») est concédé sous licence, il n'est pas vendu.
+L'acheteur obtient un droit d'utilisation non exclusif et non cessible,
+selon la formule achetée.
+
+2. LICENCE STANDARD
+- Utilisation dans UN (1) projet final, pour vous-même ou pour UN client.
+- Modification libre du code, des textes, des couleurs et des images.
+- Le projet final peut être commercial (site d'entreprise, boutique…).
+
+3. LICENCE ÉTENDUE
+- Utilisation dans un nombre illimité de projets finaux, pour vous-même
+  ou pour vos clients.
+- Mêmes droits de modification que la licence standard.
+
+4. INTERDICTIONS (toutes licences)
+- Revendre, redistribuer, partager ou publier le Produit, modifié ou non,
+  en tant que template, thème, kit, starter ou composant réutilisable
+  (marketplaces, dépôts publics, packs gratuits ou payants…).
+- Revendiquer la paternité du Produit d'origine.
+- Utiliser les marques fictives de démonstration comme de vraies marques.
+
+5. COMPOSANTS TIERS
+Les polices proviennent de Google Fonts (licence SIL Open Font License) et
+les bibliothèques open source (React, Vite…) restent soumises à leurs
+propres licences. Les séquences d'images de démonstration sont des rendus
+originaux inclus dans le Produit.
+
+6. GARANTIE ET RESPONSABILITÉ
+Le Produit est fourni « en l'état ». [DURÉE] de mises à jour et
+[DURÉE / CANAL] de support sont inclus. La responsabilité du vendeur est
+limitée au prix payé.
+
+7. RÉSILIATION
+Toute violation de cette licence met fin automatiquement au droit
+d'utilisation.
+
+Droit applicable : [PAYS]. Contact : [EMAIL]
