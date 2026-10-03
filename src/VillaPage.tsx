@@ -32,6 +32,7 @@ import { Scorecard } from './components/Scorecard';
 import { StatCount } from './components/StatCount';
 import { MENU_QUERY, TOUCH_QUERY } from './lib/media';
 import { useSmoothAnchors } from './lib/smooth-anchors';
+import { useReveal } from './lib/reveal';
 import { useTravel } from './lib/travel';
 import { useFullscreen } from './lib/fullscreen';
 import studio from './data/studio.json';
@@ -73,6 +74,30 @@ function loadDraft(): VillaData | null {
 function resolveMedia(source: MediaSource): VideoInput {
   return typeof source === 'string' ? asset(source) : source.map((s) => ({ ...s, src: asset(s.src) }));
 }
+
+/** Blocs des sections après la visite qui apparaissent à leur arrivée à l'écran (lib/reveal.ts, style dans villa.css) */
+const REVEAL = [
+  '.vl-section-head',
+  '.vl-reviews-score',
+  '.vl-brief-photo',
+  '.vl-figures > div',
+  '.vl-price-tag',
+  '.vl-card',
+  '.vl-plans',
+  '.vl-holes > li',
+  '.vl-story-photo',
+  '.vl-story-body',
+  '.vl-amenities > li',
+  '.vl-gallery > figure',
+  '.vl-rates-wrap',
+  '.vl-rates-extras > div',
+  '.vl-rates-foot',
+  '.vl-rules > div',
+  '.vl-reviews > li',
+  '.vl-booking',
+  '.vl-host',
+  '.vl-contact-card',
+] as const;
 
 const ANIM: Record<Chapter['position'], StepAnim> = {
   hero: 'fade-up',
@@ -184,6 +209,9 @@ export default function VillaPage() {
 
   // liens internes (#section) : défilement lisse, ou transition quand le trajet traverse la visite
   useSmoothAnchors(interceptAnchor);
+
+  // sections après la visite : chaque bloc apparaît une fois, à son arrivée à l'écran
+  useReveal(REVEAL);
 
   // en-tête opaque une fois la visite terminée
   useEffect(() => {

@@ -3720,6 +3720,56 @@ img.vl-review-avatar {
   }
 }
 
+/* ---------------------------------------------------------------- apparition des sections après la visite (lib/reveal.ts)
+   Chaque bloc apparaît une fois, à son arrivée à l'écran, avec un léger décalage entre voisins (--reveal-delay) :
+   textes, cartes et lignes montent en fondu ; les photos se dévoilent de bas en haut avec un léger zoom arrière.
+   Seuls les blocs marqués par le script sont masqués : sans script, tout reste visible. */
+[data-reveal] {
+  transition:
+    opacity 0.9s var(--ease) var(--reveal-delay, 0ms),
+    translate 0.9s var(--ease) var(--reveal-delay, 0ms),
+    clip-path 1.2s cubic-bezier(0.65, 0, 0.35, 1) var(--reveal-delay, 0ms);
+}
+
+[data-reveal]:not([data-revealed]) {
+  opacity: 0;
+  translate: 0 26px;
+}
+
+/* photos : volet qui s'ouvre de bas en haut, l'image se pose */
+.vl-brief-photo[data-reveal],
+.vl-story-photo[data-reveal],
+.vl-gallery > figure[data-reveal] {
+  overflow: hidden;
+}
+
+.vl-brief-photo[data-reveal]:not([data-revealed]),
+.vl-story-photo[data-reveal]:not([data-revealed]),
+.vl-gallery > figure[data-reveal]:not([data-revealed]) {
+  opacity: 1;
+  translate: none;
+  clip-path: inset(100% 0 0 0);
+}
+
+.vl-brief-photo[data-reveal] img,
+.vl-story-photo[data-reveal] img,
+.vl-gallery > figure[data-reveal] img {
+  transition: scale 1.6s var(--ease) var(--reveal-delay, 0ms);
+}
+
+.vl-brief-photo[data-reveal]:not([data-revealed]) img,
+.vl-story-photo[data-reveal]:not([data-revealed]) img,
+.vl-gallery > figure[data-reveal]:not([data-revealed]) img {
+  scale: 1.08;
+}
+
+/* grilles (sur place, chiffres, infos) : montée plus courte */
+.vl-amenities > li[data-reveal]:not([data-revealed]),
+.vl-figures > div[data-reveal]:not([data-revealed]),
+.vl-rules > div[data-reveal]:not([data-revealed]) {
+  translate: 0 14px;
+}
+
 /* ---------------------------------------------------------------- mouvements réduits */
 @media (prefers-reduced-motion: reduce) {
   .vl-hud-rec b,
@@ -3759,6 +3809,8 @@ img.vl-review-avatar {
   .vl-hole-photo img,
   .vl-gallery img,
   .vl-gallery figcaption,
+  [data-reveal],
+  [data-reveal] img,
   .vl-btn,
   .vl-btn svg,
   .vl-link,
