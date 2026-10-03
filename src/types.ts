@@ -438,7 +438,7 @@ export const UI_DEFAULTS: UiText = {
   play: 'Lire la visite',
   pause: 'Mettre la visite en pause',
   playWithMusicText: 'Visite en',
-  playWithMusic: 'Musique synchronisée (oui pour toi qui comprends l\'immersion 😉)',
+  playWithMusic: 'Lancer la visite en musique synchronisée',
   pauseWithMusic: 'Arrêter la musique synchronisée',
   travel: 'En route vers',
   showHeader: 'Afficher le menu',
