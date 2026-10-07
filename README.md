@@ -1,6 +1,6 @@
 # Golf de Gap-Bayard — 18 trous de montagne, « visite au scroll »
 
-Prototype de prospection pour le Golf de Gap-Bayard (Centre d'oxygénation, plateau de Bayard, Hautes-Alpes), sur la base du projet de référence `bora_sotheby` : la vidéo du survol se joue au rythme du scroll ; sept lieux numérotés (échauffement, practice, parcours, greens, fairways, bunkers, club-house) ouvrent une fiche ; tarifs 2026 en tableau, réservation des départs sur prima.golf. Tout le contenu (textes, couleurs, vidéo, lieux, sections) est dans **un seul fichier JSON**.
+Prototype de prospection pour le Golf de Gap-Bayard (Centre d'oxygénation, plateau de Bayard, Hautes-Alpes), sur la base du projet de référence `bora_sotheby` : la vidéo du survol se joue au rythme du scroll ; sept lieux numérotés (échauffement, practice, parcours, greens, fairways, bunkers, club-house) ouvrent une fiche ; sous la visite, **trois univers en onglets** (Golf, Séjourner, Nordique : grandes cartes photo, chacune affiche son contenu et ses tarifs juste en dessous, l'univers de la saison ouvert d'office), réservation des départs sur prima.golf. Tout le contenu (textes, couleurs, vidéo, lieux, sections) est dans **un seul fichier JSON**.
 
 **Vidéo provisoire** : survol d'un autre parcours (Fly Over Green, filigrane visible), pour montrer l'interface seulement. À remplacer par le tournage FPV de Gap-Bayard avant toute mise en ligne publique ; chapitres, points et ralentis seront alors à recaler dans `?edit`.
 
@@ -79,6 +79,7 @@ Ouvrez `PROMPT.md` : copiez le prompt, joignez `src/data/villa.json`, décrivez 
 | `chapters` | textes qui apparaissent pendant la visite (`note` : ligne manuscrite) |
 | `hotspots` | les pièces, dans l'ordre du parcours : nom, légende, description, détails, équipements, photo, positions |
 | `sections` | la villa en bref, pièces, équipements, galerie, bon à savoir, réservation |
+| `sections.universes` | univers du lieu en onglets sous la visite (golf, séjour, hiver…) : voir « Univers » plus bas |
 | `sections.reviews` | avis : saisis dans `items` (exemples fictifs par défaut, `sample: true`) ou vrais avis Google via `api` (voir « Avis » plus bas) |
 | `sections.contact.availability` | calendrier des disponibilités : exemple (`sample`), dates à la main (`booked`) ou calendrier iCal réel (`api`) ; voir « Disponibilités » plus bas |
 | `footer` | texte, liens et crédits (`credits` : vidéo, musique…) du pied de page |
@@ -131,6 +132,17 @@ Sans `image`, la fiche affiche un zoom en direct dans la vidéo. Les photos des 
 #### Formulaire de réservation
 
 `sections.contact.formAction` reçoit l'adresse d'envoi : [Formspree](https://formspree.io) (`https://formspree.io/f/xxxxxxx`), Netlify Forms, ou votre propre API (envoi `POST` des champs `arrival`, `departure`, `guests`, `name`, `email`, `message`). `sections.contact.maxGuests` limite le nombre de voyageurs. Laissé vide, le formulaire fonctionne en mode démo et n'envoie rien.
+
+#### Univers (`sections.universes`)
+
+Sous la visite, une grande carte photo par univers (Golf, Séjourner, Nordique) ; la choisir affiche son contenu juste en dessous, à la place du précédent (onglets accessibles : flèches gauche / droite, Début, Fin). Chaque univers (`items[]`) a :
+
+- `id` : ancre en minuscules (`#golf`), `label`, `kicker` (petite ligne de la carte), `image` ;
+- `text` et `cta` (liste de boutons) : bandeau en tête du contenu, une adresse `http` s'ouvre dans un nouvel onglet ;
+- `sections` : sections du JSON reprises, dans cet ordre (`stats`, `holes`, `rooms`) ; elles ne s'affichent plus ailleurs ;
+- `stories` (récits photo + texte, avec `id` d'ancre) et `rates` (tableau de tarifs, `id` d'ancre, `itemLabel` = en-tête de la première colonne).
+
+`season` (`universe`, `from`, `to` en « MM-JJ », la plage peut passer le 31 décembre) ouvre un univers d'office pendant sa saison et lui met la pastille « En ce moment » (`ui.universeNow`) ; le reste de l'année, le premier univers. Un lien vers un univers ou son contenu (`#nordique`, `#tarifs-nordique`, `#les-trous`) ouvre d'abord le bon univers, puis y mène (avec la transition si le trajet traverse la visite) ; l'adresse suit l'univers choisi. Sans `universes`, la page garde l'ordre classique (`stories` et `rates` du premier niveau).
 
 ---
 

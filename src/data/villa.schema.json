@@ -26,6 +26,161 @@
         }
       }
     },
+    "labelValue": {
+      "type": "object",
+      "required": ["label", "value"],
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      }
+    },
+    "stories": {
+      "type": "object",
+      "description": "Récits en photo + texte, en alternance",
+      "required": ["title", "items"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Ancre de la section (lien « #id ») ; dans un univers, à donner pour pouvoir y renvoyer"
+        },
+        "kicker": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["title", "text", "image"],
+            "properties": {
+              "kicker": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "image": {
+                "type": "string"
+              },
+              "imageAlt": {
+                "type": "string"
+              },
+              "facts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/labelValue"
+                }
+              },
+              "link": {
+                "$ref": "#/$defs/link"
+              }
+            }
+          }
+        }
+      }
+    },
+    "rates": {
+      "type": "object",
+      "description": "Tarifs en tableau façon carte de score : colonnes (saisons, publics), lignes (prestations), puis tarifs annexes par groupe",
+      "required": ["title", "columns", "rows"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Ancre de la section (lien « #id ») ; « tarifs » par défaut"
+        },
+        "kicker": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string",
+          "description": "Annotation manuscrite sous le titre"
+        },
+        "text": {
+          "type": "string"
+        },
+        "itemLabel": {
+          "type": "string",
+          "description": "En-tête de la première colonne (sinon ui.ratesItem)"
+        },
+        "columns": {
+          "type": "array",
+          "description": "En-têtes des colonnes de prix, ex. « Haute saison »",
+          "items": {
+            "type": "object",
+            "required": ["label"],
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "period": {
+                "type": "string",
+                "description": "Ex. « 1er juin – 30 sept. »"
+              }
+            }
+          }
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "values"],
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "values": {
+                "type": "array",
+                "description": "Un prix par colonne",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "extras": {
+          "type": "array",
+          "description": "Tarifs annexes (practice, location, formules…), en groupes",
+          "items": {
+            "type": "object",
+            "required": ["title", "items"],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/labelValue"
+                }
+              }
+            }
+          }
+        },
+        "source": {
+          "type": "string",
+          "description": "Origine des tarifs (ex. « Grille officielle 2026, TTC »)"
+        },
+        "link": {
+          "$ref": "#/$defs/link"
+        }
+      }
+    },
     "progress": {
       "type": "number",
       "minimum": 0,
@@ -721,10 +876,18 @@
           }
         },
         "stories": {
+          "$ref": "#/$defs/stories",
+          "description": "Récits en photo + texte, en alternance (séjourner, restaurant, séminaires, hiver…). Section facultative, ignorée avec des univers (chacun a les siens)."
+        },
+        "universes": {
           "type": "object",
-          "description": "Récits en photo + texte, en alternance (séjourner, restaurant, séminaires, hiver…). Section facultative.",
+          "description": "Univers du lieu en onglets sous la visite (golf, séjour, hiver…) : une grande carte chacun, son contenu s'affiche juste en dessous. Les sections reprises par un univers ne s'affichent plus ailleurs ; stories et rates du premier niveau sont alors ignorés. Section facultative.",
           "required": ["title", "items"],
           "properties": {
+            "id": {
+              "type": "string",
+              "description": "Ancre de la section des cartes (« le-centre » par défaut)"
+            },
             "kicker": {
               "type": "string"
             },
@@ -734,44 +897,76 @@
             "text": {
               "type": "string"
             },
+            "season": {
+              "type": "object",
+              "description": "Univers ouvert d'office pendant une saison (le reste de l'année : le premier univers). Un lien « #id » vers un univers ou son contenu l'emporte.",
+              "required": ["universe", "from", "to"],
+              "properties": {
+                "universe": {
+                  "type": "string",
+                  "description": "id de l'univers"
+                },
+                "from": {
+                  "type": "string",
+                  "pattern": "^\\d\\d-\\d\\d$",
+                  "description": "Début, « MM-JJ » (ex. « 12-15 »)"
+                },
+                "to": {
+                  "type": "string",
+                  "pattern": "^\\d\\d-\\d\\d$",
+                  "description": "Fin, « MM-JJ » (ex. « 03-15 ») ; la plage peut passer le 31 décembre"
+                }
+              }
+            },
             "items": {
               "type": "array",
+              "minItems": 1,
               "items": {
                 "type": "object",
-                "required": ["title", "text", "image"],
+                "required": ["id", "label", "image"],
                 "properties": {
-                  "kicker": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9-]+$",
+                    "description": "Ancre de l'univers (lien « #golf »), en minuscules sans accent"
+                  },
+                  "label": {
                     "type": "string"
                   },
-                  "title": {
-                    "type": "string"
+                  "kicker": {
+                    "type": "string",
+                    "description": "Petite ligne de la carte (ex. « 18 trous · Golf Academy »)"
                   },
                   "text": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Phrase d'introduction, sur la carte et en tête du contenu"
                   },
                   "image": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Photo de la carte (chemin dans public/)"
                   },
                   "imageAlt": {
                     "type": "string"
                   },
-                  "facts": {
+                  "cta": {
                     "type": "array",
+                    "description": "Boutons en tête du contenu ; une adresse « http » s'ouvre dans un nouvel onglet",
                     "items": {
-                      "type": "object",
-                      "required": ["label", "value"],
-                      "properties": {
-                        "label": {
-                          "type": "string"
-                        },
-                        "value": {
-                          "type": "string"
-                        }
-                      }
+                      "$ref": "#/$defs/link"
                     }
                   },
-                  "link": {
-                    "$ref": "#/$defs/link"
+                  "sections": {
+                    "type": "array",
+                    "description": "Sections du JSON reprises dans cet univers, dans cet ordre",
+                    "items": {
+                      "enum": ["stats", "holes", "rooms"]
+                    }
+                  },
+                  "stories": {
+                    "$ref": "#/$defs/stories"
+                  },
+                  "rates": {
+                    "$ref": "#/$defs/rates"
                   }
                 }
               }
@@ -872,95 +1067,8 @@
           }
         },
         "rates": {
-          "type": "object",
-          "description": "Tarifs en tableau façon carte de score (golf) : colonnes (saisons), lignes (prestations), puis tarifs annexes par groupe. Section facultative.",
-          "required": ["title", "columns", "rows"],
-          "properties": {
-            "kicker": {
-              "type": "string"
-            },
-            "title": {
-              "type": "string"
-            },
-            "note": {
-              "type": "string",
-              "description": "Annotation manuscrite sous le titre"
-            },
-            "text": {
-              "type": "string"
-            },
-            "columns": {
-              "type": "array",
-              "description": "En-têtes des colonnes de prix, ex. « Haute saison »",
-              "items": {
-                "type": "object",
-                "required": ["label"],
-                "properties": {
-                  "label": {
-                    "type": "string"
-                  },
-                  "period": {
-                    "type": "string",
-                    "description": "Ex. « 1er juin – 30 sept. »"
-                  }
-                }
-              }
-            },
-            "rows": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "required": ["label", "values"],
-                "properties": {
-                  "label": {
-                    "type": "string"
-                  },
-                  "values": {
-                    "type": "array",
-                    "description": "Un prix par colonne",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            },
-            "extras": {
-              "type": "array",
-              "description": "Tarifs annexes (practice, location, formules…), en groupes",
-              "items": {
-                "type": "object",
-                "required": ["title", "items"],
-                "properties": {
-                  "title": {
-                    "type": "string"
-                  },
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "required": ["label", "value"],
-                      "properties": {
-                        "label": {
-                          "type": "string"
-                        },
-                        "value": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "source": {
-              "type": "string",
-              "description": "Origine des tarifs (ex. « Grille officielle 2026, TTC »)"
-            },
-            "link": {
-              "$ref": "#/$defs/link"
-            }
-          }
+          "$ref": "#/$defs/rates",
+          "description": "Tarifs en tableau. Section facultative, ignorée avec des univers (chacun a les siens)."
         },
         "reviews": {
           "type": "object",
@@ -1260,6 +1368,10 @@
         "seeInTour": {
           "type": "string",
           "description": "Lien des cartes de la section « lieux »"
+        },
+        "universeNow": {
+          "type": "string",
+          "description": "Pastille de l'univers de saison sur sa carte (« En ce moment »)"
         },
         "details": {
           "type": "string",

@@ -81,6 +81,67 @@ export interface Hotspot {
   track?: TrackPoint[];
 }
 
+/** Récits en photo + texte, en alternance (séjourner, restaurant, séminaires, hiver…) */
+export interface Stories {
+  /** Ancre de la section (lien « #id ») ; dans un univers, à donner pour pouvoir y renvoyer */
+  id?: string;
+  kicker?: string;
+  title: string;
+  text?: string;
+  items: {
+    kicker?: string;
+    title: string;
+    text: string;
+    image: string;
+    imageAlt?: string;
+    facts?: { label: string; value: string }[];
+    link?: Link;
+  }[];
+}
+
+/** Tarifs en tableau façon carte de score : colonnes (saisons, publics), lignes, puis tarifs annexes par groupe */
+export interface Rates {
+  /** Ancre de la section (lien « #id ») ; « tarifs » par défaut */
+  id?: string;
+  kicker?: string;
+  title: string;
+  note?: string;
+  text?: string;
+  /** En-tête de la première colonne (sinon ui.ratesItem) */
+  itemLabel?: string;
+  columns: { label: string; period?: string }[];
+  /** Une valeur par colonne */
+  rows: { label: string; values: string[] }[];
+  extras?: { title: string; items: { label: string; value: string }[] }[];
+  /** Origine des tarifs (ex. « Grille officielle 2026, TTC ») */
+  source?: string;
+  link?: Link;
+}
+
+/** Sections du JSON qu'un univers peut reprendre, dans l'ordre donné */
+export type UniverseSection = 'stats' | 'holes' | 'rooms';
+
+/**
+ * Un univers du lieu (golf, séjour, hiver…) : une grande carte sous la visite ; la choisir affiche son contenu
+ * juste en dessous, à la place de celui de l'univers précédent. L'`id` sert d'ancre (lien « #golf »).
+ */
+export interface Universe {
+  id: string;
+  label: string;
+  /** Petite ligne de la carte (ex. « 18 trous · Golf Academy ») */
+  kicker?: string;
+  /** Phrase d'introduction, sur la carte et en tête du contenu */
+  text?: string;
+  image: string;
+  imageAlt?: string;
+  /** Boutons en tête du contenu (réserver, demander un séjour…) ; une adresse « http » s'ouvre dans un nouvel onglet */
+  cta?: Link[];
+  /** Sections du JSON reprises dans cet univers (le parcours, les trous, les lieux de la visite) */
+  sections?: UniverseSection[];
+  stories?: Stories;
+  rates?: Rates;
+}
+
 export type ChapterPosition = 'hero' | 'left' | 'right' | 'center' | 'bottom-left' | 'bottom-right';
 
 export interface Chapter {
@@ -225,39 +286,31 @@ export interface VillaData {
       text?: string;
       items: { number: number; par: number; hcp?: number; image?: string }[];
     };
-    /** Récits en photo + texte, en alternance (séjourner, restaurant, séminaires, hiver…) */
-    stories?: {
+    /** Récits en photo + texte, en alternance (sans univers ; avec, chaque univers a les siens) */
+    stories?: Stories;
+    /**
+     * Univers du lieu en onglets sous la visite (facultatif). Les sections que reprend un univers (`sections`)
+     * ne s'affichent plus ailleurs ; `stories` et `rates` du premier niveau sont alors ignorés.
+     */
+    universes?: {
+      /** Ancre de la section des cartes ; « le-centre » par défaut */
+      id?: string;
       kicker?: string;
       title: string;
       text?: string;
-      items: {
-        kicker?: string;
-        title: string;
-        text: string;
-        image: string;
-        imageAlt?: string;
-        facts?: { label: string; value: string }[];
-        link?: Link;
-      }[];
+      /**
+       * Univers ouvert d'office pendant une saison (dates « MM-JJ », la plage peut passer le 31 décembre) ;
+       * le reste de l'année, le premier univers. Un lien « #id » vers un univers ou son contenu l'emporte.
+       */
+      season?: { universe: string; from: string; to: string };
+      items: Universe[];
     };
     rooms: { kicker?: string; title: string; text?: string };
     amenities: { kicker?: string; title: string; note?: string; items: { icon: string; label: string; text?: string }[] };
     gallery: { kicker?: string; title: string; items: { src: string; caption: string }[] };
     rules: { kicker?: string; title: string; items: { label: string; value: string }[] };
-    /** Tarifs en tableau façon carte de score (golf) : colonnes (saisons), lignes, puis tarifs annexes par groupe */
-    rates?: {
-      kicker?: string;
-      title: string;
-      note?: string;
-      text?: string;
-      columns: { label: string; period?: string }[];
-      /** Une valeur par colonne */
-      rows: { label: string; values: string[] }[];
-      extras?: { title: string; items: { label: string; value: string }[] }[];
-      /** Origine des tarifs (ex. « Grille officielle 2026, TTC ») */
-      source?: string;
-      link?: Link;
-    };
+    /** Tarifs en tableau (sans univers ; avec, chaque univers a les siens) */
+    rates?: Rates;
     contact: {
       kicker?: string;
       title: string;
@@ -356,6 +409,8 @@ export interface UiText {
   holesPlan: string;
   /** Lien des cartes de la section « lieux » */
   seeInTour: string;
+  /** Pastille de l'univers de saison sur sa carte (« En ce moment ») */
+  universeNow: string;
   /** Libellé d'accessibilité des points : "<nom> : <details>" */
   details: string;
   close: string;
@@ -424,6 +479,7 @@ export const UI_DEFAULTS: UiText = {
   holesTotal: 'Total',
   holesPlan: 'Trou {n} · par {par}',
   seeInTour: 'Voir dans la visite →',
+  universeNow: 'En ce moment',
   details: 'voir la pièce',
   close: 'Fermer',
   menu: 'Menu',
@@ -502,5 +558,22 @@ export function validateVilla(data: VillaData): string[] {
     });
   });
   data.chapters?.forEach((c, i) => need(c.in < c.out, `chapters[${i}] : in doit être inférieur à out`));
+  const universes = data.sections?.universes;
+  if (universes) {
+    need(universes.items?.length > 0, 'sections.universes.items : au moins un univers');
+    const uids = new Set<string>();
+    universes.items?.forEach((u, i) => {
+      const where = `sections.universes.items[${i}] (${u.id ?? '?'})`;
+      need(u.id && /^[a-z0-9-]+$/.test(u.id), `${where} : id en minuscules, sans espace ni accent`);
+      need(!uids.has(u.id), `${where} : id en double`);
+      uids.add(u.id);
+      need(u.label && u.image, `${where} : label et image sont obligatoires`);
+    });
+    const s = universes.season;
+    if (s) {
+      need(uids.has(s.universe), `sections.universes.season.universe : univers « ${s.universe} » introuvable`);
+      need(/^\d\d-\d\d$/.test(s.from) && /^\d\d-\d\d$/.test(s.to), 'sections.universes.season : from et to au format "MM-JJ"');
+    }
+  }
   return issues;
 }

@@ -36,8 +36,8 @@
     },
     "nav": [
       {
-        "label": "Le parcours",
-        "href": "#le-parcours"
+        "label": "Golf",
+        "href": "#golf"
       },
       {
         "label": "Les 18 trous",
@@ -48,8 +48,8 @@
         "href": "#sejourner"
       },
       {
-        "label": "Tarifs",
-        "href": "#tarifs"
+        "label": "Nordique",
+        "href": "#nordique"
       },
       {
         "label": "Infos",
@@ -461,7 +461,7 @@
   ],
   "sections": {
     "stats": {
-      "kicker": "01 · Le parcours",
+      "kicker": "Golf · Le parcours",
       "title": "Un 18 trous de montagne, face aux sommets",
       "note": "de la plaine à la montagne",
       "text": "À 7 km de Gap, à la frontière des Alpes du Nord et du Sud, le parcours dessiné par Hugues Lambert en 1989 s'étire sur le plateau de Bayard, entre pâturages et forêts de pins. En face : le Vieux Chaillol (3 160 m), les sommets du Haut-Champsaur et la falaise de Céüse. Un parcours de montagne à la portée de tous les niveaux.",
@@ -495,12 +495,12 @@
       ]
     },
     "rooms": {
-      "kicker": "03 · Dans la visite",
+      "kicker": "Golf · Dans la visite",
       "title": "Du practice au trou 18",
       "text": "Touchez une carte pour retrouver l'endroit dans la visite."
     },
     "amenities": {
-      "kicker": "05 · Sur place",
+      "kicker": "Le Centre · Sur place",
       "title": "Tout pour jouer, été comme hiver",
       "note": "le golf, et tout le reste",
       "items": [
@@ -567,7 +567,7 @@
       ]
     },
     "gallery": {
-      "kicker": "06 · Galerie",
+      "kicker": "Le Centre · Galerie",
       "title": "Le plateau, vu du ciel et sous la neige",
       "items": [
         {
@@ -604,111 +604,8 @@
         }
       ]
     },
-    "rates": {
-      "kicker": "07 · Tarifs",
-      "title": "Les green fees 2026",
-      "note": "TTC, par joueur",
-      "columns": [
-        {
-          "label": "Haute saison",
-          "period": "1er juin – 30 sept."
-        },
-        {
-          "label": "Basse saison",
-          "period": "1er oct. – 30 mai"
-        }
-      ],
-      "rows": [
-        {
-          "label": "18 trous (journée)",
-          "values": [
-            "77 €",
-            "66 €"
-          ]
-        },
-        {
-          "label": "9 trous",
-          "values": [
-            "46 €",
-            "41 €"
-          ]
-        },
-        {
-          "label": "Jeunes de moins de 18 ans",
-          "values": [
-            "35 €",
-            "30 €"
-          ]
-        },
-        {
-          "label": "Jeunes de moins de 12 ans",
-          "values": [
-            "30 €",
-            "25 €"
-          ]
-        }
-      ],
-      "extras": [
-        {
-          "title": "Practice",
-          "items": [
-            {
-              "label": "Seau de 30 balles",
-              "value": "4 €"
-            },
-            {
-              "label": "10 seaux de 30 balles",
-              "value": "35 €"
-            },
-            {
-              "label": "Balles à volonté (année)",
-              "value": "185 €"
-            }
-          ]
-        },
-        {
-          "title": "Location",
-          "items": [
-            {
-              "label": "Série complète",
-              "value": "25 €"
-            },
-            {
-              "label": "Chariot électrique",
-              "value": "17 €"
-            },
-            {
-              "label": "Voiturette 18 trous (HS / BS)",
-              "value": "46 € / 40 €"
-            }
-          ]
-        },
-        {
-          "title": "Formules",
-          "items": [
-            {
-              "label": "Semaine, 7 jours consécutifs",
-              "value": "395 €"
-            },
-            {
-              "label": "Carnet de 10 green fees",
-              "value": "600 €"
-            },
-            {
-              "label": "Abonnement individuel",
-              "value": "915 €"
-            }
-          ]
-        }
-      ],
-      "source": "Grille officielle 2026 du golf. Réseau LE CLUB : 20 à 50 % de réduction avec les cartes CLASSIC et GOLD.",
-      "link": {
-        "label": "Voir toute la grille (PDF)",
-        "href": "https://www.gap-bayard.com/sites/gap-bayard.com/files/page/193941/tarifs2026golf.pdf"
-      }
-    },
     "rules": {
-      "kicker": "08 · Infos pratiques",
+      "kicker": "Le Centre · Infos pratiques",
       "title": "Venir à Gap-Bayard",
       "items": [
         {
@@ -754,7 +651,7 @@
       ]
     },
     "reviews": {
-      "kicker": "09 · Avis",
+      "kicker": "Le Centre · Avis",
       "title": "Ils ont joué le parcours",
       "note": "carte rendue, avis donné",
       "sample": true,
@@ -805,7 +702,7 @@
       ]
     },
     "contact": {
-      "kicker": "10 · Réserver",
+      "kicker": "Le Centre · Réserver",
       "title": "Réservez votre départ",
       "text": "Les départs se réservent en ligne. Pour un séjour, un groupe, un cours, un séminaire ou une compétition d'entreprise, écrivez-nous : l'accueil du Centre vous répond rapidement.",
       "booking": {
@@ -827,7 +724,7 @@
       "successMessage": "Merci, votre demande est bien partie. L'accueil du golf vous répond rapidement."
     },
     "holes": {
-      "kicker": "02 · Les 18 trous",
+      "kicker": "Golf · Les 18 trous",
       "title": "La carte du parcours",
       "note": "4 par 3, 10 par 4, 4 par 5",
       "text": "Le par et la difficulté (handicap) de chaque trou, puis les plans du parcours : à garder sous la main avant le départ.",
@@ -942,127 +839,607 @@
         }
       ]
     },
-    "stories": {
-      "kicker": "04 · Séjourner",
-      "title": "Le Centre d'oxygénation, été comme hiver",
-      "text": "Au pied du parcours, face au trou n°18 : un hôtel de 100 lits, un bar-restaurant ouvert à tous, des salles de séminaire et 250 hectares de plateau pour jouer, courir ou skier.",
+    "universes": {
+      "id": "le-centre",
+      "kicker": "Le Centre d'oxygénation · Été comme hiver",
+      "title": "Un plateau, trois façons d'en profiter",
+      "text": "Golf, séjour ou ski de fond : choisissez votre univers, tout le Centre est ici.",
+      "season": {
+        "universe": "nordique",
+        "from": "12-15",
+        "to": "03-15"
+      },
       "items": [
         {
-          "kicker": "Hébergement · 100 lits",
-          "title": "Dormir au pied du parcours",
-          "text": "21 chambres avec douche et WC privés, 4 espaces familles de 4 à 6 lits et 2 dortoirs de 8 : le Centre reçoit en nuitée, en demi-pension ou en pension complète, au calme du plateau.",
-          "image": "media/photos/club-house-aerien.webp",
-          "imageAlt": "Le Centre d'oxygénation vu du ciel, derrière un green",
-          "facts": [
+          "id": "golf",
+          "label": "Golf",
+          "kicker": "18 trous · Golf Academy",
+          "text": "Un 18 trous de montagne à 1 250 m, le practice et la Golf Academy, et vos départs réservés en ligne.",
+          "image": "media/photos/trou-3-aerien.webp",
+          "imageAlt": "Le trou n°3 et son plan d'eau, vus du ciel",
+          "cta": [
             {
-              "label": "Nuitée en chambre double",
-              "value": "61 € / adulte"
+              "label": "Réserver un départ",
+              "href": "https://prima.golf/gap-bayard"
             },
             {
-              "label": "Pension complète, chambre double",
-              "value": "96 € / adulte"
-            },
-            {
-              "label": "Enfants",
-              "value": "gratuit jusqu'à 5 ans, −50 % de 6 à 12 ans"
+              "label": "Voir les green fees",
+              "href": "#tarifs"
             }
           ],
-          "link": {
-            "label": "Demander un séjour",
-            "href": "#reserver"
+          "sections": [
+            "stats",
+            "holes",
+            "rooms"
+          ],
+          "stories": {
+            "id": "golf-academy",
+            "kicker": "Golf · Enseignement",
+            "title": "La Golf Academy",
+            "text": "Du premier swing au parcours accompagné, l'équipement et les balles sont fournis.",
+            "items": [
+              {
+                "kicker": "Enseignement · Golf Academy",
+                "title": "Apprendre ou progresser",
+                "text": "Baptême, stage découverte, cours particuliers ou parcours accompagné : la Gap Bayard Golf Academy fournit l'équipement et les balles. L'école de golf accueille les 7 à 18 ans avec l'Association sportive.",
+                "image": "media/photos/fairway-foret.webp",
+                "imageAlt": "Un fairway bordé de pins, vu du ciel",
+                "facts": [
+                  {
+                    "label": "Baptême découverte 1 h 30",
+                    "value": "40 €"
+                  },
+                  {
+                    "label": "Cours individuel 1 h",
+                    "value": "70 €"
+                  },
+                  {
+                    "label": "Stage découverte 3 × 2 h",
+                    "value": "270 €"
+                  },
+                  {
+                    "label": "Parcours accompagné 2 h",
+                    "value": "150 €"
+                  }
+                ]
+              }
+            ]
+          },
+          "rates": {
+            "id": "tarifs",
+            "kicker": "Golf · Tarifs",
+            "title": "Les green fees 2026",
+            "note": "TTC, par joueur",
+            "columns": [
+              {
+                "label": "Haute saison",
+                "period": "1er juin – 30 sept."
+              },
+              {
+                "label": "Basse saison",
+                "period": "1er oct. – 30 mai"
+              }
+            ],
+            "rows": [
+              {
+                "label": "18 trous (journée)",
+                "values": [
+                  "77 €",
+                  "66 €"
+                ]
+              },
+              {
+                "label": "9 trous",
+                "values": [
+                  "46 €",
+                  "41 €"
+                ]
+              },
+              {
+                "label": "Jeunes de moins de 18 ans",
+                "values": [
+                  "35 €",
+                  "30 €"
+                ]
+              },
+              {
+                "label": "Jeunes de moins de 12 ans",
+                "values": [
+                  "30 €",
+                  "25 €"
+                ]
+              }
+            ],
+            "extras": [
+              {
+                "title": "Practice",
+                "items": [
+                  {
+                    "label": "Seau de 30 balles",
+                    "value": "4 €"
+                  },
+                  {
+                    "label": "10 seaux de 30 balles",
+                    "value": "35 €"
+                  },
+                  {
+                    "label": "Balles à volonté (année)",
+                    "value": "185 €"
+                  }
+                ]
+              },
+              {
+                "title": "Location",
+                "items": [
+                  {
+                    "label": "Série complète",
+                    "value": "25 €"
+                  },
+                  {
+                    "label": "Chariot électrique",
+                    "value": "17 €"
+                  },
+                  {
+                    "label": "Voiturette 18 trous (HS / BS)",
+                    "value": "46 € / 40 €"
+                  }
+                ]
+              },
+              {
+                "title": "Formules",
+                "items": [
+                  {
+                    "label": "Semaine, 7 jours consécutifs",
+                    "value": "395 €"
+                  },
+                  {
+                    "label": "Carnet de 10 green fees",
+                    "value": "600 €"
+                  },
+                  {
+                    "label": "Abonnement individuel",
+                    "value": "915 €"
+                  }
+                ]
+              }
+            ],
+            "source": "Grille officielle 2026 du golf. Réseau LE CLUB : 20 à 50 % de réduction avec les cartes CLASSIC et GOLD.",
+            "link": {
+              "label": "Voir toute la grille (PDF)",
+              "href": "https://www.gap-bayard.com/sites/gap-bayard.com/files/page/193941/tarifs2026golf.pdf"
+            }
           }
         },
         {
-          "kicker": "Bar-restaurant · Tous les midis",
-          "title": "Une carte de saison, du terroir",
-          "text": "Ouvert tous les midis, aux golfeurs comme aux promeneurs : une carte de saison de terroir, simple et savoureuse, et une suggestion du jour. Réservation conseillée.",
-          "image": "media/photos/terrasse-hiver.webp",
-          "imageAlt": "Déjeuner en terrasse au soleil, dans la neige",
-          "facts": [
+          "id": "sejourner",
+          "label": "Séjourner",
+          "kicker": "Hébergement · Restaurant · Séminaires",
+          "text": "Un hôtel de 100 lits au pied du parcours, une table de terroir ouverte à tous et des salles pour réunir vos équipes.",
+          "image": "media/photos/allee-club-house.webp",
+          "imageAlt": "L'allée qui mène au Centre d'oxygénation",
+          "cta": [
             {
-              "label": "Plat du jour",
-              "value": "16,90 €"
+              "label": "Demander un séjour",
+              "href": "#reserver"
             },
             {
-              "label": "Suggestion plat + dessert",
-              "value": "21 €"
-            },
-            {
-              "label": "Réservation",
-              "value": "04 92 50 16 83"
-            }
-          ]
-        },
-        {
-          "kicker": "Enseignement · Golf Academy",
-          "title": "Apprendre ou progresser",
-          "text": "Baptême, stage découverte, cours particuliers ou parcours accompagné : la Gap Bayard Golf Academy fournit l'équipement et les balles. L'école de golf accueille les 7 à 18 ans avec l'Association sportive.",
-          "image": "media/photos/fairway-foret.webp",
-          "imageAlt": "Un fairway bordé de pins, vu du ciel",
-          "facts": [
-            {
-              "label": "Baptême découverte 1 h 30",
-              "value": "40 €"
-            },
-            {
-              "label": "Cours individuel 1 h",
-              "value": "70 €"
-            },
-            {
-              "label": "Stage découverte 3 × 2 h",
-              "value": "270 €"
-            },
-            {
-              "label": "Parcours accompagné 2 h",
-              "value": "150 €"
-            }
-          ]
-        },
-        {
-          "kicker": "Séminaires · Groupes",
-          "title": "Réunir son équipe à 1 250 m",
-          "text": "Plusieurs salles de 70 à 150 m², un restaurant qui sert jusqu'à 200 personnes et tout le plateau pour les activités : golf, ski, randonnée, chasse au trésor, VTT ou raid.",
-          "image": "media/photos/plateau.webp",
-          "imageAlt": "Un chemin sur le plateau, un troupeau de moutons et les montagnes",
-          "facts": [
-            {
-              "label": "Salles",
-              "value": "70 à 150 m²"
-            },
-            {
-              "label": "Repas et cocktails",
-              "value": "jusqu'à 200 personnes"
-            },
-            {
-              "label": "Domaine",
-              "value": "250 hectares"
+              "label": "Réserver une table",
+              "href": "tel:+33492501683"
             }
           ],
-          "link": {
-            "label": "Demander un devis",
-            "href": "#reserver"
+          "stories": {
+            "id": "le-sejour",
+            "kicker": "Séjourner · Le Centre d'oxygénation",
+            "title": "Dormir, déjeuner, se réunir",
+            "text": "Au pied du parcours, face au trou n°18 : un hôtel de 100 lits, un bar-restaurant ouvert à tous, des salles de séminaire et 250 hectares de plateau pour jouer, courir ou skier.",
+            "items": [
+              {
+                "kicker": "Hébergement · 100 lits",
+                "title": "Dormir au pied du parcours",
+                "text": "21 chambres avec douche et WC privés, 4 espaces familles de 4 à 6 lits et 2 dortoirs de 8 : le Centre reçoit en nuitée, en demi-pension ou en pension complète, au calme du plateau.",
+                "image": "media/photos/club-house-aerien.webp",
+                "imageAlt": "Le Centre d'oxygénation vu du ciel, derrière un green",
+                "facts": [
+                  {
+                    "label": "Nuitée en chambre double",
+                    "value": "61 € / adulte"
+                  },
+                  {
+                    "label": "Pension complète, chambre double",
+                    "value": "96 € / adulte"
+                  },
+                  {
+                    "label": "Enfants",
+                    "value": "gratuit jusqu'à 5 ans, −50 % de 6 à 12 ans"
+                  }
+                ],
+                "link": {
+                  "label": "Demander un séjour",
+                  "href": "#reserver"
+                }
+              },
+              {
+                "kicker": "Bar-restaurant · Tous les midis",
+                "title": "Une carte de saison, du terroir",
+                "text": "Ouvert tous les midis, aux golfeurs comme aux promeneurs : une carte de saison de terroir, simple et savoureuse, et une suggestion du jour. Réservation conseillée.",
+                "image": "media/photos/terrasse-hiver.webp",
+                "imageAlt": "Déjeuner en terrasse au soleil, dans la neige",
+                "facts": [
+                  {
+                    "label": "Plat du jour",
+                    "value": "16,90 €"
+                  },
+                  {
+                    "label": "Suggestion plat + dessert",
+                    "value": "21 €"
+                  },
+                  {
+                    "label": "Réservation",
+                    "value": "04 92 50 16 83"
+                  }
+                ]
+              },
+              {
+                "kicker": "Séminaires · Groupes",
+                "title": "Réunir son équipe à 1 250 m",
+                "text": "Plusieurs salles de 70 à 150 m², un restaurant qui sert jusqu'à 200 personnes et tout le plateau pour les activités : golf, ski, randonnée, chasse au trésor, VTT ou raid.",
+                "image": "media/photos/plateau.webp",
+                "imageAlt": "Un chemin sur le plateau, un troupeau de moutons et les montagnes",
+                "facts": [
+                  {
+                    "label": "Salles",
+                    "value": "70 à 150 m²"
+                  },
+                  {
+                    "label": "Repas et cocktails",
+                    "value": "jusqu'à 200 personnes"
+                  },
+                  {
+                    "label": "Domaine",
+                    "value": "250 hectares"
+                  }
+                ],
+                "link": {
+                  "label": "Demander un devis",
+                  "href": "#reserver"
+                }
+              }
+            ]
+          },
+          "rates": {
+            "id": "tarifs-sejour",
+            "kicker": "Séjourner · Tarifs",
+            "title": "L'hébergement en 2026",
+            "note": "par adulte et par jour",
+            "itemLabel": "Adultes dans la chambre",
+            "columns": [
+              {
+                "label": "Pension complète"
+              },
+              {
+                "label": "Demi-pension"
+              },
+              {
+                "label": "Nuitée",
+                "period": "petit-déjeuner compris"
+              }
+            ],
+            "rows": [
+              {
+                "label": "1 adulte",
+                "values": [
+                  "116 €",
+                  "101 €",
+                  "91 €"
+                ]
+              },
+              {
+                "label": "2 adultes",
+                "values": [
+                  "96 €",
+                  "83 €",
+                  "61 €"
+                ]
+              },
+              {
+                "label": "3 adultes",
+                "values": [
+                  "83 €",
+                  "73 €",
+                  "53 €"
+                ]
+              },
+              {
+                "label": "4 adultes",
+                "values": [
+                  "72 €",
+                  "62 €",
+                  "48 €"
+                ]
+              },
+              {
+                "label": "5 adultes et plus",
+                "values": [
+                  "66 €",
+                  "56 €",
+                  "40 €"
+                ]
+              }
+            ],
+            "extras": [
+              {
+                "title": "Restaurant",
+                "items": [
+                  {
+                    "label": "Plat du jour",
+                    "value": "16,90 €"
+                  },
+                  {
+                    "label": "Suggestion plat + dessert",
+                    "value": "21 €"
+                  },
+                  {
+                    "label": "Groupes",
+                    "value": "jusqu'à 100 personnes"
+                  }
+                ]
+              },
+              {
+                "title": "Bon à savoir",
+                "items": [
+                  {
+                    "label": "Enfants",
+                    "value": "gratuit jusqu'à 5 ans"
+                  },
+                  {
+                    "label": "De 6 à 12 ans",
+                    "value": "−50 %"
+                  },
+                  {
+                    "label": "Taxe de séjour",
+                    "value": "0,66 € / nuit"
+                  },
+                  {
+                    "label": "Chambres",
+                    "value": "14 h → 10 h"
+                  }
+                ]
+              }
+            ],
+            "source": "Tarifs 2026 du Centre, par adulte et par jour, chambre partagée. Boissons non comprises en demi-pension et pension complète. Les chiens ne sont pas acceptés.",
+            "link": {
+              "label": "Voir les tarifs d'hébergement (PDF)",
+              "href": "https://www.gap-bayard.com/sites/gap-bayard.com/files/page/78361/tarifshebergement2026.pdf"
+            }
           }
         },
         {
-          "kicker": "Hiver · Domaine nordique",
-          "title": "Quand la neige tombe, le plateau devient nordique",
-          "text": "50 km de pistes de ski de fond tracées chaque jour, en classique et en skating, des itinéraires de raquettes, du fat bike électrique et des chiens de traîneau. L'accueil du domaine ouvre tous les jours, du 20 décembre à début mars selon l'enneigement.",
-          "image": "media/photos/ski-skating.webp",
-          "imageAlt": "Skieurs de fond en skating dans la forêt enneigée",
-          "facts": [
+          "id": "nordique",
+          "label": "Nordique",
+          "kicker": "Ski de fond · Raquettes · Fat bike",
+          "text": "50 km de pistes, des itinéraires de raquettes et du fat bike sur neige : l'hiver, le plateau devient un domaine nordique.",
+          "image": "media/photos/ski-classique.webp",
+          "imageAlt": "Ski de fond en classique sur le plateau enneigé",
+          "cta": [
             {
-              "label": "Pistes",
-              "value": "50 km"
+              "label": "Acheter son pass en ligne",
+              "href": "https://billetterie-nordic-gap-bayard.intence.tech/shop"
             },
             {
-              "label": "Location",
-              "value": "800 paires de skis"
-            },
-            {
-              "label": "Accueil",
-              "value": "8 h 30 – 16 h 30"
+              "label": "Plan des pistes en direct",
+              "href": "https://www.gap-bayard.com/nordic/bayard"
             }
-          ]
+          ],
+          "stories": {
+            "id": "le-domaine-nordique",
+            "kicker": "Nordique · Le domaine",
+            "title": "Glisser sur le plateau",
+            "text": "L'accueil du domaine ouvre tous les jours de 8 h 30 à 16 h 30, du 20 décembre à début mars selon l'enneigement. Bar, restaurant et hébergement sur place.",
+            "items": [
+              {
+                "kicker": "Ski de fond · 50 km",
+                "title": "Quand la neige tombe, le plateau devient nordique",
+                "text": "50 km de pistes entretenues chaque jour, en classique et en skating, pour tous les niveaux, et de la randonnée nordique. Depuis 2023, le domaine ne fabrique plus de neige : il vit au rythme de la neige naturelle. Deux luges pulkas sont prêtées gratuitement aux personnes en situation de handicap.",
+                "image": "media/photos/ski-skating.webp",
+                "imageAlt": "Skieurs de fond en skating dans la forêt enneigée",
+                "facts": [
+                  {
+                    "label": "Pistes",
+                    "value": "50 km"
+                  },
+                  {
+                    "label": "Location",
+                    "value": "800 paires de skis"
+                  },
+                  {
+                    "label": "Accueil",
+                    "value": "8 h 30 – 16 h 30"
+                  }
+                ],
+                "link": {
+                  "label": "Plan des pistes en direct",
+                  "href": "https://www.gap-bayard.com/nordic/bayard"
+                }
+              },
+              {
+                "kicker": "Raquettes · Chiens de traîneau",
+                "title": "À pied, en raquettes ou en traîneau",
+                "text": "Trois itinéraires de raquettes de 4 à 6 km partent du Centre, balisés et damés, en liberté ou avec un accompagnateur en montagne. Avec Travel Dog, baptême en traîneau d'une demi-heure ou cani-raquette, sur réservation.",
+                "image": "media/photos/raquettes.webp",
+                "imageAlt": "Randonnée en raquettes dans la forêt enneigée",
+                "facts": [
+                  {
+                    "label": "Itinéraires raquettes",
+                    "value": "3 boucles de 4 à 6 km"
+                  },
+                  {
+                    "label": "Raquettes et bâtons",
+                    "value": "12 € les 3 h"
+                  },
+                  {
+                    "label": "Chiens de traîneau",
+                    "value": "sur réservation"
+                  }
+                ],
+                "link": {
+                  "label": "Réserver avec Travel Dog",
+                  "href": "https://www.traveldog.fr/"
+                }
+              },
+              {
+                "kicker": "Fat bike · Cours",
+                "title": "Fat bike sur neige et cours de ski",
+                "text": "Le fat bike à assistance électrique se loue à l'heure, été comme hiver. Pour un cours de ski de fond, une sortie en randonnée nordique ou un accompagnement en raquettes, l'école du domaine vous répond au 04 92 50 16 83.",
+                "image": "media/photos/fat-bike.webp",
+                "imageAlt": "Fat bike sur le plateau, face aux sommets",
+                "facts": [
+                  {
+                    "label": "Fat bike électrique",
+                    "value": "25 € l'heure"
+                  },
+                  {
+                    "label": "Journée fat bike (6 h)",
+                    "value": "45 €"
+                  },
+                  {
+                    "label": "Ski de randonnée nordique",
+                    "value": "20 € la journée"
+                  }
+                ]
+              }
+            ]
+          },
+          "rates": {
+            "id": "tarifs-nordique",
+            "kicker": "Nordique · Tarifs",
+            "title": "Forfaits et location",
+            "note": "hiver 2025-2026",
+            "itemLabel": "Forfait",
+            "columns": [
+              {
+                "label": "Adulte"
+              },
+              {
+                "label": "18-25 ans"
+              },
+              {
+                "label": "Jeune",
+                "period": "6 à 18 ans"
+              }
+            ],
+            "rows": [
+              {
+                "label": "Journée, tout le domaine",
+                "values": [
+                  "14 €",
+                  "8 €",
+                  "6 €"
+                ]
+              },
+              {
+                "label": "Séance, tout le domaine",
+                "values": [
+                  "12 €",
+                  "8 €",
+                  "6 €"
+                ]
+              },
+              {
+                "label": "Séance, plateau de Bayard",
+                "values": [
+                  "10 €",
+                  "8 €",
+                  "5 €"
+                ]
+              },
+              {
+                "label": "Séance, domaine réduit",
+                "values": [
+                  "6 €",
+                  "5 €",
+                  "4 €"
+                ]
+              },
+              {
+                "label": "Semaine, site de Bayard",
+                "values": [
+                  "40 €",
+                  "30 €",
+                  "30 €"
+                ]
+              }
+            ],
+            "extras": [
+              {
+                "title": "Formules Bayard",
+                "items": [
+                  {
+                    "label": "Journée famille (2 adultes, 2 enfants)",
+                    "value": "30 €"
+                  },
+                  {
+                    "label": "Journée tribu (10 personnes)",
+                    "value": "80 €"
+                  },
+                  {
+                    "label": "2 jours",
+                    "value": "21 €"
+                  },
+                  {
+                    "label": "3 jours",
+                    "value": "26 €"
+                  }
+                ]
+              },
+              {
+                "title": "Pass saison",
+                "items": [
+                  {
+                    "label": "Bayard (90 € en super primeur)",
+                    "value": "125 €"
+                  },
+                  {
+                    "label": "Valgaudemar, Champsaur, Ancelle, Bayard",
+                    "value": "160 €"
+                  },
+                  {
+                    "label": "Nordic Pass national (210 € avant le 15/11)",
+                    "value": "250 €"
+                  },
+                  {
+                    "label": "Nordic Pass Évasion (raquettes, fat bike), jour",
+                    "value": "5 €"
+                  }
+                ]
+              },
+              {
+                "title": "Location (adulte / enfant)",
+                "items": [
+                  {
+                    "label": "Ski de fond classique, journée",
+                    "value": "12 / 10 €"
+                  },
+                  {
+                    "label": "Skating, journée",
+                    "value": "18 / 10 €"
+                  },
+                  {
+                    "label": "Raquettes et bâtons, 3 h",
+                    "value": "12 / 8 €"
+                  },
+                  {
+                    "label": "Luge",
+                    "value": "5 €"
+                  }
+                ]
+              }
+            ],
+            "source": "Grille 2025-2026 du domaine nordique et de la location, gratuit pour les moins de 6 ans, support du forfait 3 €. Tarifs 2026-2027 à confirmer par le domaine.",
+            "link": {
+              "label": "Voir les tarifs du domaine (PDF)",
+              "href": "https://www.gap-bayard.com/sites/gap-bayard.com/files/page/193942/tarifspassnordiques2026adoptesenag.pdf"
+            }
+          }
         }
       ]
     }

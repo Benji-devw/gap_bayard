@@ -1,7 +1,7 @@
 {
   "name": "gap_bayard",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Golf de Gap-Bayard, 18 trous de montagne à 1 250 m (Hautes-Alpes) : visite immersive au scroll.",
   "type": "module",
   "scripts": {

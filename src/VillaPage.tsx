@@ -1,4 +1,5 @@
-import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties } from 'react';
+import { Fragment, lazy, Suspense, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { flushSync } from 'react-dom';
 import {
   ScrollSequence,
   SequenceLoader,
@@ -10,7 +11,19 @@ import {
 } from './lib/scroll-frames';
 import { asset } from './lib/asset';
 import rawData from './data/villa.json';
-import { firstSource, resolveUi, validateVilla, type Chapter, type Hotspot, type MediaSource, type VillaData } from './types';
+import {
+  firstSource,
+  resolveUi,
+  validateVilla,
+  type Chapter,
+  type Hotspot,
+  type MediaSource,
+  type Rates,
+  type Stories,
+  type Universe,
+  type UniverseSection,
+  type VillaData,
+} from './types';
 import { bestMoment, toJson } from './utils';
 import { Hotspots } from './components/Hotspots';
 import { RouteMap } from './components/RouteMap';
@@ -30,8 +43,9 @@ import { MapButton } from './components/MapButton';
 import { Reviews } from './components/Reviews';
 import { Scorecard } from './components/Scorecard';
 import { StatCount } from './components/StatCount';
+import { UniverseTabs } from './components/UniverseTabs';
 import { MENU_QUERY, TOUCH_QUERY } from './lib/media';
-import { useSmoothAnchors } from './lib/smooth-anchors';
+import { useSmoothAnchors, type AnchorIntercept } from './lib/smooth-anchors';
 import { useReveal } from './lib/reveal';
 import { useTravel } from './lib/travel';
 import { useFullscreen } from './lib/fullscreen';
@@ -78,6 +92,8 @@ function resolveMedia(source: MediaSource): VideoInput {
 /** Blocs des sections après la visite qui apparaissent à leur arrivée à l'écran (lib/reveal.ts, style dans villa.css) */
 const REVEAL = [
   '.vl-section-head',
+  '.vl-universe-tab',
+  '.vl-universe-bar',
   '.vl-reviews-score',
   '.vl-brief-photo',
   '.vl-figures > div',
@@ -173,6 +189,43 @@ function SectionHead({ kicker, title, note, text }: { kicker?: string; title: st
   );
 }
 
+/* ------------------------------------------------------------------ univers (sections.universes) */
+type Universes = NonNullable<VillaData['sections']['universes']>;
+
+/** Ancres des sections du JSON qu'un univers peut reprendre */
+const SECTION_IDS: Record<UniverseSection, string> = { stats: 'le-parcours', holes: 'les-trous', rooms: 'le-club' };
+
+/** Ancres que contient un univers : lui-même, ses sections reprises, ses récits, ses tarifs */
+function universeAnchors(u: Universe): string[] {
+  return [u.id, ...(u.sections ?? []).map((s) => SECTION_IDS[s]), u.stories?.id, u.rates && (u.rates.id ?? 'tarifs')].filter(
+    (a): a is string => !!a,
+  );
+}
+
+/** Univers qui contient l'ancre de l'adresse (#golf, #tarifs…), sinon null */
+function universeOfHash(universes: Universes, hash: string): string | null {
+  let id = '';
+  try {
+    id = decodeURIComponent(hash.replace(/^#/, ''));
+  } catch {
+    return null;
+  }
+  return (id && universes.items.find((u) => universeAnchors(u).includes(id))?.id) || null;
+}
+
+/** Univers de la saison en cours (season, dates « MM-JJ », la plage peut passer le 31 décembre), sinon le premier */
+function universeOfSeason(universes: Universes, date = new Date()): string {
+  const s = universes.season;
+  if (s && universes.items.some((u) => u.id === s.universe)) {
+    const md = `${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    if (s.from <= s.to ? md >= s.from && md <= s.to : md >= s.from || md <= s.to) return s.universe;
+  }
+  return universes.items[0]?.id ?? '';
+}
+
+/** Lien vers une autre adresse (réservation, billetterie) : nouvel onglet */
+const external = (href: string) => (href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {});
+
 /* ------------------------------------------------------------------ page */
 export default function VillaPage() {
   const [restored] = useState(() => loadDraft() !== null);
@@ -190,6 +243,12 @@ export default function VillaPage() {
   const engineRef = useRef<ScrollFramesEngine | null>(null);
   const { travel, toMoment, interceptAnchor } = useTravel(engineRef, () => setOpenId(null));
   const { meta, theme, brand, media, hud, chapters, hotspots, sections, footer } = data;
+  // univers en onglets sous la visite : celui de l'adresse (#golf, #tarifs…), sinon celui de la saison
+  const universes = sections.universes;
+  const [universe, setUniverse] = useState(() =>
+    universes ? (universeOfHash(universes, window.location.hash) ?? universeOfSeason(universes)) : '',
+  );
+  const centreRef = useRef<HTMLElement>(null);
   const gap = data.hotspotSettings?.gap ?? 0.04;
   const zoom = data.hotspotSettings?.zoom ?? 0.34;
 
@@ -207,8 +266,41 @@ export default function VillaPage() {
     }
   }, [data]);
 
+  /**
+   * Lien vers un univers ou vers son contenu (#nordique, #tarifs…) : l'univers s'affiche d'abord (rendu immédiat,
+   * pour mesurer la destination), puis le trajet habituel. Vers l'univers lui-même, on s'arrête sur ses cartes.
+   */
+  const onAnchor: AnchorIntercept = (target, link) => {
+    const panel = target.closest<HTMLElement>('[data-universe]');
+    if (!panel) return interceptAnchor(target, link);
+    flushSync(() => setUniverse(panel.dataset.universe!));
+    const dest = target === panel ? (centreRef.current ?? panel) : target;
+    if (!interceptAnchor(dest, link)) {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      dest.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    }
+    return true;
+  };
+
   // liens internes (#section) : défilement lisse, ou transition quand le trajet traverse la visite
-  useSmoothAnchors(interceptAnchor);
+  useSmoothAnchors(onAnchor);
+
+  // retour arrière du navigateur vers un autre univers
+  useEffect(() => {
+    if (!universes) return;
+    const onPop = () => {
+      const id = universeOfHash(universes, window.location.hash);
+      if (id) setUniverse(id);
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, [universes]);
+
+  /** Carte d'univers choisie : son contenu s'affiche dessous, l'adresse suit (#golf) sans ajouter d'étape à l'historique */
+  const selectUniverse = (id: string) => {
+    setUniverse(id);
+    history.replaceState(null, '', `#${id}`);
+  };
 
   // sections après la visite : chaque bloc apparaît une fois, à son arrivée à l'écran
   useReveal(REVEAL);
@@ -286,6 +378,172 @@ export default function VillaPage() {
   const host = sections.contact.host;
   const tourFullscreen = fullscreen && !solidHeader && !menuOpen;
   const headerTucked = tourFullscreen && !headerPeek;
+
+  /* ---------------------------------------------------------------- sections du parcours
+   * À leur place après la visite, ou dans l'univers qui les reprend (sections.universes.items[].sections). */
+  const statsSection = (
+    <section id={SECTION_IDS.stats} className="vl-section vl-brief">
+      {sections.stats.image && (
+        <figure className="vl-brief-photo">
+          <img src={asset(sections.stats.image)} alt={sections.stats.imageCaption ?? ''} loading="lazy" />
+          {sections.stats.imageCaption && <figcaption>{sections.stats.imageCaption}</figcaption>}
+        </figure>
+      )}
+      <div className="vl-brief-body">
+        <SectionHead
+          kicker={sections.stats.kicker}
+          title={sections.stats.title}
+          note={sections.stats.note}
+          text={sections.stats.text}
+        />
+        <div className="vl-brief-side">
+          <dl className="vl-figures">
+            {sections.stats.items.map((item) => (
+              <div key={item.label}>
+                <dt>{item.label}</dt>
+                <dd>{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+          {brand.price && (
+            <p className="vl-price-tag">
+              <span className="vl-hand">à partir de</span>
+              <strong>{brand.price}</strong>
+              {brand.priceNote && <span>{brand.priceNote}</span>}
+            </p>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+
+  const holesSection = sections.holes && (
+    <section id={SECTION_IDS.holes} className="vl-section vl-holes-section">
+      <SectionHead kicker={sections.holes.kicker} title={sections.holes.title} note={sections.holes.note} text={sections.holes.text} />
+      <Scorecard holes={sections.holes} ui={ui} />
+    </section>
+  );
+
+  const roomsSection = hotspots.length > 0 && (
+    <section id={SECTION_IDS.rooms} className="vl-section vl-rooms-section">
+      <SectionHead kicker={sections.rooms.kicker} title={sections.rooms.title} text={sections.rooms.text} />
+      <ol className="vl-holes">
+        {hotspots.map((h, i) => (
+          <li key={h.id}>
+            <button type="button" className="vl-hole" onClick={() => showInTour(h)}>
+              <span className="vl-hole-photo">
+                {h.image ? <img src={asset(h.image)} alt="" loading="lazy" /> : <span className="vl-thumb-empty" />}
+              </span>
+              <span className="vl-hole-head">
+                <span className="vl-hole-num">{String(i + 1).padStart(2, '0')}</span>
+                {h.category && <span className="vl-hole-cat">{h.category}</span>}
+              </span>
+              <span className="vl-hole-name">{h.label}</span>
+              {h.note && <span className="vl-hand vl-hole-note">{h.note}</span>}
+              <span className="vl-hole-link">{ui.seeInTour}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+
+  const reused: Record<UniverseSection, ReactNode> = { stats: statsSection, holes: holesSection, rooms: roomsSection };
+
+  /** Récits en photo + texte, en alternance */
+  const storiesSection = (st: Stories, id: string) => (
+    <section id={st.id ?? id} className="vl-section vl-stories-section">
+      <SectionHead kicker={st.kicker} title={st.title} text={st.text} />
+      <div className="vl-stories">
+        {st.items.map((it) => (
+          <article key={it.title} className="vl-story">
+            <figure className="vl-story-photo">
+              <img src={asset(it.image)} alt={it.imageAlt ?? ''} loading="lazy" />
+            </figure>
+            <div className="vl-story-body">
+              {it.kicker && <Kicker text={it.kicker} />}
+              <h3>{it.title}</h3>
+              <p>{it.text}</p>
+              {it.facts && it.facts.length > 0 && (
+                <dl className="vl-story-facts">
+                  {it.facts.map((f) => (
+                    <div key={f.label}>
+                      <dt>{f.label}</dt>
+                      <dd>{f.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+              {it.link && (
+                <a className="vl-link" href={it.link.href} {...external(it.link.href)}>
+                  {it.link.label}
+                </a>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+
+  /** Tarifs : tableau façon carte de score, tarifs annexes par groupe */
+  const ratesSection = (r: Rates) => (
+    <section id={r.id ?? 'tarifs'} className="vl-section vl-rates-section">
+      <SectionHead kicker={r.kicker} title={r.title} note={r.note} text={r.text} />
+      <div className="vl-rates-wrap">
+        <table className="vl-rates">
+          <thead>
+            <tr>
+              <th scope="col">{r.itemLabel ?? ui.ratesItem}</th>
+              {r.columns.map((col) => (
+                <th key={col.label} scope="col">
+                  {col.label}
+                  {col.period && <span>{col.period}</span>}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {r.rows.map((row) => (
+              <tr key={row.label}>
+                <th scope="row">{row.label}</th>
+                {row.values.map((v, k) => (
+                  <td key={k}>{v}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {r.extras && r.extras.length > 0 && (
+        <div className="vl-rates-extras">
+          {r.extras.map((group) => (
+            <div key={group.title}>
+              <h3>{group.title}</h3>
+              <dl>
+                {group.items.map((item) => (
+                  <div key={item.label}>
+                    <dt>{item.label}</dt>
+                    <dd>{item.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          ))}
+        </div>
+      )}
+      {(r.source || r.link) && (
+        <p className="vl-rates-foot">
+          {r.source}
+          {r.link && (
+            <a href={r.link.href} target="_blank" rel="noopener">
+              {r.link.label}
+            </a>
+          )}
+        </p>
+      )}
+    </section>
+  );
 
   return (
     <div className="tpl-villa" style={themeStyle}>
@@ -462,112 +720,63 @@ export default function VillaPage() {
         {hero && <RotateHint until={hero.in > 0 ? hero.in : hero.out} label={ui.rotateHint} close={ui.close} />}
       </ScrollSequence>
 
-      {/* ------------------------------------------------------------ le parcours en bref : grande photo, texte, chiffres */}
-      <section id="le-parcours" className="vl-section vl-brief">
-        {sections.stats.image && (
-          <figure className="vl-brief-photo">
-            <img src={asset(sections.stats.image)} alt={sections.stats.imageCaption ?? ''} loading="lazy" />
-            {sections.stats.imageCaption && <figcaption>{sections.stats.imageCaption}</figcaption>}
-          </figure>
-        )}
-        <div className="vl-brief-body">
-          <SectionHead
-            kicker={sections.stats.kicker}
-            title={sections.stats.title}
-            note={sections.stats.note}
-            text={sections.stats.text}
-          />
-          <div className="vl-brief-side">
-            <dl className="vl-figures">
-              {sections.stats.items.map((item) => (
-                <div key={item.label}>
-                  <dt>{item.label}</dt>
-                  <dd>{item.value}</dd>
-                </div>
-              ))}
-            </dl>
-            {brand.price && (
-              <p className="vl-price-tag">
-                <span className="vl-hand">à partir de</span>
-                <strong>{brand.price}</strong>
-                {brand.priceNote && <span>{brand.priceNote}</span>}
-              </p>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ------------------------------------------------------------ les 18 trous : carte de score et plans */}
-      {sections.holes && (
-        <section id="les-trous" className="vl-section vl-holes-section">
-          <SectionHead kicker={sections.holes.kicker} title={sections.holes.title} note={sections.holes.note} text={sections.holes.text} />
-          <Scorecard holes={sections.holes} ui={ui} />
-        </section>
-      )}
-
-      {/* ------------------------------------------------------------ les lieux (issus des points de la visite) */}
-      {hotspots.length > 0 && (
-        <section id="le-club" className="vl-section vl-rooms-section">
-          <SectionHead kicker={sections.rooms.kicker} title={sections.rooms.title} text={sections.rooms.text} />
-          <ol className="vl-holes">
-            {hotspots.map((h, i) => (
-              <li key={h.id}>
-                <button type="button" className="vl-hole" onClick={() => showInTour(h)}>
-                  <span className="vl-hole-photo">
-                    {h.image ? <img src={asset(h.image)} alt="" loading="lazy" /> : <span className="vl-thumb-empty" />}
-                  </span>
-                  <span className="vl-hole-head">
-                    <span className="vl-hole-num">{String(i + 1).padStart(2, '0')}</span>
-                    {h.category && <span className="vl-hole-cat">{h.category}</span>}
-                  </span>
-                  <span className="vl-hole-name">{h.label}</span>
-                  {h.note && <span className="vl-hand vl-hole-note">{h.note}</span>}
-                  <span className="vl-hole-link">{ui.seeInTour}</span>
-                </button>
-              </li>
-            ))}
-          </ol>
-        </section>
-      )}
-
-      {/* ------------------------------------------------------------ séjourner : récits en photo + texte, en alternance */}
-      {sections.stories && (
-        <section id="sejourner" className="vl-section vl-stories-section">
-          <SectionHead kicker={sections.stories.kicker} title={sections.stories.title} text={sections.stories.text} />
-          <div className="vl-stories">
-            {sections.stories.items.map((st) => (
-              <article key={st.title} className="vl-story">
-                <figure className="vl-story-photo">
-                  <img src={asset(st.image)} alt={st.imageAlt ?? ''} loading="lazy" />
-                </figure>
-                <div className="vl-story-body">
-                  {st.kicker && <Kicker text={st.kicker} />}
-                  <h3>{st.title}</h3>
-                  <p>{st.text}</p>
-                  {st.facts && st.facts.length > 0 && (
-                    <dl className="vl-story-facts">
-                      {st.facts.map((f) => (
-                        <div key={f.label}>
-                          <dt>{f.label}</dt>
-                          <dd>{f.value}</dd>
-                        </div>
+      {universes ? (
+        <>
+          {/* ------------------------------------------------------------ univers : grandes cartes, puis le contenu de celle choisie */}
+          <section ref={centreRef} id={universes.id ?? 'le-centre'} className="vl-section vl-universes-section">
+            <SectionHead kicker={universes.kicker} title={universes.title} text={universes.text} />
+            <UniverseTabs
+              items={universes.items}
+              active={universe}
+              now={universes.season ? universeOfSeason(universes) : undefined}
+              nowLabel={ui.universeNow}
+              label={universes.title}
+              onSelect={selectUniverse}
+            />
+          </section>
+          {universes.items.map((u) => (
+            <div
+              key={u.id}
+              id={u.id}
+              role="tabpanel"
+              aria-labelledby={`tab-${u.id}`}
+              className="vl-universe"
+              data-universe={u.id}
+              hidden={u.id !== universe}
+            >
+              {(u.text || (u.cta && u.cta.length > 0)) && (
+                <div className="vl-universe-bar">
+                  {u.text && <p>{u.text}</p>}
+                  {u.cta && u.cta.length > 0 && (
+                    <div className="vl-universe-actions">
+                      {u.cta.map((l, k) => (
+                        <a key={l.href} href={l.href} className={k === 0 ? 'vl-btn' : 'vl-btn vl-btn-line'} {...external(l.href)}>
+                          {l.label}
+                          {l.href.startsWith('http') && (
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                              <path d="M7 17L17 7M9 7h8v8" />
+                            </svg>
+                          )}
+                        </a>
                       ))}
-                    </dl>
-                  )}
-                  {st.link && (
-                    <a
-                      className="vl-link"
-                      href={st.link.href}
-                      {...(st.link.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}
-                    >
-                      {st.link.label}
-                    </a>
+                    </div>
                   )}
                 </div>
-              </article>
-            ))}
-          </div>
-        </section>
+              )}
+              {u.sections?.map((key) => <Fragment key={key}>{reused[key]}</Fragment>)}
+              {u.stories && storiesSection(u.stories, `${u.id}-recits`)}
+              {u.rates && ratesSection(u.rates)}
+            </div>
+          ))}
+        </>
+      ) : (
+        <>
+          {/* ------------------------------------------------------------ le parcours en bref, les trous, les lieux, séjourner */}
+          {statsSection}
+          {holesSection}
+          {roomsSection}
+          {sections.stories && storiesSection(sections.stories, 'sejourner')}
+        </>
       )}
 
       {/* ------------------------------------------------------------ sur place */}
@@ -599,64 +808,8 @@ export default function VillaPage() {
         </div>
       </section>
 
-      {/* ------------------------------------------------------------ tarifs : tableau façon carte de score */}
-      {sections.rates && (
-        <section id="tarifs" className="vl-section vl-rates-section">
-          <SectionHead kicker={sections.rates.kicker} title={sections.rates.title} note={sections.rates.note} text={sections.rates.text} />
-          <div className="vl-rates-wrap">
-            <table className="vl-rates">
-              <thead>
-                <tr>
-                  <th scope="col">{ui.ratesItem}</th>
-                  {sections.rates.columns.map((col) => (
-                    <th key={col.label} scope="col">
-                      {col.label}
-                      {col.period && <span>{col.period}</span>}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {sections.rates.rows.map((row) => (
-                  <tr key={row.label}>
-                    <th scope="row">{row.label}</th>
-                    {row.values.map((v, k) => (
-                      <td key={k}>{v}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          {sections.rates.extras && sections.rates.extras.length > 0 && (
-            <div className="vl-rates-extras">
-              {sections.rates.extras.map((group) => (
-                <div key={group.title}>
-                  <h3>{group.title}</h3>
-                  <dl>
-                    {group.items.map((item) => (
-                      <div key={item.label}>
-                        <dt>{item.label}</dt>
-                        <dd>{item.value}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              ))}
-            </div>
-          )}
-          {(sections.rates.source || sections.rates.link) && (
-            <p className="vl-rates-foot">
-              {sections.rates.source}
-              {sections.rates.link && (
-                <a href={sections.rates.link.href} target="_blank" rel="noopener">
-                  {sections.rates.link.label}
-                </a>
-              )}
-            </p>
-          )}
-        </section>
-      )}
+      {/* ------------------------------------------------------------ tarifs (sans univers ; avec, chacun a les siens) */}
+      {!universes && sections.rates && ratesSection(sections.rates)}
 
       {/* ------------------------------------------------------------ infos pratiques */}
       <section id="infos" className="vl-section vl-rules-section">

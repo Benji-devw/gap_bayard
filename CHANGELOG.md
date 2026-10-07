@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.0 — trois univers en onglets (7 octobre 2026)
+
+- Sous la visite, **trois univers en grandes cartes photo** (Golf, Séjourner, Nordique) : la carte choisie affiche son contenu juste en dessous, à la place du précédent (fondu) ; onglets accessibles (`role="tab"`, flèches, Début, Fin) ; composant `UniverseTabs.tsx`, bloc « univers » de `villa.css` (cases à filets, filet sapin de la carte choisie, photos pâlies, point magenta « En ce moment » ; trois cartes compactes côte à côte sur téléphone)
+- Univers de la saison ouvert d'office (`season` : Nordique du 15 décembre au 15 mars, Golf le reste de l'année) ; un lien vers un univers ou son contenu (`#nordique`, `#tarifs-nordique`, `#les-trous`) ouvre d'abord le bon univers, puis y mène (transition si le trajet traverse la visite) ; l'adresse suit l'univers choisi, retour arrière du navigateur pris en compte
+- Golf : le parcours, les 18 trous, les lieux de la visite, la Golf Academy, les green fees, boutons « Réserver un départ » (prima.golf) et « Voir les green fees »
+- Séjourner : hébergement, restaurant, séminaires, **tarifs d'hébergement 2026** en tableau (pension complète, demi-pension, nuitée, selon le nombre d'adultes), restaurant et bon à savoir ; boutons « Demander un séjour » et « Réserver une table »
+- Nordique (nouveau) : ski de fond, raquettes et chiens de traîneau (Travel Dog), fat bike et cours ; **forfaits et location 2025-2026** (grilles PDF du domaine) ; boutons « Acheter son pass en ligne » (billetterie du domaine) et « Plan des pistes en direct »
+- En-tête : Golf, Les 18 trous, Séjourner, Nordique, Infos, Avis ; étiquettes des sections renumérotées par univers (« Golf · Tarifs », « Le Centre · Avis »…)
+- Nouvelles options : `sections.universes` (`id`, `kicker`, `title`, `text`, `season`, `items[]` : `id`, `label`, `kicker`, `text`, `image`, `cta[]`, `sections`, `stories`, `rates`), `id` des récits et des tarifs, `rates.itemLabel`, `ui.universeNow` ; `stories` et `rates` deviennent des définitions communes du schéma (`$defs`)
+
 ## 1.0.0 — prototype de prospection (3 octobre 2026)
 
 - En ligne sur Vercel : https://gap-bayard.vercel.app (`og:image` et `og:url` en adresse absolue) ; CORS du bucket R2 ouvert à ce domaine

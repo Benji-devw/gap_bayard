@@ -2505,6 +2505,272 @@ html:has(.vl-studio[open]) {
   margin-top: 26px;
 }
 
+/* ---------------------------------------------------------------- univers : trois grandes cartes en onglets, contenu dessous
+   Des cases de carte de score : filet fin en haut, photo, numéro mono, nom en grand serif. La carte choisie prend un
+   filet sapin épais et sa photo en couleur, les autres pâlissent ; « En ce moment » (univers de saison) porte le point
+   magenta. Le contenu de l'univers (bandeau d'actions, puis ses sections) arrive en fondu sous les cartes. */
+.vl-universes-section {
+  padding-bottom: clamp(36px, 4vw, 56px);
+  background: var(--surface);
+}
+
+.vl-universe-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 clamp(14px, 2vw, 28px);
+}
+
+.vl-universe-tab {
+  position: relative;
+  display: grid;
+  align-content: start;
+  padding-top: 18px;
+  text-align: left;
+  color: var(--fg);
+  border-top: 1px solid var(--line);
+  cursor: pointer;
+}
+
+/* filet sapin de la carte choisie, qui se tire de gauche à droite */
+.vl-universe-tab::before {
+  content: '';
+  position: absolute;
+  inset: -2px 0 auto;
+  height: 3px;
+  background: var(--accent);
+  scale: 0 1;
+  transform-origin: left;
+  transition: scale 0.5s var(--ease);
+}
+
+.vl-universe-tab[aria-selected='true']::before {
+  scale: 1 1;
+}
+
+.vl-universe-tab:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: 6px;
+}
+
+.vl-universe-photo {
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--pine-soft);
+}
+
+.vl-universe-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.55;
+  filter: grayscale(0.6);
+  transition:
+    opacity 0.5s,
+    filter 0.5s,
+    scale 0.8s var(--ease);
+}
+
+.vl-universe-tab:hover .vl-universe-photo img {
+  opacity: 0.85;
+  scale: 1.04;
+}
+
+.vl-universe-tab[aria-selected='true'] .vl-universe-photo img {
+  opacity: 1;
+  filter: none;
+}
+
+.vl-universe-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.vl-universe-num {
+  color: var(--accent2);
+}
+
+.vl-universe-now {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--accent);
+}
+
+.vl-universe-now::before {
+  content: '';
+  flex: none;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--highlight);
+}
+
+.vl-universe-name {
+  margin-top: 8px;
+  font-family: var(--display);
+  font-size: clamp(36px, 3.6vw, 56px);
+  line-height: 1;
+  letter-spacing: -0.015em;
+  color: var(--muted);
+  transition: color 0.3s;
+}
+
+.vl-universe-tab:hover .vl-universe-name,
+.vl-universe-tab[aria-selected='true'] .vl-universe-name {
+  color: var(--fg);
+}
+
+.vl-universe-kicker {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+/* contenu de l'univers choisi : fondu à chaque changement (l'animation repart quand le panneau réapparaît) */
+.vl-universe[hidden] {
+  display: none;
+}
+
+.vl-universe {
+  animation: vl-universe-in 0.6s var(--ease);
+}
+
+@keyframes vl-universe-in {
+  from {
+    opacity: 0;
+    translate: 0 18px;
+  }
+}
+
+/* bandeau sous les cartes : la phrase de l'univers en italique, ses boutons à droite */
+.vl-universe-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px 40px;
+  padding: 0 max(var(--pad), (100% - 1320px) / 2 + var(--pad)) clamp(56px, 6vw, 88px);
+  background: var(--surface);
+}
+
+.vl-universe-bar p {
+  max-width: 52ch;
+  font-family: var(--hand);
+  font-size: clamp(22px, 2vw, 28px);
+  font-style: italic;
+  line-height: 1.25;
+  text-wrap: pretty;
+}
+
+.vl-universe-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* bouton secondaire : pilule à filet sapin */
+.vl-btn-line {
+  color: var(--accent);
+  background: transparent;
+  border-color: var(--accent);
+}
+
+.vl-btn-line:hover {
+  color: var(--cream);
+  background: var(--accent);
+}
+
+/* sections d'un univers : crème et blanc cassé en alternance, quel que soit leur nombre */
+.vl-universe > section:nth-of-type(odd) {
+  background: var(--bg);
+}
+
+.vl-universe > section:nth-of-type(even) {
+  background: var(--surface);
+}
+
+/* téléphone : trois cartes compactes côte à côte (photo carrée, nom), le point magenta seul pour la saison */
+@media (max-width: 760px) {
+  .vl-universe-tabs {
+    gap: 0 10px;
+  }
+
+  .vl-universe-tab {
+    padding-top: 12px;
+  }
+
+  .vl-universe-photo {
+    aspect-ratio: 1;
+  }
+
+  .vl-universe-head {
+    margin-top: 10px;
+  }
+
+  .vl-universe-now {
+    font-size: 0;
+  }
+
+  .vl-universe-name {
+    margin-top: 4px;
+    font-size: clamp(21px, 6vw, 26px);
+  }
+
+  .vl-universe-kicker {
+    display: none;
+  }
+
+  .vl-universe-bar p {
+    font-size: 21px;
+  }
+
+  .vl-universe-actions {
+    width: 100%;
+  }
+
+  .vl-universe-actions .vl-btn {
+    flex: 1 1 100%;
+  }
+}
+
+/* téléphone couché : photos en bandeau pour garder les cartes dans l'écran */
+@media (pointer: coarse) and (max-height: 500px) {
+  .vl-universe-photo {
+    aspect-ratio: 16 / 7;
+  }
+
+  .vl-universe-name {
+    font-size: 28px;
+  }
+
+  .vl-universe-kicker {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vl-universe {
+    animation: none;
+  }
+
+  .vl-universe-tab::before,
+  .vl-universe-photo img,
+  .vl-universe-name {
+    transition: none;
+  }
+}
+
 /* ---------------------------------------------------------------- sur place : grille à filets sur sapin */
 .vl-amenities-section {
   color: var(--cream);
