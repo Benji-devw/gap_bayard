@@ -6,7 +6,7 @@
   "intro": "Je m'occupe de tout, du tournage à la mise en ligne : prises de vue en drone FPV 4K à 60 images/s, montage et compression de la vidéo pour le web et le mobile, développement du site et design à votre image. Gîtes, campings, maisons d'hôtes : Gap et 1 h autour.",
   "highlights": [
     { "value": "≈ 2 h", "label": "de tournage sur place" },
-    { "value": "≈ 1 semaine", "label": "entre le tournage et la mise en ligne" },
+    { "value": "≈ 2 semaines", "label": "entre le tournage et la mise en ligne" },
     { "value": "0", "label": "matériel à prévoir de votre côté" }
   ],
   "steps": [
@@ -31,7 +31,7 @@
     {
       "icon": "rocket",
       "title": "Validation & mise en ligne",
-      "duration": "≈ 1 semaine après le tournage",
+      "duration": "≈ 2 semaines après le tournage",
       "text": "Vous testez le site sur un lien privé et me transmettez vos ajustements. Je le teste sur iPhone, Android et ordinateur, puis je le mets en ligne."
     },
     {

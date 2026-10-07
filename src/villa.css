@@ -2426,6 +2426,39 @@ html:has(.vl-studio[open]) {
   border-bottom: 1px solid var(--accent2);
 }
 
+/* téléphone (debout ou couché) : les cartes défilent à l'horizontale, comme les plans des trous ; la suivante
+   dépasse du bord pour inviter au geste, chaque carte se cale à gauche */
+@media (max-width: 760px), (pointer: coarse) and (max-height: 500px) {
+  .vl-holes {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 72%;
+    gap: 14px;
+    margin-inline: calc(var(--pad) * -1);
+    padding: 0 var(--pad) 14px;
+    scroll-padding-inline: var(--pad);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent2) transparent;
+  }
+
+  .vl-holes > li {
+    scroll-snap-align: start;
+  }
+
+  .vl-hole-name {
+    font-size: 28px;
+  }
+}
+
+@media (pointer: coarse) and (max-height: 500px) {
+  .vl-holes {
+    grid-auto-columns: 34%;
+  }
+}
+
 /* ---------------------------------------------------------------- séjourner : récits photo + texte, en alternance */
 .vl-stories {
   display: grid;
@@ -4344,11 +4377,6 @@ img.vl-review-avatar {
     margin-inline: calc(var(--pad) * -1);
     padding-inline: var(--pad);
     scroll-padding-inline: var(--pad);
-  }
-
-  .vl-holes {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 32px;
   }
 
   .vl-story-body h3 {
