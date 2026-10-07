@@ -62,6 +62,10 @@
             "type": "object",
             "required": ["title", "text", "image"],
             "properties": {
+              "id": {
+                "type": "string",
+                "description": "Ancre du récit (lien « #hebergement », sous-catégorie du menu)"
+              },
               "kicker": {
                 "type": "string"
               },
@@ -404,8 +408,50 @@
         },
         "nav": {
           "type": "array",
+          "description": "Menu de l'en-tête et du menu burger. Sous-catégories facultatives (children) : panneau sous l'en-tête sur ordinateur, pastilles dans le menu burger.",
           "items": {
-            "$ref": "#/$defs/link"
+            "type": "object",
+            "required": ["label", "href"],
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "href": {
+                "type": "string"
+              },
+              "kicker": {
+                "type": "string",
+                "description": "Petite ligne du panneau ; lien vers un univers (« #golf ») : celle de l'univers si absente"
+              },
+              "text": {
+                "type": "string",
+                "description": "Phrase du panneau ; lien vers un univers : celle de l'univers si absente"
+              },
+              "image": {
+                "type": "string",
+                "description": "Photo du panneau (chemin dans public/) ; lien vers un univers : celle de l'univers si absente"
+              },
+              "children": {
+                "type": "array",
+                "description": "Sous-catégories, dans l'ordre",
+                "items": {
+                  "type": "object",
+                  "required": ["label", "href"],
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "href": {
+                      "type": "string"
+                    },
+                    "note": {
+                      "type": "string",
+                      "description": "Précision sous le nom (panneau de l'ordinateur)"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "priceNote": {
@@ -1372,6 +1418,14 @@
         "universeNow": {
           "type": "string",
           "description": "Pastille de l'univers de saison sur sa carte (« En ce moment »)"
+        },
+        "navSub": {
+          "type": "string",
+          "description": "Libellé d'accessibilité du bouton qui ouvre les sous-catégories du menu ({label} = entrée)"
+        },
+        "navAll": {
+          "type": "string",
+          "description": "Lien vers toute la catégorie, dans le panneau du menu"
         },
         "details": {
           "type": "string",

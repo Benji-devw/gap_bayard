@@ -70,7 +70,7 @@ Ouvrez `PROMPT.md` : copiez le prompt, joignez `src/data/villa.json`, décrivez 
 | --- | --- |
 | `meta` | titre et description de la page (référencement), langue |
 | `theme` | couleurs (`bg`, `surface`, `fg`, `muted`, `line`, `accent`, `accent2`, `ink`) et polices Google Fonts (`display`, `body`, `hand` manuscrite) |
-| `brand` | nom du bien, lieu, prix à la nuit et sa précision, menu, bouton d'en-tête |
+| `brand` | nom du bien, lieu, prix à la nuit et sa précision, menu, bouton d'en-tête ; `nav[].children` = sous-catégories (`label`, `href`, `note`) : panneau pleine largeur sous l'en-tête sur ordinateur (au survol, ou bouton chevron au clavier et au doigt ; photo, phrase et petite ligne reprises de l'univers visé), pastilles dans le menu burger |
 | `media` | vidéo, longueur de scroll, lissage, ralentis, rythme |
 | `map` | lieu du bien (`query` : adresse, ville ou code postal) : bouton Google Maps dans l'en-tête |
 | `audio` | musique d'ambiance de la visite (`src`, `volume`) : coupée par défaut, bouton en bas au centre |

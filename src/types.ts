@@ -16,6 +16,18 @@ export interface Link {
 }
 
 /**
+ * Entrée du menu : un lien, avec des sous-catégories facultatives (panneau sous l'en-tête sur ordinateur,
+ * pastilles dans le menu burger). Lien vers un univers (« #golf ») : `kicker`, `text` et `image` reprennent
+ * ceux de l'univers s'ils manquent.
+ */
+export interface NavItem extends Link {
+  kicker?: string;
+  text?: string;
+  image?: string;
+  children?: (Link & { note?: string })[];
+}
+
+/**
  * Un candidat vidéo : le premier que l'écran et le navigateur acceptent est lu.
  * Ex. version portrait pour le téléphone tenu à la verticale, version HEVC pour Safari, AV1 pour Chrome.
  */
@@ -89,6 +101,8 @@ export interface Stories {
   title: string;
   text?: string;
   items: {
+    /** Ancre du récit (lien « #hebergement », sous-catégorie du menu) */
+    id?: string;
     kicker?: string;
     title: string;
     text: string;
@@ -188,7 +202,7 @@ export interface VillaData {
     /** Logo du client (image de public/) : remplace le nom dans l'en-tête, le chargement et le pied de page */
     logo?: string;
     cta: Link;
-    nav: Link[];
+    nav: NavItem[];
   };
   media: {
     type: 'frames' | 'video';
@@ -411,6 +425,9 @@ export interface UiText {
   seeInTour: string;
   /** Pastille de l'univers de saison sur sa carte (« En ce moment ») */
   universeNow: string;
+  /** Menu : bouton qui ouvre les sous-catégories ({label} = entrée), lien vers toute la catégorie */
+  navSub: string;
+  navAll: string;
   /** Libellé d'accessibilité des points : "<nom> : <details>" */
   details: string;
   close: string;
@@ -480,6 +497,8 @@ export const UI_DEFAULTS: UiText = {
   holesPlan: 'Trou {n} · par {par}',
   seeInTour: 'Voir dans la visite →',
   universeNow: 'En ce moment',
+  navSub: 'Sous-catégories : {label}',
+  navAll: 'Tout voir',
   details: 'voir la pièce',
   close: 'Fermer',
   menu: 'Menu',

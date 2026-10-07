@@ -288,25 +288,40 @@
 }
 
 .vl-nav {
-  display: flex;
-  gap: 4px;
   margin-left: auto;
   font-size: 14px;
   font-weight: 400;
 }
 
-.vl-nav a {
+.vl-nav-list {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.vl-nav-item {
+  display: flex;
+  align-items: center;
+}
+
+.vl-nav-top {
   position: relative;
-  padding: 8px 12px;
+  padding: 8px 2px 8px 12px;
   color: inherit;
   text-decoration: none;
 }
 
-.vl-nav a::after {
+/* entrée sans sous-catégories : même marge des deux côtés */
+.vl-nav-top:last-child {
+  padding-right: 12px;
+}
+
+/* soulignement magenta au survol, et tant que le panneau de l'entrée est ouvert */
+.vl-nav-top::after {
   content: '';
   position: absolute;
   left: 12px;
-  right: 12px;
+  right: 2px;
   bottom: 4px;
   height: 1px;
   background: var(--highlight);
@@ -315,8 +330,227 @@
   transition: scale 0.3s var(--ease);
 }
 
-.vl-nav a:hover::after {
+.vl-nav-top:last-child::after {
+  right: 12px;
+}
+
+.vl-nav-top:hover::after,
+.vl-nav-item.is-open .vl-nav-top::after {
   scale: 1 1;
+}
+
+.vl-nav-top:focus-visible,
+.vl-nav-toggle:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: 2px;
+}
+
+/* chevron : ouvre le panneau au clavier et au doigt (la souris l'ouvre au survol) */
+.vl-nav-toggle {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 30px;
+  border-radius: var(--radius);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.vl-nav-toggle svg {
+  width: 10px;
+  height: 10px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: rotate 0.3s var(--ease);
+}
+
+.vl-nav-item.is-open .vl-nav-toggle {
+  color: var(--accent);
+}
+
+.vl-nav-item.is-open .vl-nav-toggle svg {
+  rotate: 180deg;
+}
+
+/* panneau des sous-catégories : pleine largeur sous l'en-tête, crème à filets, comme une page de carte de score.
+   Photo de la catégorie, sa phrase et « Tout voir », puis les sous-catégories numérotées en serif. */
+.vl-sub {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  color: var(--fg);
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 34px 60px -34px rgb(15 28 21 / 0.4);
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 -8px;
+  transition:
+    opacity 0.25s,
+    translate 0.35s var(--ease),
+    visibility 0s 0.35s;
+}
+
+.vl-nav-item.is-open .vl-sub {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+  transition:
+    opacity 0.25s,
+    translate 0.35s var(--ease);
+}
+
+.vl-sub-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 280px) minmax(0, 1fr) minmax(0, 1.25fr);
+  align-items: start;
+  gap: clamp(28px, 3.5vw, 64px);
+  padding: 34px max(var(--pad), (100% - 1320px) / 2 + var(--pad)) 40px;
+}
+
+.vl-sub-inner:not(:has(.vl-sub-photo)) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+}
+
+.vl-sub-photo {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--pine-soft);
+}
+
+.vl-sub-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vl-sub-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent2);
+}
+
+.vl-sub-kicker::before {
+  content: '';
+  flex: none;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--highlight);
+}
+
+.vl-sub-title {
+  margin-top: 14px;
+  font-family: var(--display);
+  font-size: clamp(40px, 3.6vw, 56px);
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+}
+
+.vl-sub-text {
+  margin-top: 14px;
+  max-width: 40ch;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--fg) 75%, var(--muted));
+}
+
+.vl-sub-intro .vl-link {
+  margin-top: 20px;
+}
+
+.vl-sub-list {
+  border-top: 1px solid var(--fg);
+}
+
+.vl-sub-list li {
+  border-bottom: 1px solid var(--line);
+}
+
+.vl-sub-list a {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: 12px;
+  padding: 11px 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.vl-sub-list a:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: 2px;
+}
+
+.vl-sub-num {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--accent2);
+}
+
+.vl-sub-name {
+  font-family: var(--display);
+  font-size: 25px;
+  line-height: 1.05;
+  transition:
+    color 0.2s,
+    translate 0.3s var(--ease);
+}
+
+.vl-sub-note {
+  grid-column: 2;
+  margin-top: 3px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.vl-sub-list a:hover .vl-sub-name,
+.vl-sub-list a:focus-visible .vl-sub-name {
+  color: var(--accent);
+  translate: 4px 0;
+}
+
+/* les sous-catégories arrivent l'une après l'autre à l'ouverture */
+.vl-sub-list li {
+  opacity: 0;
+  translate: 0 6px;
+  transition:
+    opacity 0.3s,
+    translate 0.35s var(--ease);
+}
+
+.vl-nav-item.is-open .vl-sub-list li {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: calc(0.04s * var(--k) + 0.06s);
+}
+
+/* écran d'ordinateur étroit : le panneau laisse tomber la photo */
+@media (max-width: 1100px) {
+  .vl-sub-photo {
+    display: none;
+  }
+
+  .vl-sub-inner,
+  .vl-sub-inner:not(:has(.vl-sub-photo)) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  }
 }
 
 .vl-btn-header {
@@ -1670,11 +1904,11 @@ html:has(.vl-menu.is-open) {
   overflow: hidden;
 }
 
-.vl-menu ul {
+.vl-menu > ul {
   counter-reset: vl-menu;
 }
 
-.vl-menu li {
+.vl-menu > ul > li {
   counter-increment: vl-menu;
   border-bottom: 1px solid var(--hair-light);
   opacity: 0;
@@ -1682,13 +1916,13 @@ html:has(.vl-menu.is-open) {
   transition: opacity 0.4s, transform 0.4s;
 }
 
-.vl-menu.is-open li {
+.vl-menu.is-open > ul > li {
   opacity: 1;
   transform: none;
   transition-delay: calc(0.05s * var(--i) + 0.08s);
 }
 
-.vl-menu li a {
+.vl-menu > ul > li > a {
   display: flex;
   align-items: baseline;
   gap: 18px;
@@ -1700,12 +1934,40 @@ html:has(.vl-menu.is-open) {
   color: inherit;
 }
 
-.vl-menu li a::before {
+.vl-menu > ul > li > a::before {
   content: counter(vl-menu, decimal-leading-zero);
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.14em;
   color: var(--brass-soft);
+}
+
+/* sous-catégories : pastilles à filet, alignées sur le titre (après le numéro) */
+.vl-menu-sub {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 0 18px 37px;
+}
+
+.vl-menu-sub a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--hair-light);
+  border-radius: 999px;
+  font-size: 13.5px;
+  line-height: 1.2;
+  text-decoration: none;
+  color: rgb(246 241 230 / 0.85);
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.vl-menu-sub a:hover,
+.vl-menu-sub a:focus-visible {
+  border-color: var(--brass-soft);
+  color: var(--cream);
 }
 
 .vl-menu > .vl-btn {
@@ -2470,6 +2732,20 @@ html:has(.vl-studio[open]) {
   grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
   align-items: center;
   gap: clamp(32px, 6vw, 96px);
+}
+
+/* ancre d'un récit : hors de la grille, un peu au-dessus, pour que l'en-tête fixe ne couvre pas la photo */
+.vl-story {
+  position: relative;
+}
+
+.vl-anchor {
+  position: absolute;
+  top: calc((var(--header-h) + 28px) * -1);
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
 }
 
 .vl-story:nth-child(even) .vl-story-photo {
@@ -4113,8 +4389,14 @@ img.vl-review-avatar {
   .vl-btn,
   .vl-btn svg,
   .vl-link,
-  .vl-nav a::after,
-  .vl-menu li {
+  .vl-nav-top::after,
+  .vl-nav-toggle svg,
+  .vl-sub,
+  .vl-nav-item.is-open .vl-sub,
+  .vl-sub-list li,
+  .vl-nav-item.is-open .vl-sub-list li,
+  .vl-sub-name,
+  .vl-menu > ul > li {
     transition: none;
   }
 }
@@ -4145,12 +4427,19 @@ img.vl-review-avatar {
     display: none;
   }
 
-  .vl-nav a {
-    padding: 8px 9px;
+  .vl-nav-top {
+    padding-left: 9px;
   }
 
-  .vl-nav a::after {
+  .vl-nav-top:last-child {
+    padding-right: 9px;
+  }
+
+  .vl-nav-top::after {
     left: 9px;
+  }
+
+  .vl-nav-top:last-child::after {
     right: 9px;
   }
 }
@@ -5051,10 +5340,21 @@ img.vl-review-avatar {
     height: 30dvh;
   }
 
-  /* menu burger : tout tient dans la hauteur */
-  .vl-menu li a {
+  /* menu burger : tout tient dans la hauteur, pastilles plus serrées */
+  .vl-menu > ul > li > a {
     padding: 7px 0;
     font-size: 28px;
+  }
+
+  .vl-menu-sub {
+    gap: 6px;
+    padding-bottom: 10px;
+  }
+
+  .vl-menu-sub a {
+    min-height: 30px;
+    padding: 0 11px;
+    font-size: 12.5px;
   }
 }
 

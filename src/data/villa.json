@@ -37,27 +37,120 @@
     "nav": [
       {
         "label": "Golf",
-        "href": "#golf"
-      },
-      {
-        "label": "Les 18 trous",
-        "href": "#les-trous"
+        "href": "#golf",
+        "children": [
+          {
+            "label": "Le parcours",
+            "href": "#le-parcours",
+            "note": "18 trous par 72, à 1 250 m"
+          },
+          {
+            "label": "Les 18 trous",
+            "href": "#les-trous",
+            "note": "Carte de score et plans"
+          },
+          {
+            "label": "Dans la visite",
+            "href": "#le-club",
+            "note": "Du practice au trou 18"
+          },
+          {
+            "label": "Golf Academy",
+            "href": "#golf-academy",
+            "note": "Cours, stages, école de golf"
+          },
+          {
+            "label": "Green fees",
+            "href": "#tarifs",
+            "note": "Tarifs 2026"
+          }
+        ]
       },
       {
         "label": "Séjourner",
-        "href": "#sejourner"
+        "href": "#sejourner",
+        "children": [
+          {
+            "label": "Hébergement",
+            "href": "#hebergement",
+            "note": "100 lits au pied du parcours"
+          },
+          {
+            "label": "Restaurant",
+            "href": "#restaurant",
+            "note": "Carte de terroir, tous les midis"
+          },
+          {
+            "label": "Séminaires",
+            "href": "#seminaires",
+            "note": "Salles de 70 à 150 m²"
+          },
+          {
+            "label": "Tarifs",
+            "href": "#tarifs-sejour",
+            "note": "Hébergement 2026"
+          }
+        ]
       },
       {
         "label": "Nordique",
-        "href": "#nordique"
+        "href": "#nordique",
+        "children": [
+          {
+            "label": "Ski de fond",
+            "href": "#ski-de-fond",
+            "note": "50 km de pistes"
+          },
+          {
+            "label": "Raquettes et traîneau",
+            "href": "#raquettes",
+            "note": "3 boucles, chiens de traîneau"
+          },
+          {
+            "label": "Fat bike et cours",
+            "href": "#fat-bike",
+            "note": "Location à l'heure, école du domaine"
+          },
+          {
+            "label": "Forfaits et location",
+            "href": "#tarifs-nordique",
+            "note": "Hiver 2025-2026"
+          }
+        ]
       },
       {
-        "label": "Infos",
-        "href": "#infos"
-      },
-      {
-        "label": "Avis",
-        "href": "#avis"
+        "label": "Le Centre",
+        "href": "#sur-place",
+        "kicker": "Centre d'oxygénation · 1 250 m",
+        "text": "Accès, navette, ce que vous trouverez sur place et les avis des joueurs : tout pour préparer votre venue.",
+        "image": "media/photos/club-house-aerien.webp",
+        "children": [
+          {
+            "label": "Sur place",
+            "href": "#sur-place",
+            "note": "Pro shop, location, plein air"
+          },
+          {
+            "label": "Galerie",
+            "href": "#galerie",
+            "note": "Le plateau, été comme hiver"
+          },
+          {
+            "label": "Infos pratiques",
+            "href": "#infos",
+            "note": "Accès, navette, horaires"
+          },
+          {
+            "label": "Avis",
+            "href": "#avis",
+            "note": "Ils ont joué le parcours"
+          },
+          {
+            "label": "Contact",
+            "href": "#reserver",
+            "note": "Séjour, groupe, séminaire"
+          }
+        ]
       }
     ]
   },
@@ -879,6 +972,7 @@
             "text": "Du premier swing au parcours accompagné, l'équipement et les balles sont fournis.",
             "items": [
               {
+                "id": "golf-academy-cours",
                 "kicker": "Enseignement · Golf Academy",
                 "title": "Apprendre ou progresser",
                 "text": "Baptême, stage découverte, cours particuliers ou parcours accompagné : la Gap Bayard Golf Academy fournit l'équipement et les balles. L'école de golf accueille les 7 à 18 ans avec l'Association sportive.",
@@ -1034,6 +1128,7 @@
             "text": "Au pied du parcours, face au trou n°18 : un hôtel de 100 lits, un bar-restaurant ouvert à tous, des salles de séminaire et 250 hectares de plateau pour jouer, courir ou skier.",
             "items": [
               {
+                "id": "hebergement",
                 "kicker": "Hébergement · 100 lits",
                 "title": "Dormir au pied du parcours",
                 "text": "21 chambres avec douche et WC privés, 4 espaces familles de 4 à 6 lits et 2 dortoirs de 8 : le Centre reçoit en nuitée, en demi-pension ou en pension complète, au calme du plateau.",
@@ -1059,6 +1154,7 @@
                 }
               },
               {
+                "id": "restaurant",
                 "kicker": "Bar-restaurant · Tous les midis",
                 "title": "Une carte de saison, du terroir",
                 "text": "Ouvert tous les midis, aux golfeurs comme aux promeneurs : une carte de saison de terroir, simple et savoureuse, et une suggestion du jour. Réservation conseillée.",
@@ -1080,6 +1176,7 @@
                 ]
               },
               {
+                "id": "seminaires",
                 "kicker": "Séminaires · Groupes",
                 "title": "Réunir son équipe à 1 250 m",
                 "text": "Plusieurs salles de 70 à 150 m², un restaurant qui sert jusqu'à 200 personnes et tout le plateau pour les activités : golf, ski, randonnée, chasse au trésor, VTT ou raid.",
@@ -1237,6 +1334,7 @@
             "text": "L'accueil du domaine ouvre tous les jours de 8 h 30 à 16 h 30, du 20 décembre à début mars selon l'enneigement. Bar, restaurant et hébergement sur place.",
             "items": [
               {
+                "id": "ski-de-fond",
                 "kicker": "Ski de fond · 50 km",
                 "title": "Quand la neige tombe, le plateau devient nordique",
                 "text": "50 km de pistes entretenues chaque jour, en classique et en skating, pour tous les niveaux, et de la randonnée nordique. Depuis 2023, le domaine ne fabrique plus de neige : il vit au rythme de la neige naturelle. Deux luges pulkas sont prêtées gratuitement aux personnes en situation de handicap.",
@@ -1262,6 +1360,7 @@
                 }
               },
               {
+                "id": "raquettes",
                 "kicker": "Raquettes · Chiens de traîneau",
                 "title": "À pied, en raquettes ou en traîneau",
                 "text": "Trois itinéraires de raquettes de 4 à 6 km partent du Centre, balisés et damés, en liberté ou avec un accompagnateur en montagne. Avec Travel Dog, baptême en traîneau d'une demi-heure ou cani-raquette, sur réservation.",
@@ -1287,6 +1386,7 @@
                 }
               },
               {
+                "id": "fat-bike",
                 "kicker": "Fat bike · Cours",
                 "title": "Fat bike sur neige et cours de ski",
                 "text": "Le fat bike à assistance électrique se loue à l'heure, été comme hiver. Pour un cours de ski de fond, une sortie en randonnée nordique ou un accompagnement en raquettes, l'école du domaine vous répond au 04 92 50 16 83.",

@@ -44,6 +44,7 @@ import { Reviews } from './components/Reviews';
 import { Scorecard } from './components/Scorecard';
 import { StatCount } from './components/StatCount';
 import { UniverseTabs } from './components/UniverseTabs';
+import { HeaderNav } from './components/HeaderNav';
 import { MENU_QUERY, TOUCH_QUERY } from './lib/media';
 import { useSmoothAnchors, type AnchorIntercept } from './lib/smooth-anchors';
 import { useReveal } from './lib/reveal';
@@ -195,11 +196,15 @@ type Universes = NonNullable<VillaData['sections']['universes']>;
 /** Ancres des sections du JSON qu'un univers peut reprendre */
 const SECTION_IDS: Record<UniverseSection, string> = { stats: 'le-parcours', holes: 'les-trous', rooms: 'le-club' };
 
-/** Ancres que contient un univers : lui-même, ses sections reprises, ses récits, ses tarifs */
+/** Ancres que contient un univers : lui-même, ses sections reprises, ses récits (et chacun d'eux), ses tarifs */
 function universeAnchors(u: Universe): string[] {
-  return [u.id, ...(u.sections ?? []).map((s) => SECTION_IDS[s]), u.stories?.id, u.rates && (u.rates.id ?? 'tarifs')].filter(
-    (a): a is string => !!a,
-  );
+  return [
+    u.id,
+    ...(u.sections ?? []).map((s) => SECTION_IDS[s]),
+    u.stories?.id,
+    ...(u.stories?.items.map((it) => it.id) ?? []),
+    u.rates && (u.rates.id ?? 'tarifs'),
+  ].filter((a): a is string => !!a);
 }
 
 /** Univers qui contient l'ancre de l'adresse (#golf, #tarifs…), sinon null */
@@ -378,6 +383,11 @@ export default function VillaPage() {
   const host = sections.contact.host;
   const tourFullscreen = fullscreen && !solidHeader && !menuOpen;
   const headerTucked = tourFullscreen && !headerPeek;
+  // menu : une entrée qui mène à un univers reprend sa petite ligne, sa phrase et sa photo si elles manquent
+  const navItems = brand.nav.map((n) => {
+    const u = universes?.items.find((x) => `#${x.id}` === n.href);
+    return u ? { ...n, kicker: n.kicker ?? u.kicker, text: n.text ?? u.text, image: n.image ?? u.image } : n;
+  });
 
   /* ---------------------------------------------------------------- sections du parcours
    * À leur place après la visite, ou dans l'univers qui les reprend (sections.universes.items[].sections). */
@@ -457,6 +467,8 @@ export default function VillaPage() {
       <div className="vl-stories">
         {st.items.map((it) => (
           <article key={it.title} className="vl-story">
+            {/* ancre du récit (sous-catégorie du menu) : décalée de la hauteur de l'en-tête, pour tous les trajets */}
+            {it.id && <span id={it.id} className="vl-anchor" aria-hidden="true" />}
             <figure className="vl-story-photo">
               <img src={asset(it.image)} alt={it.imageAlt ?? ''} loading="lazy" />
             </figure>
@@ -570,13 +582,7 @@ export default function VillaPage() {
           )}
           <span className="vl-logo-place">{brand.location}</span>
         </a>
-        <nav className="vl-nav">
-          {brand.nav.map((l) => (
-            <a key={l.href} href={l.href}>
-              {l.label}
-            </a>
-          ))}
-        </nav>
+        <HeaderNav items={navItems} disabled={headerTucked || menuOpen} labels={{ sub: ui.navSub, all: ui.navAll }} />
         {data.map && <MapButton query={data.map.query} label={ui.map} />}
         <StudioInfo note={data.studioNote} />
         <a href={brand.cta.href} className="vl-btn vl-btn-sm vl-btn-header">
@@ -611,11 +617,22 @@ export default function VillaPage() {
       {/* menu mobile (≤ 900 px) */}
       <nav id="vl-menu" className={cx('vl-menu', menuOpen && 'is-open')} inert={!menuOpen}>
         <ul>
-          {brand.nav.map((l, i) => (
+          {navItems.map((l, i) => (
             <li key={l.href} style={{ '--i': i } as CSSProperties}>
               <a href={l.href} onClick={() => setMenuOpen(false)}>
                 {l.label}
               </a>
+              {l.children && l.children.length > 0 && (
+                <ul className="vl-menu-sub">
+                  {l.children.map((c) => (
+                    <li key={c.href}>
+                      <a href={c.href} onClick={() => setMenuOpen(false)}>
+                        {c.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
         </ul>
