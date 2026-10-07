@@ -112,6 +112,7 @@ const REVEAL = [
   '.vl-rules > div',
   '.vl-reviews > li',
   '.vl-booking',
+  '.vl-contact-links',
   '.vl-host',
   '.vl-contact-card',
 ] as const;
@@ -850,7 +851,22 @@ export default function VillaPage() {
       <section id="reserver" className="vl-section vl-contact">
         <div className="vl-contact-info">
           <SectionHead kicker={sections.contact.kicker} title={sections.contact.title} text={sections.contact.text} />
-          {sections.contact.booking && (
+          {sections.contact.links && sections.contact.links.length > 0 ? (
+            /* accès directs : une ligne par action, flèche au bout (nouvel onglet pour une autre adresse) */
+            <ul className="vl-contact-links">
+              {sections.contact.links.map((l) => (
+                <li key={l.href}>
+                  <a href={l.href} {...external(l.href)}>
+                    <span className="vl-contact-link-name">{l.label}</span>
+                    {l.note && <span className="vl-contact-link-note">{l.note}</span>}
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d={l.href.startsWith('http') ? 'M7 17L17 7M9 7h8v8' : 'M5 12h14M13 6l6 6-6 6'} />
+                    </svg>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : sections.contact.booking && (
             <div className="vl-booking">
               <a href={sections.contact.booking.href} className="vl-btn vl-btn-big" target="_blank" rel="noopener">
                 {sections.contact.booking.label}
@@ -878,7 +894,7 @@ export default function VillaPage() {
           {sections.contact.availability && (
             <Availability config={sections.contact.availability} lang={meta.lang} ui={ui} onPick={setStay} />
           )}
-          <BookingForm contact={sections.contact} labels={ui.form} dates={stay} />
+          <BookingForm contact={sections.contact} labels={ui.form} dates={stay} universe={universe || undefined} />
         </div>
       </section>
 

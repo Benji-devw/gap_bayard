@@ -988,7 +988,8 @@
 }
 
 /* ---------------------------------------------------------------- commandes de la visite : en bas au centre
-   Ronds crème (son, plein écran), lecture en sapin au milieu, « Visite en ♫ » en pilule crème.
+   Ronds crème (son, plein écran), lecture au milieu en plus grand, « Visite en ♫ » en pilule crème ;
+   toutes crème à l'arrêt, sapin quand elles sont actives.
    Centrées par left: 50% + translate (jamais de right). */
 .vl-tour-controls {
   position: absolute;
@@ -1051,7 +1052,8 @@
   }
 }
 
-/* lecture automatique : bouton principal, sapin, anneau clair ; laiton pendant la lecture */
+/* lecture automatique : bouton principal, plus grand, anneau clair ; mêmes couleurs que les autres commandes :
+   crème à l'arrêt, sapin pendant la lecture */
 .vl-play {
   display: grid;
   place-items: center;
@@ -1059,17 +1061,20 @@
   height: 58px;
   padding: 0;
   border-radius: 50%;
-  color: var(--cream);
-  background: var(--accent);
+  color: var(--fg);
+  background: color-mix(in srgb, var(--cream) 88%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   box-shadow:
-    0 0 0 1px rgb(255 255 255 / 0.55),
+    0 0 0 1px rgb(255 255 255 / 0.6),
     0 0 0 6px rgb(255 255 255 / 0.14),
     0 18px 34px -16px rgb(0 0 0 / 0.6);
   cursor: pointer;
-  transition: background 0.25s, scale 0.25s var(--ease);
+  transition: background 0.25s, color 0.25s, scale 0.25s var(--ease);
 }
 
 .vl-play:hover {
+  background: #fff;
   scale: 1.05;
 }
 
@@ -1081,7 +1086,8 @@
 }
 
 .vl-play[aria-pressed='true'] {
-  background: var(--accent2);
+  color: var(--cream);
+  background: var(--accent);
 }
 
 .vl-play svg {
@@ -2451,6 +2457,9 @@ html:has(.vl-studio[open]) {
   gap: 16px;
   max-width: 100%;
   overflow-x: auto;
+  /* sans ça, overflow-x: auto passe aussi la hauteur en auto : pendant leur apparition (montée de 26 px),
+     les cartes dépassent en bas et une barre de défilement verticale clignote à droite */
+  overflow-y: hidden;
 }
 
 .vl-card {
@@ -2700,6 +2709,7 @@ html:has(.vl-studio[open]) {
     padding: 0 var(--pad) 14px;
     scroll-padding-inline: var(--pad);
     overflow-x: auto;
+    overflow-y: hidden; /* pas de barre verticale pendant l'apparition des cartes (voir .vl-card-wrap) */
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
     scrollbar-width: thin;
@@ -3644,18 +3654,166 @@ img.vl-review-avatar {
 }
 
 .vl-form-wide,
-.vl-form button {
+.vl-form-topics,
+.vl-form-foot {
   grid-column: 1 / -1;
 }
 
-/* une seule date : nom et e-mail côte à côte */
-.vl-form label.vl-form-wide:has(input[type='email']) {
-  grid-column: auto;
+.vl-form textarea::placeholder {
+  color: color-mix(in srgb, var(--muted) 80%, transparent);
 }
 
-.vl-form button {
-  justify-self: start;
+/* objet de la demande : pastilles à filet, sapin une fois choisie (boutons radio natifs, masqués à l'œil) */
+.vl-form-topics {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.vl-form-topics legend {
+  margin-bottom: 12px;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.vl-form-topics > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vl-form .vl-form-topic {
+  position: relative;
+  display: block;
+}
+
+.vl-form .vl-form-topic input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.vl-form .vl-form-topic > span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 16px;
+  font-family: var(--body);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--fg);
+  border: 1px solid color-mix(in srgb, var(--fg) 22%, transparent);
+  border-radius: 999px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.vl-form-topic:hover > span {
+  border-color: var(--accent);
+}
+
+.vl-form-topic input:checked + span {
+  color: var(--cream);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.vl-form-topic input:focus-visible + span {
+  outline: 2px solid var(--accent2);
+  outline-offset: 2px;
+}
+
+/* bouton et mention d'usage des coordonnées */
+.vl-form-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 22px;
   margin-top: 6px;
+}
+
+.vl-form-privacy {
+  flex: 1 1 200px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* accès directs (réserver un départ, pass nordique, appeler) : lignes à filets, nom en serif, flèche au bout */
+.vl-contact-links {
+  margin-bottom: 40px;
+  border-top: 1px solid var(--fg);
+}
+
+.vl-contact-links li {
+  border-bottom: 1px solid var(--line);
+}
+
+.vl-contact-links a {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 16px;
+  padding: 16px 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.vl-contact-links a:focus-visible {
+  outline: 2px solid var(--accent2);
+  outline-offset: 2px;
+}
+
+.vl-contact-link-name {
+  font-family: var(--display);
+  font-size: clamp(26px, 2.4vw, 32px);
+  line-height: 1.05;
+  transition: color 0.2s;
+}
+
+.vl-contact-link-note {
+  grid-column: 1;
+  margin-top: 4px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.vl-contact-links svg {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: 40px;
+  height: 40px;
+  padding: 11px;
+  fill: none;
+  stroke: var(--cream);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: background 0.25s, translate 0.25s var(--ease);
+}
+
+.vl-contact-links a:hover .vl-contact-link-name {
+  color: var(--accent);
+}
+
+.vl-contact-links a:hover svg {
+  background: var(--ink);
+  translate: 3px 0;
 }
 
 .vl-form-success {
@@ -4747,8 +4905,12 @@ img.vl-review-avatar {
     width: 100%;
   }
 
-  .vl-form button {
-    justify-self: stretch;
+  .vl-form-foot .vl-btn {
+    flex: 1 1 100%;
+  }
+
+  .vl-contact-links {
+    margin-bottom: 32px;
   }
 
   .vl-footer nav {
@@ -5371,6 +5533,7 @@ img.vl-review-avatar {
   .vl-pos-bottom-right,
   .vl-fullscreen,
   .vl-sound,
+  .vl-play,
   .vl-music-play {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
@@ -5386,6 +5549,7 @@ img.vl-review-avatar {
 
   .vl-fullscreen,
   .vl-sound,
+  .vl-play:not([aria-pressed='true']),
   .vl-music-play:not([aria-pressed='true']) {
     background: var(--cream);
   }
@@ -5422,6 +5586,7 @@ html:fullscreen .vl-pos-bottom-right {
 
 html:fullscreen .vl-fullscreen,
 html:fullscreen .vl-sound,
+html:fullscreen .vl-play:not([aria-pressed='true']),
 html:fullscreen .vl-music-play:not([aria-pressed='true']) {
   background: var(--cream);
   -webkit-backdrop-filter: none;

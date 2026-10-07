@@ -132,6 +132,17 @@ export interface Rates {
   link?: Link;
 }
 
+/** Objet d'une demande de contact (pastille du formulaire) */
+export interface ContactTopic {
+  id: string;
+  label: string;
+  dates: 'range' | 'single' | 'none';
+  /** Invitation dans le champ du message */
+  message?: string;
+  /** id de l'univers pour lequel cet objet est choisi d'office */
+  universe?: string;
+}
+
 /** Sections du JSON qu'un univers peut reprendre, dans l'ordre donné */
 export type UniverseSection = 'stats' | 'holes' | 'rooms';
 
@@ -339,6 +350,19 @@ export interface VillaData {
       bookingNote?: string;
       /** true = une seule date dans le formulaire (date souhaitée, sans départ) : golf, cours, rendez-vous */
       singleDate?: boolean;
+      /**
+       * Accès directs à gauche du formulaire (réserver un départ, acheter un pass, appeler…), à la place de `booking` ;
+       * une adresse « http » s'ouvre dans un nouvel onglet
+       */
+      links?: (Link & { note?: string })[];
+      /**
+       * Objets de la demande, en pastilles en tête du formulaire : chacun règle ses dates (`range` arrivée et départ,
+       * `single` date souhaitée, `none` sans date) et l'invitation du message. `universe` : objet choisi d'office
+       * quand cet univers est affiché. Absent : formulaire simple (`singleDate`).
+       */
+      topics?: ContactTopic[];
+      /** Petite mention sous le bouton (usage des coordonnées) */
+      privacy?: string;
       submitLabel: string;
       successMessage: string;
       /** Calendrier des disponibilités au-dessus du formulaire (facultatif) */
@@ -460,7 +484,18 @@ export interface UiText {
   /** Plein écran pendant la visite : bouton qui rappelle ou range l'en-tête */
   showHeader: string;
   hideHeader: string;
-  form: { arrival: string; departure: string; guests: string; name: string; email: string; message: string };
+  /** Formulaire : `date` = date souhaitée (une seule date), `topic` = titre des objets de la demande */
+  form: {
+    arrival: string;
+    departure: string;
+    date: string;
+    guests: string;
+    name: string;
+    phone: string;
+    email: string;
+    message: string;
+    topic: string;
+  };
 }
 
 export const UI_DEFAULTS: UiText = {
@@ -521,10 +556,13 @@ export const UI_DEFAULTS: UiText = {
   form: {
     arrival: 'Arrivée',
     departure: 'Départ',
+    date: 'Date souhaitée',
     guests: 'Voyageurs',
     name: 'Nom',
+    phone: 'Téléphone (facultatif)',
     email: 'E-mail',
     message: 'Message',
+    topic: 'Votre demande',
   },
 };
 

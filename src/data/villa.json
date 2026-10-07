@@ -31,7 +31,7 @@
     "price": "66 €",
     "priceNote": "green fee 18 trous en basse saison · 77 € du 1er juin au 30 septembre (tarifs 2026)",
     "cta": {
-      "label": "Réserver un départ",
+      "label": "Réserver",
       "href": "#reserver"
     },
     "nav": [
@@ -795,26 +795,79 @@
       ]
     },
     "contact": {
-      "kicker": "Le Centre · Réserver",
-      "title": "Réservez votre départ",
-      "text": "Les départs se réservent en ligne. Pour un séjour, un groupe, un cours, un séminaire ou une compétition d'entreprise, écrivez-nous : l'accueil du Centre vous répond rapidement.",
-      "booking": {
-        "label": "Réserver un départ en ligne",
-        "href": "https://prima.golf/gap-bayard"
-      },
-      "bookingNote": "Réservation immédiate sur prima.golf, 7 jours sur 7.",
-      "singleDate": true,
+      "kicker": "Le Centre · Contact",
+      "title": "Préparer votre venue",
+      "text": "Un départ, un séjour, un groupe ou une journée de ski de fond : réservez en direct ou écrivez à l'accueil du Centre, qui vous répond rapidement.",
+      "links": [
+        {
+          "label": "Réserver un départ",
+          "href": "https://prima.golf/gap-bayard",
+          "note": "Golf · prima.golf, 7 jours sur 7"
+        },
+        {
+          "label": "Acheter son pass nordique",
+          "href": "https://billetterie-nordic-gap-bayard.intence.tech/shop",
+          "note": "Nordique · billetterie en ligne"
+        },
+        {
+          "label": "Appeler l'accueil",
+          "href": "tel:+33492501683",
+          "note": "Séjour, restaurant, séminaire · 04 92 50 16 83"
+        }
+      ],
       "host": {
-        "name": "Accueil du golf",
+        "name": "Accueil du Centre",
         "role": "Centre d'oxygénation de Gap-Bayard",
         "phone": "+33 4 92 50 16 83",
         "email": "contact@gap-bayard.com",
         "note": "Séjours, groupes, séminaires : on organise tout."
       },
+      "topics": [
+        {
+          "id": "sejour",
+          "label": "Séjour",
+          "dates": "range",
+          "universe": "sejourner",
+          "message": "Nombre de chambres, pension complète ou demi-pension, enfants…"
+        },
+        {
+          "id": "golf",
+          "label": "Golf",
+          "dates": "single",
+          "universe": "golf",
+          "message": "Cours, stage, groupe, compétition d'entreprise…"
+        },
+        {
+          "id": "seminaire",
+          "label": "Séminaire",
+          "dates": "range",
+          "message": "Nombre de participants, salle, repas, activités…"
+        },
+        {
+          "id": "restaurant",
+          "label": "Restaurant",
+          "dates": "single",
+          "message": "Nombre de couverts, groupe, occasion…"
+        },
+        {
+          "id": "nordique",
+          "label": "Nordique",
+          "dates": "single",
+          "universe": "nordique",
+          "message": "Cours de ski de fond, sortie raquettes, groupe…"
+        },
+        {
+          "id": "autre",
+          "label": "Autre",
+          "dates": "none",
+          "message": "Votre question"
+        }
+      ],
       "maxGuests": 100,
       "formAction": "",
       "submitLabel": "Envoyer la demande",
-      "successMessage": "Merci, votre demande est bien partie. L'accueil du golf vous répond rapidement."
+      "successMessage": "Merci, votre demande est bien partie. L'accueil du Centre vous répond rapidement.",
+      "privacy": "Vos coordonnées servent uniquement à répondre à votre demande."
     },
     "holes": {
       "kicker": "Golf · Les 18 trous",
@@ -1587,9 +1640,15 @@
     "details": "voir le lieu",
     "ratesItem": "Green fee",
     "form": {
-      "arrival": "Date souhaitée",
-      "guests": "Joueurs",
-      "message": "Votre demande (groupe, cours, séminaire…)"
+      "arrival": "Arrivée",
+      "departure": "Départ",
+      "date": "Date souhaitée",
+      "guests": "Personnes",
+      "name": "Nom",
+      "phone": "Téléphone (facultatif)",
+      "email": "E-mail",
+      "message": "Votre message",
+      "topic": "Votre demande"
     }
   }
 }

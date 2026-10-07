@@ -133,6 +133,8 @@ Sans `image`, la fiche affiche un zoom en direct dans la vidéo. Les photos des 
 
 `sections.contact.formAction` reçoit l'adresse d'envoi : [Formspree](https://formspree.io) (`https://formspree.io/f/xxxxxxx`), Netlify Forms, ou votre propre API (envoi `POST` des champs `arrival`, `departure`, `guests`, `name`, `email`, `message`). `sections.contact.maxGuests` limite le nombre de voyageurs. Laissé vide, le formulaire fonctionne en mode démo et n'envoie rien.
 
+Avec `sections.contact.topics`, le formulaire commence par l'objet de la demande en pastilles (`id`, `label` envoyé avec la demande, `dates` : `range` arrivée et départ, `single` date souhaitée, `none` ; `message` : invitation du champ message ; `universe` : objet choisi d'office quand cet univers est affiché) et envoie aussi `topic`, `date` et `phone`. `sections.contact.links` remplace le bouton `booking` par des accès directs (réserver, acheter un pass, appeler) ; `privacy` ajoute une mention sous le bouton.
+
 #### Univers (`sections.universes`)
 
 Sous la visite, une grande carte photo par univers (Golf, Séjourner, Nordique) ; la choisir affiche son contenu juste en dessous, à la place du précédent (onglets accessibles : flèches gauche / droite, Début, Fin). Chaque univers (`items[]`) a :

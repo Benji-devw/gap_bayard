@@ -1211,6 +1211,59 @@
               "$ref": "#/$defs/link",
               "description": "Réservation en ligne (ex. départs sur prima.golf) : bouton principal de la section, ouvert dans un nouvel onglet"
             },
+            "links": {
+              "type": "array",
+              "description": "Accès directs à gauche du formulaire (réserver un départ, acheter un pass, appeler…), à la place de booking ; une adresse « http » s'ouvre dans un nouvel onglet",
+              "items": {
+                "type": "object",
+                "required": ["label", "href"],
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  },
+                  "href": {
+                    "type": "string"
+                  },
+                  "note": {
+                    "type": "string",
+                    "description": "Précision sous le nom"
+                  }
+                }
+              }
+            },
+            "topics": {
+              "type": "array",
+              "description": "Objets de la demande, en pastilles en tête du formulaire ; chacun règle ses dates et l'invitation du message. Absent : formulaire simple (singleDate).",
+              "items": {
+                "type": "object",
+                "required": ["id", "label", "dates"],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "label": {
+                    "type": "string",
+                    "description": "Nom de la pastille, envoyé avec la demande"
+                  },
+                  "dates": {
+                    "enum": ["range", "single", "none"],
+                    "description": "range : arrivée et départ ; single : date souhaitée ; none : sans date"
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "Invitation dans le champ du message"
+                  },
+                  "universe": {
+                    "type": "string",
+                    "description": "id de l'univers pour lequel cet objet est choisi d'office"
+                  }
+                }
+              }
+            },
+            "privacy": {
+              "type": "string",
+              "description": "Petite mention sous le bouton (usage des coordonnées)"
+            },
             "bookingNote": {
               "type": "string",
               "description": "Ligne sous le bouton de réservation en ligne"
@@ -1510,10 +1563,17 @@
             "departure": {
               "type": "string"
             },
+            "date": {
+              "type": "string",
+              "description": "Date souhaitée (une seule date)"
+            },
             "guests": {
               "type": "string"
             },
             "name": {
+              "type": "string"
+            },
+            "phone": {
               "type": "string"
             },
             "email": {
@@ -1521,6 +1581,10 @@
             },
             "message": {
               "type": "string"
+            },
+            "topic": {
+              "type": "string",
+              "description": "Titre des objets de la demande (pastilles)"
             }
           }
         }
