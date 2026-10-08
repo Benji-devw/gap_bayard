@@ -302,10 +302,17 @@ export default function VillaPage() {
     return () => window.removeEventListener('popstate', onPop);
   }, [universes]);
 
-  /** Carte d'univers choisie : son contenu s'affiche dessous, l'adresse suit (#golf) sans ajouter d'étape à l'historique */
-  const selectUniverse = (id: string) => {
-    setUniverse(id);
+  /**
+   * Carte d'univers choisie : son contenu s'affiche dessous, l'adresse suit (#golf) sans ajouter d'étape à l'historique.
+   * D'un clic (`scroll`), on descend à la première section de l'univers (rendu immédiat pour la trouver à sa place).
+   */
+  const selectUniverse = (id: string, scroll: boolean) => {
+    flushSync(() => setUniverse(id));
     history.replaceState(null, '', `#${id}`);
+    if (!scroll) return;
+    const first = document.getElementById(id)?.querySelector<HTMLElement>('.vl-section');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    first?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
   };
 
   // sections après la visite : chaque bloc apparaît une fois, à son arrivée à l'écran

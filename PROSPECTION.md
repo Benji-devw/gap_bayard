@@ -31,11 +31,11 @@ https://gap-bayard.vercel.app (non indexée). **Attention** : la vidéo est un s
 |---|---|---|---|
 | 1 | Visite FPV en drone (vidéo seule) | 500 – 900 € | Le premier contrat, facile à signer. 18 trous ≠ une maison : prévoir le haut de la fourchette ou un devis à part (plusieurs batteries, tournage hors heures de jeu, plus long que les ≈ 2 h annoncées) |
 | 2 | Visite immersive (page de visite au scroll) | 2 500 – 3 000 € | La maquette actuelle : une page golf qui renvoie vers leur site et prima.golf. Argument : prix réduit des 10 premiers clients |
-| + | Pack Zen | 150 € / an | Hébergement, nom de domaine, mises à jour de saison (tarifs) |
+| + | Pack Zen | 150 – 350 € / an (sites simples) | Pour Gap-Bayard : forfait sur devis, plutôt 400 – 600 € / an (trois univers, tarifs de saison, actualités) |
 | + | Version anglaise | 150 – 300 € | Clientèle de passage, Italiens, Néerlandais |
 
 - **L'application qui regroupe tous les services** (golf + nordique + hébergement + restaurant + séminaires) **n'est pas dans la grille** : devis à part, par étapes (1. golf + survol, 2. hébergement / restaurant / séminaires, 3. nordique), ne pas la vendre au prix de la visite immersive.
-- **Maintenance et hébergement** : 150 €/an (Pack Zen) est calibré pour une page de bien, pas pour une application multi-services mise à jour à chaque saison : chiffrer un forfait annuel adapté.
+- **Maintenance et hébergement** : le Pack Zen (150 – 350 €/an) est calibré pour un site simple, pas pour une application multi-services mise à jour à chaque saison : chiffrer un forfait annuel adapté.
 - **Code propriété de Navart** : à prévoir comme objection (« et si on arrête avec vous ? »). Réponse prête : licence d'utilisation, contenus exportables à tout moment (textes, photos, vidéos, tarifs), et éventuellement un rachat du code ou une licence de sortie chiffrée dans le contrat. Si le Centre est une structure publique, la réversibilité peut être exigée : à vérifier.
 - Bayard est à moins d'1 h de Gap : déplacement inclus.
 - Le prospect verra les fourchettes sur la page prestation : rester cohérent, devis détaillé après le rendez-vous sur place.

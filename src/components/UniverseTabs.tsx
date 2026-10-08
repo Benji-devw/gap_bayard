@@ -11,7 +11,8 @@ interface Props {
   nowLabel: string;
   /** Nom de la liste pour les lecteurs d'écran */
   label: string;
-  onSelect: (id: string) => void;
+  /** `scroll` : choisi d'un clic (on descend au contenu) ; au clavier, on reste sur les cartes */
+  onSelect: (id: string, scroll: boolean) => void;
 }
 
 /**
@@ -35,7 +36,7 @@ export function UniverseTabs({ items, active, now, nowLabel, label, onSelect }: 
               : -1;
     if (to < 0) return;
     e.preventDefault();
-    onSelect(items[to].id);
+    onSelect(items[to].id, false);
     refs.current[to]?.focus();
   };
 
@@ -56,7 +57,7 @@ export function UniverseTabs({ items, active, now, nowLabel, label, onSelect }: 
             aria-controls={u.id}
             tabIndex={selected ? 0 : -1}
             className="vl-universe-tab"
-            onClick={() => onSelect(u.id)}
+            onClick={(e) => onSelect(u.id, e.detail > 0)}
             onKeyDown={(e) => onKey(e, i)}
           >
             <span className="vl-universe-photo">
